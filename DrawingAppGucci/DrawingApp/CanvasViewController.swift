@@ -18,13 +18,14 @@ class CanvasViewController: UIViewController {
         addRectangleView(rect: plane.makeRectangle())
     }
     
+    @IBAction func tapView(_ sender: UITapGestureRecognizer) {
+        os_log("%@", "\(sender.location(in: self.view))")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         layout()
         attribute()
-        for _ in 0...100 {
-            addRectangleView(rect: plane.makeRectangle())
-        }
     }
     
     private func attribute() {
@@ -51,7 +52,6 @@ class CanvasViewController: UIViewController {
         self.view.bringSubviewToFront(rectangleButton)
     }
     
+
+    
 }
-
-
-
