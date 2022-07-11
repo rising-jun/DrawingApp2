@@ -14,6 +14,7 @@ class CanvasViewController: UIViewController {
     private var beforeSelectedView: SquareView? {
         didSet {
             // TODO: - Status View 한테 새로운 렉탱글이 왔다고 알려야함
+            guard oldValue != beforeSelectedView else { return }
             oldValue?.isSelected = false
         }
         
