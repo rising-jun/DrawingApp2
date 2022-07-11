@@ -11,6 +11,17 @@ import os.log
 class CanvasViewController: UIViewController {
     
     private let plane = Plane()
+    private var beforeSelectedView: SquareView? {
+        didSet {
+            // TODO: - Status View 한테 새로운 렉탱글이 왔다고 알려야함
+            oldValue?.isSelected = false
+        }
+        
+        willSet {
+            newValue?.isSelected = true
+        }
+    }
+    
     @IBOutlet weak var rectangleButton: UIButton!
     @IBOutlet weak var statusView: UIView!
     
@@ -19,10 +30,22 @@ class CanvasViewController: UIViewController {
     }
     
     @IBAction func tapView(_ sender: UITapGestureRecognizer) {
-        os_log("%@", "\(sender.location(in: self.view))")
         let point = sender.location(in: self.view)
-//        print(plane.isTouched(at: (Double(point.x), Double(point.y))))
-        os_log("%@", "\(plane.isTouched(at: (Double(point.x), Double(point.y))))")
+        guard let selectedRectangleIndex = plane.isTouched(at: (Double(point.x), Double(point.y))) else {
+            statusView.isHidden = true
+            return
+        }
+        let squareViews: [UIView] = {
+            var array = view.subviews
+            array.removeLast()
+            array.removeFirst()
+            return array
+        }()
+        
+        guard let selectedView = squareViews[selectedRectangleIndex] as? SquareView else {
+            return
+        }
+        self.beforeSelectedView = selectedView
     }
     
     override func viewDidLoad() {
@@ -42,15 +65,6 @@ class CanvasViewController: UIViewController {
     }
     
     private func addRectangleView(rect: Rectangle) {
-//        let view : UIView = {
-//            let view = UIView()
-//            view.frame = .init(x: rect.x, y: rect.y, width: rect.width, height: rect.height)
-//            view.backgroundColor = UIColor.init(red: rect.red,
-//                                                green: rect.green,
-//                                                blue: rect.blue,
-//                                                alpha: rect.alpha.value)
-//            return view
-//        }()
         let view = SquareView(rectangle: rect)
         self.view.addSubview(view)
         self.view.bringSubviewToFront(rectangleButton)

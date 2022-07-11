@@ -9,6 +9,15 @@ import UIKit
 
 class SquareView: UIView {
     let rectangle: Rectangle!
+    var isSelected: Bool = false {
+        didSet {
+            if isSelected {
+                self.layer.borderWidth = 10
+            } else {
+                self.layer.borderWidth = 0
+            }
+        }
+    }
     
     init(rectangle: Rectangle) {
         self.rectangle = rectangle
@@ -20,6 +29,7 @@ class SquareView: UIView {
                                        green: rectangle.green,
                                        blue: rectangle.blue,
                                        alpha: rectangle.alpha.value)
+        self.layer.borderColor = UIColor.tintColor.cgColor
     }
     
     
@@ -32,5 +42,13 @@ class SquareView: UIView {
                                        green: rectangle.green,
                                        blue: rectangle.blue,
                                        alpha: rectangle.alpha.value)
+    }
+    
+    func drawEdges(selected: Bool) {
+        if selected {
+            self.layer.borderWidth = 10
+        } else {
+            self.layer.borderWidth = 0
+        }
     }
 }
