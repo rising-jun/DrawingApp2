@@ -16,7 +16,8 @@ extension OSLog {
     static let model = OSLog(subsystem: subsystem, category: "Model")
 }
 
+//MARK: - 이 사이즈를 컴파일 하기 전에 알 수 있나?
 enum ScreenSize {
-    static let width = UIScreen.main.bounds.width
-    static let height = UIScreen.main.bounds.height
+    static let width = UIScreen.main.bounds.size.width - 120.0
+    static let height = UIScreen.main.bounds.size.height - 150.0
 }

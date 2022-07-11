@@ -16,8 +16,8 @@ protocol Planable {
 
 final class Plane: Planable {
 
-    var rectangles: [Rectangle] = []
-    let factory = Factory()
+    private(set) var rectangles: [Rectangle] = []
+    private let factory = Factory()
     var count: Int { rectangles.count }
     
     subscript(index: Int) -> Rectangle {
@@ -36,11 +36,11 @@ final class Plane: Planable {
         return rectangle
     }
     
-    //TODO: - 리펙토링이 너무 시급해보임. 우짜쓰까잉...
+    //TODO: - 실패했을 때 값 전달할 방법 리펙토링
     func isTouched(at point: (Double, Double)) -> (Bool, Int) {
         for (index, rectangle) in rectangles.enumerated() {
-            if rectangle.bounds.0.contains(point.0)
-                && rectangle.bounds.1.contains(point.1) {
+            if rectangle.widthBound.contains(point.0)
+                && rectangle.heightBound.contains(point.1) {
                 return (true, index)
             }
         }

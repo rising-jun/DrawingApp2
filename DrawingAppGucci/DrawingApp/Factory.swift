@@ -44,8 +44,8 @@ final class Factory {
     }
     
     private func makeAlpha() -> Alpha {
-        let randomInt = Int.random(in: 1...10)
-        switch randomInt {
+        let randomAlpha = Int.random(in: 1...10)
+        switch randomAlpha {
         case 1:
             return .one
         case 2:
