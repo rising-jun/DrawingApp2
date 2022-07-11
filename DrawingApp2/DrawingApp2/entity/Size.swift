@@ -14,3 +14,8 @@ final class Size {
         self.width = width
     }
 }
+extension Size: CustomStringConvertible {
+    var description: String {
+        "W\(String(format: "%.0f", width)), H\(String(format: "%.0f", height))"
+    }
+}

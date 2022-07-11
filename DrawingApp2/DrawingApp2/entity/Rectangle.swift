@@ -6,13 +6,22 @@
 //
 
 final class Rectangle {
+    var id: Id
     var size: Size
     var point: Point
     var color: Color
+    var alpha: Alpha
     
-    init(size: Size, point: Point, color: Color) {
+    init(id: Id, size: Size, point: Point, color: Color, alpha: Alpha) {
+        self.id = id
         self.size = size
         self.point = point
         self.color = color
+        self.alpha = alpha
+    }
+}
+extension Rectangle: CustomStringConvertible {
+    var description: String {
+        "\(id.description), \(point.description), \(size.description), \(color.description) \(alpha.description)"
     }
 }

@@ -6,19 +6,24 @@
 //
 
 final class Color {
-    var r: Double
-    var g: Double
-    var b: Double
-    init(r: Double, g: Double, b: Double) {
+    var r: Int
+    var g: Int
+    var b: Int
+    init(r: Int, g: Int, b: Int) {
         self.r = r
         self.g = g
         self.b = b
     }
     
     static func makeRandomPoint() -> Color {
-        let r = Double.random(in: 0.0 ... 255)
-        let g = Double.random(in: 0.0 ... 255)
-        let b = Double.random(in: 0.0 ... 255)
+        let r = Int.random(in: 0 ... 255)
+        let g = Int.random(in: 0 ... 255)
+        let b = Int.random(in: 0 ... 255)
         return Color(r: r, g: g, b: b)
+    }
+}
+extension Color: CustomStringConvertible {
+    var description: String {
+        "r:\(r), g:\(g), b:\(b) "
     }
 }

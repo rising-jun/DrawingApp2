@@ -8,5 +8,7 @@
 import Foundation
 
 final class RectangleFactory {
-    
+    func makeRectangle() -> Rectangle {
+        Rectangle(id: Id.makeId(),size: Size(), point: Point.makeRandomPoint(), color: Color.makeRandomPoint(), alpha: Alpha.makeAlpha())
+    }
 }

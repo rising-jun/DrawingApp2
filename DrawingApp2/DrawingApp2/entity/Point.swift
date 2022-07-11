@@ -15,8 +15,13 @@ final class Point {
     }
     
     static func makeRandomPoint() -> Point {
-        let x = Double.random(in: 0.0 ... 100)
-        let y = Double.random(in: 0.0 ... 100)
+        let x = Double.random(in: 0.0 ... 300)
+        let y = Double.random(in: 0.0 ... 300)
         return Point(x: x, y: y)
+    }
+}
+extension Point: CustomStringConvertible {
+    var description: String {
+        "x:\(String(format: "%.0f", x)), y:\(String(format: "%.0f", y))"
     }
 }

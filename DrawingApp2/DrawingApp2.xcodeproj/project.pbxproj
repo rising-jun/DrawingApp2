@@ -22,6 +22,8 @@
 		72FAB6FD287BF2ED004C7909 /* RectangleFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72FAB6FC287BF2ED004C7909 /* RectangleFactory.swift */; };
 		72FAB6FF287BF2FE004C7909 /* Rectangle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72FAB6FE287BF2FE004C7909 /* Rectangle.swift */; };
 		72FAB701287BF3AD004C7909 /* Alpha.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72FAB700287BF3AD004C7909 /* Alpha.swift */; };
+		72FAB703287BF674004C7909 /* Id.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72FAB702287BF674004C7909 /* Id.swift */; };
+		72FAB708287C0505004C7909 /* RectangleFactoryTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72FAB707287C0505004C7909 /* RectangleFactoryTest.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,6 +63,8 @@
 		72FAB6FC287BF2ED004C7909 /* RectangleFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RectangleFactory.swift; sourceTree = "<group>"; };
 		72FAB6FE287BF2FE004C7909 /* Rectangle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rectangle.swift; sourceTree = "<group>"; };
 		72FAB700287BF3AD004C7909 /* Alpha.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alpha.swift; sourceTree = "<group>"; };
+		72FAB702287BF674004C7909 /* Id.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Id.swift; sourceTree = "<group>"; };
+		72FAB707287C0505004C7909 /* RectangleFactoryTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RectangleFactoryTest.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -128,6 +132,7 @@
 			isa = PBXGroup;
 			children = (
 				72FAB6DB287BE919004C7909 /* DrawingApp2Tests.swift */,
+				72FAB707287C0505004C7909 /* RectangleFactoryTest.swift */,
 			);
 			path = DrawingApp2Tests;
 			sourceTree = "<group>";
@@ -147,8 +152,9 @@
 				72FAB6F6287BEFD4004C7909 /* Size.swift */,
 				72FAB6F8287BF013004C7909 /* Point.swift */,
 				72FAB6FA287BF0C6004C7909 /* Color.swift */,
-				72FAB6FE287BF2FE004C7909 /* Rectangle.swift */,
 				72FAB700287BF3AD004C7909 /* Alpha.swift */,
+				72FAB702287BF674004C7909 /* Id.swift */,
+				72FAB6FE287BF2FE004C7909 /* Rectangle.swift */,
 			);
 			path = entity;
 			sourceTree = "<group>";
@@ -300,6 +306,7 @@
 				72FAB6C7287BE918004C7909 /* SceneDelegate.swift in Sources */,
 				72FAB6FB287BF0C6004C7909 /* Color.swift in Sources */,
 				72FAB6FF287BF2FE004C7909 /* Rectangle.swift in Sources */,
+				72FAB703287BF674004C7909 /* Id.swift in Sources */,
 				72FAB701287BF3AD004C7909 /* Alpha.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -308,6 +315,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				72FAB708287C0505004C7909 /* RectangleFactoryTest.swift in Sources */,
 				72FAB6DC287BE919004C7909 /* DrawingApp2Tests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
