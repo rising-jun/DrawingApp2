@@ -8,7 +8,7 @@
 import UIKit
 import os.log
 
-class ViewController: UIViewController {
+class CanvasViewController: UIViewController {
     
     private let plane = Plane()
     @IBOutlet weak var rectangleButton: UIButton!
