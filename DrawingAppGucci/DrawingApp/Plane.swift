@@ -9,7 +9,7 @@ import Foundation
 
 protocol Planable {
     func makeRectangle() -> Rectangle
-    func isTouched(at point: (Double, Double)) -> (Bool, Int)
+    func isTouched(at point: (Double, Double)) -> Int?
     func findTouchedRectangle(at point: (Double, Double)) -> Rectangle?
     subscript(_ index: Int) -> Rectangle { get }
 }
@@ -37,20 +37,18 @@ final class Plane: Planable {
     }
     
     //TODO: - 실패했을 때 값 전달할 방법 리펙토링
-    func isTouched(at point: (Double, Double)) -> (Bool, Int) {
+    func isTouched(at point: (Double, Double)) -> Int? {
         for (index, rectangle) in rectangles.enumerated() {
             if rectangle.widthBound.contains(point.0)
                 && rectangle.heightBound.contains(point.1) {
-                return (true, index)
+                return index
             }
         }
-        return (false, 999999999)   // 9 아홉개
+        return nil
     }
     
     func findTouchedRectangle(at point: (Double, Double)) -> Rectangle? {
-        let touchResult = isTouched(at: point)
-        let touchResultBool = touchResult.0
-        let touchResultInt = touchResult.1
-        return touchResultBool == true ? self[touchResultInt] : nil
+        guard let touchResultIndex = isTouched(at: point) else { return nil }
+        return rectangles[touchResultIndex]
     }
 }
