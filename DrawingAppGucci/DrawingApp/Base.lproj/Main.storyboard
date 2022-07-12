@@ -28,9 +28,58 @@
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wEe-lM-fZ5">
                                 <rect key="frame" x="944" y="0.0" width="236" height="820"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7Nh-d9-PsU" userLabel="ColorLabel">
+                                        <rect key="frame" x="15" y="40" width="206" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rd0-TC-Ekx" userLabel="NewColorButton">
+                                        <rect key="frame" x="15" y="76" width="206" height="31"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="filled" title="Button"/>
+                                        <connections>
+                                            <action selector="touchedColorButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="A7I-zW-6ET"/>
+                                        </connections>
+                                    </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DL5-eW-nSO" userLabel="AlphaLabel">
+                                        <rect key="frame" x="15" y="167" width="206" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="EsB-tQ-o8q" userLabel="Slider">
+                                        <rect key="frame" x="13" y="250" width="210" height="31"/>
+                                        <connections>
+                                            <action selector="movedDot:" destination="BYZ-38-t0r" eventType="valueChanged" id="cF8-6J-yoc"/>
+                                        </connections>
+                                    </slider>
+                                    <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" maximumValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="dPq-A1-Z09">
+                                        <rect key="frame" x="15" y="203" width="94" height="32"/>
+                                        <connections>
+                                            <action selector="alphaStepper:" destination="BYZ-38-t0r" eventType="valueChanged" id="Tvr-R9-Xke"/>
+                                        </connections>
+                                    </stepper>
+                                </subviews>
                                 <color key="backgroundColor" systemColor="systemGray3Color"/>
                                 <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="rd0-TC-Ekx" secondAttribute="trailing" constant="15" id="0Al-uO-JQt"/>
+                                    <constraint firstItem="EsB-tQ-o8q" firstAttribute="top" secondItem="dPq-A1-Z09" secondAttribute="bottom" constant="15" id="2h9-EA-ite"/>
+                                    <constraint firstItem="7Nh-d9-PsU" firstAttribute="top" secondItem="wEe-lM-fZ5" secondAttribute="top" constant="40" id="Grk-oZ-Xcy"/>
+                                    <constraint firstItem="DL5-eW-nSO" firstAttribute="leading" secondItem="7Nh-d9-PsU" secondAttribute="leading" id="Iqp-Py-GcK"/>
+                                    <constraint firstItem="dPq-A1-Z09" firstAttribute="leading" secondItem="DL5-eW-nSO" secondAttribute="leading" id="LDi-50-fZR"/>
+                                    <constraint firstItem="DL5-eW-nSO" firstAttribute="top" secondItem="rd0-TC-Ekx" secondAttribute="bottom" constant="60" id="MHC-Jh-fof"/>
+                                    <constraint firstItem="7Nh-d9-PsU" firstAttribute="top" secondItem="wEe-lM-fZ5" secondAttribute="top" constant="40" id="MYg-SW-1Wl"/>
+                                    <constraint firstItem="dPq-A1-Z09" firstAttribute="top" secondItem="DL5-eW-nSO" secondAttribute="bottom" constant="15" id="QQ1-sm-roT"/>
+                                    <constraint firstItem="EsB-tQ-o8q" firstAttribute="leading" secondItem="dPq-A1-Z09" secondAttribute="leading" id="UwU-1d-pwb"/>
+                                    <constraint firstAttribute="trailing" secondItem="7Nh-d9-PsU" secondAttribute="trailing" constant="15" id="b2y-oV-y5u"/>
+                                    <constraint firstItem="rd0-TC-Ekx" firstAttribute="top" secondItem="7Nh-d9-PsU" secondAttribute="bottom" constant="15" id="e8V-tq-7Q0"/>
+                                    <constraint firstAttribute="trailing" secondItem="DL5-eW-nSO" secondAttribute="trailing" constant="15" id="hUX-xa-kvb"/>
+                                    <constraint firstAttribute="trailing" secondItem="EsB-tQ-o8q" secondAttribute="trailing" constant="15" id="nlR-sA-k62"/>
+                                    <constraint firstItem="7Nh-d9-PsU" firstAttribute="leading" secondItem="wEe-lM-fZ5" secondAttribute="leading" constant="15" id="ppI-54-xgM"/>
                                     <constraint firstAttribute="width" priority="250" constant="240" id="uTT-DD-Auz"/>
+                                    <constraint firstItem="rd0-TC-Ekx" firstAttribute="leading" secondItem="7Nh-d9-PsU" secondAttribute="leading" id="xud-Lz-FNB"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -52,7 +101,11 @@
                         </connections>
                     </view>
                     <connections>
+                        <outlet property="alphaLabel" destination="DL5-eW-nSO" id="Qzl-8U-UJW"/>
+                        <outlet property="colorButton" destination="rd0-TC-Ekx" id="Nfm-mN-M70"/>
+                        <outlet property="colorLabel" destination="7Nh-d9-PsU" id="xEU-hf-8ON"/>
                         <outlet property="rectangleButton" destination="lwj-Gd-drK" id="qEH-nL-GQt"/>
+                        <outlet property="slider" destination="EsB-tQ-o8q" id="hjy-1q-Z2k"/>
                         <outlet property="statusView" destination="wEe-lM-fZ5" id="7FD-Fz-mtZ"/>
                     </connections>
                 </viewController>

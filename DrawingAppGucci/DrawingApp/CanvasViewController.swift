@@ -8,7 +8,7 @@
 import UIKit
 import os.log
 
-class CanvasViewController: UIViewController {
+final class CanvasViewController: UIViewController {
     
     private let plane = Plane()
     private var beforeSelectedView: SquareView? {
@@ -23,6 +23,22 @@ class CanvasViewController: UIViewController {
         }
     }
     
+    @IBOutlet weak var colorLabel: UILabel!
+    @IBOutlet weak var colorButton: UIButton!
+    @IBAction func touchedColorButton(_ sender: UIButton) {
+        guard let currentSquare = beforeSelectedView,
+              let currentRectangle = currentSquare.rectangle
+            else { return }
+        plane.changeColor(for: currentRectangle)
+        currentSquare.updateViewAttribute()
+        colorButton.setTitle("\(currentRectangle.hexaColor)", for: .normal)
+    }
+    @IBOutlet weak var alphaLabel: UILabel!
+    @IBAction func alphaStepper(_ sender: Any) {
+    }
+    @IBOutlet weak var slider: UISlider!
+    @IBAction func movedDot(_ sender: Any) {
+    }
     @IBOutlet weak var rectangleButton: UIButton!
     @IBOutlet weak var statusView: UIView!
     
@@ -34,6 +50,7 @@ class CanvasViewController: UIViewController {
         let point = sender.location(in: self.view)
         guard let selectedRectangleIndex = plane.isTouched(at: (Double(point.x), Double(point.y))) else {
             statusView.isHidden = true
+            beforeSelectedView = nil
             return
         }
         let squareViews: [UIView] = {
@@ -47,6 +64,7 @@ class CanvasViewController: UIViewController {
             return
         }
         self.beforeSelectedView = selectedView
+        informSelectedViewToStatus(with: selectedView)
     }
     
     override func viewDidLoad() {
@@ -57,8 +75,14 @@ class CanvasViewController: UIViewController {
     
     private func attribute() {
         statusView.isHidden = true
+        colorLabel.text = "색상"
+        colorButton.setTitle("#123456", for: .normal)
+        alphaLabel.text = "투명도"
         rectangleButton.isOpaque = true
         rectangleButton.layer.cornerRadius = 10
+        slider.isContinuous = false
+        slider.minimumValue = 0.1
+        slider.maximumValue = 1.0
     } 
     
     private func layout() {
@@ -71,4 +95,13 @@ class CanvasViewController: UIViewController {
         self.view.bringSubviewToFront(rectangleButton)
     }
     
+}
+
+extension CanvasViewController {
+    private func informSelectedViewToStatus(with square: SquareView) {
+        guard let rectangle = square.rectangle else { return }
+        statusView.isHidden = false
+        colorButton.setTitle("\(rectangle.hexaColor)", for: .normal)
+        slider.value = Float(rectangle.alpha.value)
+    }
 }

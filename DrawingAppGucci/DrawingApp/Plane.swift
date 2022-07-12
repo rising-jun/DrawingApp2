@@ -51,4 +51,8 @@ final class Plane: Planable {
         guard let touchResultIndex = isTouched(at: point) else { return nil }
         return rectangles[touchResultIndex]
     }
+    
+    func changeColor(for rectangle: Rectangle) {
+        rectangle.setRandomColor()
+    }
 }
