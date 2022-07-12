@@ -13,7 +13,7 @@ final class CanvasViewController: UIViewController {
     private let plane = Plane()
     private var beforeSelectedView: SquareView? {
         didSet {
-            // TODO: - Status View 한테 새로운 렉탱글이 왔다고 알려야함
+            // TODO: - Status View 한테 새로운 렉탱글이 왔다고 알려야함(뷰를 구분한다면 말이죠!)
             guard oldValue != beforeSelectedView else { return }
             oldValue?.isSelected = false
         }
