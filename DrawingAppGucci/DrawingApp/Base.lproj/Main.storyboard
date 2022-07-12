@@ -52,13 +52,13 @@
                                     <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="EsB-tQ-o8q" userLabel="Slider">
                                         <rect key="frame" x="13" y="250" width="210" height="31"/>
                                         <connections>
-                                            <action selector="movedDot:" destination="BYZ-38-t0r" eventType="valueChanged" id="cF8-6J-yoc"/>
+                                            <action selector="movedDot:" destination="BYZ-38-t0r" eventType="valueChanged" id="q84-18-Z9Y"/>
                                         </connections>
                                     </slider>
                                     <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" maximumValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="dPq-A1-Z09">
                                         <rect key="frame" x="15" y="203" width="94" height="32"/>
                                         <connections>
-                                            <action selector="alphaStepper:" destination="BYZ-38-t0r" eventType="valueChanged" id="Tvr-R9-Xke"/>
+                                            <action selector="touchedStepper:" destination="BYZ-38-t0r" eventType="valueChanged" id="BHu-Lr-bwx"/>
                                         </connections>
                                     </stepper>
                                 </subviews>
@@ -107,6 +107,7 @@
                         <outlet property="rectangleButton" destination="lwj-Gd-drK" id="qEH-nL-GQt"/>
                         <outlet property="slider" destination="EsB-tQ-o8q" id="hjy-1q-Z2k"/>
                         <outlet property="statusView" destination="wEe-lM-fZ5" id="7FD-Fz-mtZ"/>
+                        <outlet property="stepper" destination="dPq-A1-Z09" id="cAp-QF-agK"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

@@ -34,11 +34,28 @@ final class CanvasViewController: UIViewController {
         colorButton.setTitle("\(currentRectangle.hexaColor)", for: .normal)
     }
     @IBOutlet weak var alphaLabel: UILabel!
-    @IBAction func alphaStepper(_ sender: Any) {
+
+    @IBOutlet weak var stepper: UIStepper!
+    @IBAction func touchedStepper(_ sender: UIStepper) {
+        guard let currentSquare = beforeSelectedView else { return }
+        sender.value = round(sender.value * 10) / 10
+        slider.value = Float(sender.value)
+        plane.changeAlpha(for: currentSquare.rectangle, value: sender.value)
+        currentSquare.updateViewAttribute()
     }
+    
+    @IBAction func movedDot(_ sender: UISlider) {
+        guard let currentSquare = beforeSelectedView else { return }
+        let roundedSliderValue: Float = round(sender.value * 10) / 10
+        sender.value = roundedSliderValue
+        stepper.value = Double(roundedSliderValue)
+        stepper.value = round(stepper.value * 10) / 10
+        plane.changeAlpha(for: currentSquare.rectangle, value: stepper.value)
+        currentSquare.updateViewAttribute()
+    }
+    
     @IBOutlet weak var slider: UISlider!
-    @IBAction func movedDot(_ sender: Any) {
-    }
+
     @IBOutlet weak var rectangleButton: UIButton!
     @IBOutlet weak var statusView: UIView!
     
@@ -83,6 +100,10 @@ final class CanvasViewController: UIViewController {
         slider.isContinuous = false
         slider.minimumValue = 0.1
         slider.maximumValue = 1.0
+        stepper.isContinuous = false
+        stepper.minimumValue = 0.1
+        stepper.maximumValue = 1.0
+        stepper.stepValue = 0.1
     } 
     
     private func layout() {
@@ -103,5 +124,6 @@ extension CanvasViewController {
         statusView.isHidden = false
         colorButton.setTitle("\(rectangle.hexaColor)", for: .normal)
         slider.value = Float(rectangle.alpha.value)
+        stepper.value = rectangle.alpha.value
     }
 }

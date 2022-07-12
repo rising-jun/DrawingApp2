@@ -55,4 +55,8 @@ final class Plane: Planable {
     func changeColor(for rectangle: Rectangle) {
         rectangle.setRandomColor()
     }
+    
+    func changeAlpha(for rectangle: Rectangle, value: Double) {
+        rectangle.changeAlpha(value: value)
+    }
 }

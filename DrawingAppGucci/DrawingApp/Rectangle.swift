@@ -14,7 +14,7 @@ final class Rectangle: CustomStringConvertible {
     let size: (Double,  Double)
     let point: (Double, Double)
     var color: (UInt8, UInt8, UInt8)
-    let alpha: Alpha
+    var alpha: Alpha
     var bounds: (ClosedRange<Double>, ClosedRange<Double>) {
         let widthBound = point.0...point.0 + size.0
         let hegihtBound = point.1...point.1 + size.1
@@ -60,5 +60,9 @@ final class Rectangle: CustomStringConvertible {
                                                   UInt8.random(in: (UInt8.min...UInt8.max)),
                                                   UInt8.random(in: (UInt8.min...UInt8.max)))
         self.color = randomColor
+    }
+    
+    func changeAlpha(value: Double) {
+        self.alpha.change(value: value)
     }
 }
