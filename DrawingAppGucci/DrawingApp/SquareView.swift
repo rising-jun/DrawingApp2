@@ -8,7 +8,7 @@
 import UIKit
 
 class SquareView: UIView {
-    let rectangle: Rectangle!
+    let rectangle: Rectangle
     var isSelected: Bool = false {
         didSet {
             if isSelected {
@@ -37,7 +37,7 @@ class SquareView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func updateViewAttribute(rectangle: Rectangle) {
+    func updateViewAttribute() {
         self.backgroundColor = UIColor(red: rectangle.red,
                                        green: rectangle.green,
                                        blue: rectangle.blue,
