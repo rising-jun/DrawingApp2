@@ -8,6 +8,9 @@
 import Foundation
 
 protocol Planable {
+    var onUpdatedAlpha: (Double) -> Void { get }
+    var onUpdatedColor: (String) -> Void { get }
+    
     func makeRectangle() -> Rectangle
     func isTouched(at point: (Double, Double)) -> Int?
     func findTouchedRectangle(at point: (Double, Double)) -> Rectangle?
@@ -19,6 +22,8 @@ final class Plane: Planable {
     private(set) var rectangles: [Rectangle] = []
     private let factory = Factory()
     var count: Int { rectangles.count }
+    var onUpdatedAlpha: (Double) -> Void = { _ in }
+    var onUpdatedColor: (String) -> Void = { _ in }
     
     subscript(index: Int) -> Rectangle {
         //MARK: - Debug == assert, release == precondition
@@ -36,7 +41,6 @@ final class Plane: Planable {
         return rectangle
     }
     
-    //TODO: - 실패했을 때 값 전달할 방법 리펙토링
     func isTouched(at point: (Double, Double)) -> Int? {
         for (index, rectangle) in rectangles.enumerated() {
             if rectangle.widthBound.contains(point.0)
@@ -54,9 +58,13 @@ final class Plane: Planable {
     
     func changeColor(for rectangle: Rectangle) {
         rectangle.setRandomColor()
+        self.onUpdatedColor(rectangle.hexaColor)
     }
     
     func changeAlpha(for rectangle: Rectangle, value: Double) {
-        rectangle.changeAlpha(value: value)
+        let roundedAlpha: Double = round(value * 10) / 10
+        rectangle.changeAlpha(value: roundedAlpha)
+        //MARK: - roundedAlpha 에서 +- 0.1 된 값이 넘겨질 것임
+        self.onUpdatedAlpha(rectangle.alpha.value)
     }
 }
