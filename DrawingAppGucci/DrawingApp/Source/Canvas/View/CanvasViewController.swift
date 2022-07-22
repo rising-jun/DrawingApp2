@@ -32,14 +32,7 @@ final class CanvasViewController: UIViewController {
             self.informSelectedViewToStatus(with: newValue)
         }
     }
-    // MARK: - 사각형의 색 변화
-    /// 1 사용자 터치(VC)
-    /// 2 플레인(M)
-    /// 3 렉탱글(M)
-    /// 4 플레인 `onUpdate()`
-    /// 5 (VC) bind 에 정의된 클로저 호출
-    /// 6 (V) 컬러 버튼 변경, 슬라이더, 스텝퍼 변경
-    /// 7 (V) self.beforeSelectedView?.updateViewAttribute() 호출
+
     @IBAction func touchedColorButton(_ sender: UIButton) {
         guard let currentSquare = beforeSelectedView
         else { return }
@@ -120,7 +113,7 @@ extension CanvasViewController {
     private func informSelectedViewToStatus(with square: SquareView) {
         let rectangle = square.rectangle
         statusView.isHidden = false
-        colorButton.setTitle(rectangle.hexaColor, for: .normal)
+        colorButton.setTitle(rectangle.color.hexaColor, for: .normal)
         adjustSliderAndStepper(alphaValue: rectangle.alpha.value)
     }
     

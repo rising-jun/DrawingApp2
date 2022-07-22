@@ -21,13 +21,13 @@ class SquareView: UIView {
     
     init(rectangle: Rectangle) {
         self.rectangle = rectangle
-        super.init(frame: CGRect(x: rectangle.x,
-                                 y: rectangle.y,
-                                 width: rectangle.width,
-                                 height: rectangle.height))
-        self.backgroundColor = UIColor(red: rectangle.red,
-                                       green: rectangle.green,
-                                       blue: rectangle.blue,
+        super.init(frame: CGRect(x: rectangle.point.x,
+                                 y: rectangle.point.y,
+                                 width: rectangle.size.width,
+                                 height: rectangle.size.height))
+        self.backgroundColor = UIColor(red: rectangle.color.red,
+                                       green: rectangle.color.green,
+                                       blue: rectangle.color.blue,
                                        alpha: rectangle.alpha.value)
         self.layer.borderColor = UIColor.tintColor.cgColor
     }
@@ -38,9 +38,9 @@ class SquareView: UIView {
     }
     
     func updateViewAttribute() {
-        self.backgroundColor = UIColor(red: rectangle.red,
-                                       green: rectangle.green,
-                                       blue: rectangle.blue,
+        self.backgroundColor = UIColor(red: rectangle.color.red,
+                                       green: rectangle.color.green,
+                                       blue: rectangle.color.blue,
                                        alpha: rectangle.alpha.value)
     }
     

@@ -12,17 +12,27 @@ final class Factory {
         let uuid = makeUUID()
         let width: Double = 150.0
         let height: Double = 120.0
-        let rgb: (UInt8, UInt8, UInt8) = (UInt8.random(in: UInt8.min...UInt8.max),
-                                          UInt8.random(in: UInt8.min...UInt8.max),
-                                          UInt8.random(in: UInt8.min...UInt8.max))
-        let point: (Double, Double) = (Double.random(in: 0...ScreenSize.width), Double.random(in: 0...ScreenSize.height))
+        let size = Size(width: width, height: height)
+        let color = Color()
+        let point = Point(
+            x: Double.random(in: 0...ScreenSize.width),
+            y: Double.random(in: 0...ScreenSize.height)
+        )
         let alpha: Alpha = makeAlpha()
+        let bound = Bound(size: size, point: point)
         
-        return Rectangle(id: uuid, size: (width, height), point: point, backgroundColor: rgb, alpha: alpha)
+        return Rectangle(
+            id: uuid,
+            size: size,
+            point: point,
+            color: color,
+            alpha: alpha,
+            bound: bound
+        )
     }
     
      private func makeUUID() -> String {
-        let id = UUID()
+        let id = UUID()             // xxxx-xxxx-xxxx-xxxx
             .uuidString
             .components(separatedBy: "-")
             .reduce("") { partialResult, word in

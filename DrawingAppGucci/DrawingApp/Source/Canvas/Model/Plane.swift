@@ -43,8 +43,8 @@ final class Plane: Planable {
     
     func isTouched(at point: (Double, Double)) -> Int? {
         for (index, rectangle) in rectangles.enumerated() {
-            if rectangle.widthBound.contains(point.0)
-                && rectangle.heightBound.contains(point.1) {
+            if rectangle.bound.xBound.contains(point.0)
+                && rectangle.bound.yBound.contains(point.1) {
                 return index
             }
         }
@@ -58,7 +58,7 @@ final class Plane: Planable {
     
     func changeColor(for rectangle: Rectangle) {
         rectangle.setRandomColor()
-        self.onUpdatedColor(rectangle.hexaColor)
+        self.onUpdatedColor(rectangle.color.hexaColor)
     }
     
     func changeAlpha(for rectangle: Rectangle, value: Double) {
