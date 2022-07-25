@@ -23,12 +23,12 @@ final class CanvasViewController: UIViewController {
             // TODO: - Status View 한테 새로운 렉탱글이 왔다고 알려야함(뷰를 구분한다면 말이죠!)
             // MARK: - 같은 사각형 뷰를 클릭 하면 리턴되는 가드문
             guard oldValue != beforeSelectedView else { return }
-            oldValue?.isSelected = false
+            oldValue?.drawEdges(selected: false)
         }
         
         willSet {
             guard let newValue = newValue else { return }
-            newValue.isSelected = true
+            newValue.drawEdges(selected: true)
             self.informSelectedViewToStatus(with: newValue)
         }
     }

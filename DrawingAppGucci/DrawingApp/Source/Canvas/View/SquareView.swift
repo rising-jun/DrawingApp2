@@ -9,16 +9,7 @@ import UIKit
 
 class SquareView: UIView {
     let rectangle: Rectangle
-    var isSelected: Bool = false {
-        didSet {
-            if isSelected {
-                self.layer.borderWidth = 10
-            } else {
-                self.layer.borderWidth = 0
-            }
-        }
-    }
-    
+
     init(rectangle: Rectangle) {
         self.rectangle = rectangle
         super.init(frame: CGRect(x: rectangle.point.x,
