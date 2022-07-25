@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class Rectangle: CustomStringConvertible {
+class Rectangle: CustomStringConvertible {
     lazy var description: String = "(\(id)), X\(point.x), Y\(point.y), W\(size.width), H\(size.height) R: \(color.r), G: \(color.g), B: \(color.b), alpha: \(alpha.value)"
     
     let id: String

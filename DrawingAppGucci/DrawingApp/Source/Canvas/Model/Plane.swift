@@ -16,7 +16,7 @@ protocol Planable {
 }
 
 final class Plane: Planable {
-
+    //MARK: - photo가 rectangle을 상속받음
     private(set) var rectangles: [Rectangle] = []
     private let factory = Factory()
     var count: Int { rectangles.count }
@@ -31,10 +31,17 @@ final class Plane: Planable {
         return 0 <= index && index < self.rectangles.count
     }
     
+    //MARK: - 사각형 추가
     func makeRectangle() {
-        let rectangle = factory.generateRectangle()
+        let rectangle = factory.generateRectangle(with: .rectangle)
         rectangles.append(rectangle)
-        NotificationCenter.default.post(name: .rectangle, object: self, userInfo: [NotificationKey.rectangle: rectangle])
+        NotificationCenter.default.post(name: .rectangle, object: self, userInfo: [NotificationKey.rectangle: rectangle, NotificationKey.index: count - 1])
+    }
+    //MARK: - 사진 추가
+    func makePhoto() {
+        guard let photo = factory.generateRectangle(with: .photo) as? Photo else { return }
+        rectangles.append(photo)
+        NotificationCenter.default.post(name: .photo, object: self, userInfo: [NotificationKey.photo: photo,  NotificationKey.index: count - 1])
     }
     
     func isTouched(at point: (Double, Double)) -> Int? {
@@ -49,18 +56,19 @@ final class Plane: Planable {
     
     func findTouchedRectangle(at point: (Double, Double)) -> Rectangle? {
         guard let touchResultIndex = isTouched(at: point) else { return nil }
-        return rectangles[touchResultIndex]
+        return self[touchResultIndex]
     }
-    
-    func changeColor(for rectangle: Rectangle) {
-        rectangle.setRandomColor()
-        NotificationCenter.default.post(name: .color, object: self, userInfo: [NotificationKey.color: rectangle.color.hexaColor])
+    //MARK: - 색상 변경
+    func changeColor(at index: Int) {
+        let rectangle = self[index]
+        NotificationCenter.default.post(name: .color, object: self, userInfo: [NotificationKey.color: rectangle.color, NotificationKey.alpha: rectangle.alpha])
     }
-    
-    func changeAlpha(for rectangle: Rectangle, value: Double) {
+    //MARK: - 투명도 변경
+    func changeAlpha(at index: Int, value: Double) {
         let roundedAlpha: Double = round(value * 10) / 10
+        let rectangle = self[index]
         rectangle.changeAlpha(value: roundedAlpha)
         //MARK: - roundedAlpha 에서 +- 0.1 된 값이 넘겨질 것임
-        NotificationCenter.default.post(name: .alpha, object: self, userInfo: [NotificationKey.alpha: rectangle.alpha.value])
+        NotificationCenter.default.post(name: .color, object: self, userInfo: [NotificationKey.color: rectangle.color, NotificationKey.alpha: rectangle.alpha])
     }
 }

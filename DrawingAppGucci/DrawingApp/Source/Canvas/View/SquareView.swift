@@ -7,39 +7,16 @@
 
 import UIKit
 
-class SquareView: UIView {
-    let rectangle: Rectangle
-
-    init(rectangle: Rectangle) {
-        self.rectangle = rectangle
-        super.init(frame: CGRect(x: rectangle.point.x,
-                                 y: rectangle.point.y,
-                                 width: rectangle.size.width,
-                                 height: rectangle.size.height))
-        self.backgroundColor = UIColor(red: rectangle.color.red,
-                                       green: rectangle.color.green,
-                                       blue: rectangle.color.blue,
-                                       alpha: rectangle.alpha.value)
-        self.layer.borderColor = UIColor.tintColor.cgColor
-    }
+final class SquareView: UIView, Drawable {
     
+    var index: Int
+    
+    init(rectangle: Rectangle, index: Int) {
+        self.index = index
+        super.init(frame: CGRect(x: rectangle.point.x, y: rectangle.point.y, width: rectangle.size.width, height: rectangle.size.height))
+    }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    func updateViewAttribute() {
-        self.backgroundColor = UIColor(red: rectangle.color.red,
-                                       green: rectangle.color.green,
-                                       blue: rectangle.color.blue,
-                                       alpha: rectangle.alpha.value)
-    }
-    
-    func drawEdges(selected: Bool) {
-        if selected {
-            self.layer.borderWidth = 10
-        } else {
-            self.layer.borderWidth = 0
-        }
     }
 }

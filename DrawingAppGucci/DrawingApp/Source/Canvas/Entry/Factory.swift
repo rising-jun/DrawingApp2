@@ -8,7 +8,7 @@
 import Foundation
 
 final class Factory {
-    func generateRectangle() -> Rectangle {
+    func generateRectangle(with: Drawing) -> Rectangle {
         let uuid = makeUUID()
         let width: Double = 150.0
         let height: Double = 120.0
@@ -21,7 +21,7 @@ final class Factory {
         let alpha: Alpha = makeAlpha()
         let bound = Bound(size: size, point: point)
         
-        return Rectangle(
+        let rectangle = Rectangle(
             id: uuid,
             size: size,
             point: point,
@@ -29,6 +29,17 @@ final class Factory {
             alpha: alpha,
             bound: bound
         )
+        
+        let photo = Photo(
+            id: uuid,
+            size: size,
+            point: point,
+            color: color,
+            alpha: alpha,
+            bound: bound
+        )
+        
+        return with == .rectangle ? rectangle : photo
     }
     
      private func makeUUID() -> String {
