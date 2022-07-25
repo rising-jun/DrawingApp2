@@ -8,10 +8,8 @@
 import Foundation
 
 protocol Planable {
-    var onUpdatedAlpha: (Double) -> Void { get }
-    var onUpdatedColor: (String) -> Void { get }
     
-    func makeRectangle() -> Rectangle
+    func makeRectangle()
     func isTouched(at point: (Double, Double)) -> Int?
     func findTouchedRectangle(at point: (Double, Double)) -> Rectangle?
     subscript(_ index: Int) -> Rectangle { get }
@@ -22,8 +20,6 @@ final class Plane: Planable {
     private(set) var rectangles: [Rectangle] = []
     private let factory = Factory()
     var count: Int { rectangles.count }
-    var onUpdatedAlpha: (Double) -> Void = { _ in }
-    var onUpdatedColor: (String) -> Void = { _ in }
     
     subscript(index: Int) -> Rectangle {
         //MARK: - Debug == assert, release == precondition
@@ -35,10 +31,10 @@ final class Plane: Planable {
         return 0 <= index && index < self.rectangles.count
     }
     
-    func makeRectangle() -> Rectangle {
+    func makeRectangle() {
         let rectangle = factory.generateRectangle()
         rectangles.append(rectangle)
-        return rectangle
+        NotificationCenter.default.post(name: .rectangle, object: self, userInfo: [NotificationKey.rectangle: rectangle])
     }
     
     func isTouched(at point: (Double, Double)) -> Int? {
@@ -58,13 +54,13 @@ final class Plane: Planable {
     
     func changeColor(for rectangle: Rectangle) {
         rectangle.setRandomColor()
-        self.onUpdatedColor(rectangle.color.hexaColor)
+        NotificationCenter.default.post(name: .color, object: self, userInfo: [NotificationKey.color: rectangle.color.hexaColor])
     }
     
     func changeAlpha(for rectangle: Rectangle, value: Double) {
         let roundedAlpha: Double = round(value * 10) / 10
         rectangle.changeAlpha(value: roundedAlpha)
         //MARK: - roundedAlpha 에서 +- 0.1 된 값이 넘겨질 것임
-        self.onUpdatedAlpha(rectangle.alpha.value)
+        NotificationCenter.default.post(name: .alpha, object: self, userInfo: [NotificationKey.alpha: rectangle.alpha.value])
     }
 }

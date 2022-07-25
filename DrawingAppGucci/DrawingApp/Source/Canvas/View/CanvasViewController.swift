@@ -34,8 +34,7 @@ final class CanvasViewController: UIViewController {
     }
 
     @IBAction func touchedColorButton(_ sender: UIButton) {
-        guard let currentSquare = beforeSelectedView
-        else { return }
+        guard let currentSquare = beforeSelectedView else { return }
         plane.changeColor(for: currentSquare.rectangle)
     }
     
@@ -66,7 +65,7 @@ final class CanvasViewController: UIViewController {
     }
     
     @IBAction func touchedRectangleButton(_ sender: Any) {
-        addSquareView(rect: plane.makeRectangle())
+        plane.makeRectangle()
     }
     
     override func viewDidLoad() {
@@ -95,16 +94,52 @@ final class CanvasViewController: UIViewController {
     }
 
     private func bind() {
-        plane.onUpdatedAlpha = { [unowned self] alpha in
-            self.adjustSliderAndStepper(alphaValue: alpha)
+
+    }
+    
+    private func setUpNotification() {
+        // MARK: - 투명도 조절
+        NotificationCenter.default
+            .addObserver(
+                forName: .alpha,
+                object: nil,
+                queue: .main) { [unowned self] noti in
+                    guard let alphaDouble = noti.userInfo?[NotificationKey.alpha] as? Double else { return }
+                    
+                    self.adjustSliderAndStepper(alphaValue: alphaDouble)
+                }
+        // MARK: - 색 조절
+        NotificationCenter.default
+            .addObserver(
+                forName: .color,
+                object: nil,
+                queue: .main) { [unowned self] noti in
+                    guard let colorString = noti.userInfo?[NotificationKey.color] as? String else { return }
+                    
+                    self.colorButton.setTitle(colorString, for: .normal)
+                    self.beforeSelectedView?.updateViewAttribute()
         }
-        
-        plane.onUpdatedColor = { [unowned self] colorText in
-            self.colorButton.setTitle(colorText, for: .normal)
-            self.beforeSelectedView?.updateViewAttribute()
+        NotificationCenter.default
+            .addObserver(
+                forName: .rectangle,
+                object: nil,
+                queue: .main) { [unowned self] noti in
+            guard let rectangle = noti.userInfo?[NotificationKey.rectangle] as? Rectangle else { return }
+                    
+            addSquareView(rect: rectangle)
         }
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        // TODO: - 여기에 Notification 을 달아야한다.
+        setUpNotification()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        NotificationCenter.default.removeObserver(self)
+    }
 }
 
 //MARK: - 메인 뷰에 나타나는 요소를 관리하는 메서드
