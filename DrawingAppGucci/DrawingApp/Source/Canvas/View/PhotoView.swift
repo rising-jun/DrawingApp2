@@ -20,6 +20,9 @@ final class PhotoView: UIImageView, Drawable {
                 width: photo.size.width,
                 height: photo.size.height)
         )
+        super.isOpaque = false
+        super.alpha = photo.alpha.value
+        super.layer.borderColor = tintColor.cgColor
     }
     
     required init?(coder: NSCoder) {
@@ -29,5 +32,9 @@ final class PhotoView: UIImageView, Drawable {
     
     func updateImage(image: UIImage) {
         self.image = image
+    }
+    
+    func updateAlpha(alpha: Alpha) {
+        self.alpha = alpha.value
     }
 }

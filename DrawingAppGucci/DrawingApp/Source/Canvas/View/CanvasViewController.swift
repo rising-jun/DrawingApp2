@@ -23,9 +23,8 @@ final class CanvasViewController: UIViewController {
     private let plane = Plane()
     private var image: UIImage?
     private var beforeSelectedView: UIView? {
+        //MARK: - 선택된 뷰의 테두리를 그리고, 이전에 있던 뷰의 테두리를 지우기
         didSet {
-            // TODO: - Status View 한테 새로운 렉탱글이 왔다고 알려야함(뷰를 구분한다면 말이죠!)
-            // MARK: - 같은 사각형 뷰를 클릭 하면 리턴되는 가드문
             guard oldValue != beforeSelectedView else { return }
             oldValue?.drawEdges(selected: false)
         }
@@ -36,6 +35,7 @@ final class CanvasViewController: UIViewController {
         }
     }
     
+    //MARK: - 사진 버튼 누르면 실행 되는 액션
     @IBAction func touchedPictureButton(_ sender: UIButton) {
         var config = PHPickerConfiguration(photoLibrary: .shared())
         config.selectionLimit = 1
@@ -45,46 +45,52 @@ final class CanvasViewController: UIViewController {
         present(vc, animated: true)
     }
     
+    //MARK: - 상태창에 컬러 버튼 누르면 실행 되는 액션
     @IBAction func touchedColorButton(_ sender: UIButton) {
         guard let currentSquare = beforeSelectedView as? Drawable else { return }
         plane.changeColor(at: currentSquare.index)
     }
     
+    //MARK: - 스테퍼 + - 버튼 누르면 실행 되는 액션
     @IBAction func touchedStepper(_ sender: UIStepper) {
         guard let currentSquare = beforeSelectedView as? Drawable else { return }
         plane.changeAlpha(at: currentSquare.index, value: sender.value)
     }
     
+    //MARK: - 슬라이더에 점을 움직이면 실행 되는 액션
     @IBAction func movedDot(_ sender: UISlider) {
         guard let currentSquare = beforeSelectedView as? Drawable else { return }
         plane.changeAlpha(at: currentSquare.index, value: Double(sender.value))
     }
     
+    //MARK: - 메인 화면에 한 점을 터치하면 실행되는 액션
+    /// 1. 사각형을 탭하는 경우와, 빈 공간을 탭하는 경우가 나뉜다.
+    /// 2. 사각형을 탭하면, 상태 창에 알리고, 테두리를 그린다.
+    /// 3. 빈 공간을 탭하면, 상태창을 숨기고, 이전에 선택한 사각형의 태두리를 지운다.
     @IBAction func tapView(_ sender: UITapGestureRecognizer) {
         let point = sender.location(in: self.view)
         guard let selectedRectangleIndex = plane
-                .isTouched(at: (Double(point.x), Double(point.y)))
+                .isTouched(at: (Double(point.x), Double(point.y))),
+              let selectedRectangle = plane.findTouchedRectangle(at: (Double(point.x), Double(point.y)))
         else {
             statusView.isHidden = true
             beforeSelectedView = nil
             return
         }
+        let isPhoto = selectedRectangle is Photo
         //MARK: PhotoView와 SquareView 가 한데 들어감
-        let squareViews: [UIView] = view.subviews
+        let squareViews: [UIView] = view.subviews.filter { $0 is Drawable }
         let selectedView = squareViews[selectedRectangleIndex]
         beforeSelectedView = selectedView
+        self.informSelectedViewToStatus(color: selectedRectangle.color, alpha: selectedRectangle.alpha, isPhoto: isPhoto)
     }
     
+    //MARK: - 사각형 버튼 누르면 실행 되는 액션
     @IBAction func touchedRectangleButton(_ sender: Any) {
         plane.makeRectangle()
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        layout()
-        attribute()
-    }
-    
+    //MARK: - 객체들의 초기값 설정
     private func attribute() {
         colorLabel.text = "색상"
         alphaLabel.text = "투명도"
@@ -96,13 +102,11 @@ final class CanvasViewController: UIViewController {
         stepper.maximumValue = 1.0
         stepper.stepValue = 0.1
         rectangleButton.isOpaque = false
+        statusView.isHidden = true
         rectangleButton.layer.cornerRadius = 10
     }
     
-    private func layout() {
-        statusView.isHidden = true
-    }
-    
+    // MARK: - 노티피케이션 설정
     private func setUpNotifications() {
         // MARK: - 사각형 투명도 조절
         NotificationCenter.default
@@ -118,19 +122,11 @@ final class CanvasViewController: UIViewController {
                     self.adjustSliderAndStepper(color: color, alpha: alpha)
                     self.informSelectedViewToStatus(color: color, alpha: alpha, isPhoto: false)
                 }
+        
         // MARK: - 색 조절
-        /// 색이 변경된 것이 전파가 되면, 바껴야 할 것들
-        /// 1. ColorButton, slider, stepper -> status view 업데이트
-        /// 2. beforeSelectedView color 변경
-        /// ...
-        /// 바꾸려고 하니까 befroeSelected가 squareView만 적용이 되는 문제가 있다.
-        /// 그렇다면..?
-        /// PhotoView 도 사용할 수 있도록 바꾸어야할 것인데..
-        /// DrawingView도 사용할 수 있도록 해볼까?
-        /// 해치웠나...?
         NotificationCenter.default
             .addObserver(
-                forName: .color,
+                forName: .rectangle,
                 object: nil,
                 queue: .main) { [unowned self] noti in
                     guard
@@ -170,18 +166,26 @@ final class CanvasViewController: UIViewController {
         //MARK: - 사진 투명도 변경
         NotificationCenter.default
             .addObserver(
-                forName: .color,
+                forName: .photo,
                 object: nil,
                 queue: .main) { [unowned self] noti in
                     guard
                         let alpha = noti.userInfo?[NotificationKey.alpha] as? Alpha,
-                        let color = noti.userInfo?[NotificationKey.color] as? Color
+                        let color = noti.userInfo?[NotificationKey.color] as? Color,
+                        let photoView = beforeSelectedView as? PhotoView
                     else { return }
+                    photoView.updateAlpha(alpha: alpha)
                     self.adjustSliderAndStepper(color: color, alpha: alpha)
                     self.informSelectedViewToStatus(color: color, alpha: alpha, isPhoto: true)
                 }
     }
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        attribute()
+    }
+    
+    // MARK: - 메모리 관리를 위해 노티 셋업을 willAppear 에서, 노티 해제를 willDisappear 에서 실행
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setUpNotifications()
@@ -196,20 +200,27 @@ final class CanvasViewController: UIViewController {
 //MARK: - 컬러버튼, 스테퍼, 슬라이더 조정 및 뷰에 사각형, 사진 추가
 extension CanvasViewController {
     
+    // MARK: - 상태창에 선택된 스퀘어 뷰를 알리기
+    /// 스퀘어 뷰를 넘길 것인지? 아니면 업데이트할 정보만 넘길 것인지?
+    /// 이게 어느때 불려야하는가?
+    /// 1. selectedView 에 값이 들어갔을 때, - 이때는 뷰의 값만 전달 할 수가 있음. 뷰의 UIColor 를 보고 컬러와 알파값을 구해내는게 가능한가?
+    /// 2. 색상이나 알파값이 변경되었을 때 - 색상이나 알파값이 전달, 근데 사각형을 생성할 땐, 어떤 값이 들어가는지..? 아니면 렉탱글을 가지고 있으면 되는데 ...?
+    /// 3. 빈공간이 터치되었을 때 - 구현 완
     private func informSelectedViewToStatus(color: Color, alpha: Alpha, isPhoto: Bool) {
-        
         statusView.isHidden = false
         let buttonTitleString = isPhoto ? "비어있음" : color.hexaColor
         colorButton.setTitle(buttonTitleString, for: .normal)
         adjustSliderAndStepper(color: color, alpha: alpha)
     }
     
+    // MARK: - 새로운 스퀘어뷰를 추가하는 메서드
     private func addSquareView(rect: Rectangle, index: Int) {
         let squareView = SquareView(rectangle: rect, index: index)
         view.addSubview(squareView)
         view.bringSubviewToFront(drawableStackview)
     }
     
+    // MARK: - 새로운 사진뷰를 추가하는 메서드
     private func addPhotoView(photo: Photo, image: UIImage, index: Int) {
         let photoView = PhotoView(photo: photo, index: index)
         photoView.image = image
@@ -217,6 +228,7 @@ extension CanvasViewController {
         view.bringSubviewToFront(drawableStackview)
     }
     
+    // MARK: - 스테퍼와 슬라이더의 값을 조정하는 메서드
     private func adjustSliderAndStepper(color: Color, alpha: Alpha) {
         slider.value = Float(alpha.value)
         stepper.value = alpha.value

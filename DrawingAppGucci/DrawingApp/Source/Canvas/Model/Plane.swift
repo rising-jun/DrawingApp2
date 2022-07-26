@@ -44,6 +44,7 @@ final class Plane: Planable {
         NotificationCenter.default.post(name: .photo, object: self, userInfo: [NotificationKey.photo: photo,  NotificationKey.index: count - 1])
     }
     
+    // MARK: - 몇 번째 인덱스가 선택되었는지 반환
     func isTouched(at point: (Double, Double)) -> Int? {
         for (index, rectangle) in rectangles.enumerated() {
             if rectangle.bound.xBound.contains(point.0)
@@ -54,6 +55,7 @@ final class Plane: Planable {
         return nil
     }
     
+    // MARK: - 선택된 인덱스의 사각형을 반환
     func findTouchedRectangle(at point: (Double, Double)) -> Rectangle? {
         guard let touchResultIndex = isTouched(at: point) else { return nil }
         return self[touchResultIndex]
@@ -61,14 +63,23 @@ final class Plane: Planable {
     //MARK: - 색상 변경
     func changeColor(at index: Int) {
         let rectangle = self[index]
-        NotificationCenter.default.post(name: .color, object: self, userInfo: [NotificationKey.color: rectangle.color, NotificationKey.alpha: rectangle.alpha])
+        rectangle.setRandomColor()
+        if rectangle is Photo {
+            NotificationCenter.default.post(name: .photo, object: self, userInfo: [NotificationKey.color: rectangle.color, NotificationKey.alpha: rectangle.alpha])
+            return
+        }
+        NotificationCenter.default.post(name: .rectangle, object: self, userInfo: [NotificationKey.color: rectangle.color, NotificationKey.alpha: rectangle.alpha])
     }
     //MARK: - 투명도 변경
     func changeAlpha(at index: Int, value: Double) {
         let roundedAlpha: Double = round(value * 10) / 10
         let rectangle = self[index]
         rectangle.changeAlpha(value: roundedAlpha)
+        if rectangle is Photo {
+            NotificationCenter.default.post(name: .photo, object: self, userInfo: [NotificationKey.color: rectangle.color, NotificationKey.alpha: rectangle.alpha])
+            return 
+        }
         //MARK: - roundedAlpha 에서 +- 0.1 된 값이 넘겨질 것임
-        NotificationCenter.default.post(name: .color, object: self, userInfo: [NotificationKey.color: rectangle.color, NotificationKey.alpha: rectangle.alpha])
+        NotificationCenter.default.post(name: .rectangle, object: self, userInfo: [NotificationKey.color: rectangle.color, NotificationKey.alpha: rectangle.alpha])
     }
 }

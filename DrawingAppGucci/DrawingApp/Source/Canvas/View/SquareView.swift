@@ -14,6 +14,8 @@ final class SquareView: UIView, Drawable {
     init(rectangle: Rectangle, index: Int) {
         self.index = index
         super.init(frame: CGRect(x: rectangle.point.x, y: rectangle.point.y, width: rectangle.size.width, height: rectangle.size.height))
+        super.updateColorAndAlpha(color: rectangle.color, alpha: rectangle.alpha)
+        self.layer.borderColor = tintColor.cgColor
     }
     
     required init?(coder: NSCoder) {
