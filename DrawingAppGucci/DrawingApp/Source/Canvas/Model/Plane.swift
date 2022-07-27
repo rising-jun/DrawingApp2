@@ -8,45 +8,51 @@
 import Foundation
 
 protocol Planable {
-    
-    func makeRectangle()
+    func makeShape(with blueprint: BlueprintOfViewShape)
     func isTouched(at point: (Double, Double)) -> Int?
-    func findTouchedRectangle(at point: (Double, Double)) -> Rectangle?
-    subscript(_ index: Int) -> Rectangle { get }
+    func findTouchedShape(at point: (Double, Double)) -> Shape?
+    func changeColor(at index: Int)
+    func changeAlpha(at index: Int, value: Double)
+    subscript(_ index: Int) -> Shape { get }
 }
 
 final class Plane: Planable {
-    //MARK: - photo가 rectangle을 상속받음
-    private(set) var rectangles: [Rectangle] = []
-    private let factory = Factory()
-    var count: Int { rectangles.count }
     
-    subscript(index: Int) -> Rectangle {
+    //MARK: - photo가 rectangle을 상속받음
+    private(set) var shapes: [Shape] = []
+    private let factory = ShapeFactory()
+    var count: Int { shapes.count }
+    
+    subscript(index: Int) -> Shape {
         //MARK: - Debug == assert, release == precondition
         assert(isIndexValid(index: index), "out of index")
-        return self.rectangles[index]
+        return self.shapes[index]
     }
     
     private func isIndexValid(index: Int) -> Bool {
-        return 0 <= index && index < self.rectangles.count
+        return 0 <= index && index < self.shapes.count
+    }
+
+    func makeShape(with blueprint: BlueprintOfViewShape) {
+        
+        let isRectangle: Bool = blueprint == .rectangle
+        let notiName: Notification.Name = isRectangle ? .rectangle : .photo
+        let notiKey: NotificationKey = isRectangle ? .rectangle : .photo
+        let shape = factory.generateShape(with: blueprint)
+        shapes.append(shape)
+        NotificationCenter.default
+            .post(
+                name: notiName,
+                object: self,
+                userInfo: [notiKey: shape,
+                           NotificationKey.index: count - 1]
+            )
     }
     
-    //MARK: - 사각형 추가
-    func makeRectangle() {
-        let rectangle = factory.generateRectangle(with: .rectangle)
-        rectangles.append(rectangle)
-        NotificationCenter.default.post(name: .rectangle, object: self, userInfo: [NotificationKey.rectangle: rectangle, NotificationKey.index: count - 1])
-    }
-    //MARK: - 사진 추가
-    func makePhoto() {
-        guard let photo = factory.generateRectangle(with: .photo) as? Photo else { return }
-        rectangles.append(photo)
-        NotificationCenter.default.post(name: .photo, object: self, userInfo: [NotificationKey.photo: photo,  NotificationKey.index: count - 1])
-    }
-    
+    // TODO: -  CanvasVC 에서 어떻게 쓰이는 지 확인 1
     // MARK: - 몇 번째 인덱스가 선택되었는지 반환
     func isTouched(at point: (Double, Double)) -> Int? {
-        for (index, rectangle) in rectangles.enumerated() {
+        for (index, rectangle) in shapes.enumerated() {
             if rectangle.bound.xBound.contains(point.0)
                 && rectangle.bound.yBound.contains(point.1) {
                 return index
@@ -55,31 +61,50 @@ final class Plane: Planable {
         return nil
     }
     
+    // TODO: -  CanvasVC 에서 어떻게 쓰이는 지 확인 2
     // MARK: - 선택된 인덱스의 사각형을 반환
-    func findTouchedRectangle(at point: (Double, Double)) -> Rectangle? {
+    func findTouchedShape(at point: (Double, Double)) -> Shape? {
         guard let touchResultIndex = isTouched(at: point) else { return nil }
         return self[touchResultIndex]
     }
+    
     //MARK: - 색상 변경
     func changeColor(at index: Int) {
-        let rectangle = self[index]
+        guard let rectangle = self[index] as? Rectangle else { return }
         rectangle.setRandomColor()
-        if rectangle is Photo {
-            NotificationCenter.default.post(name: .photo, object: self, userInfo: [NotificationKey.color: rectangle.color, NotificationKey.alpha: rectangle.alpha])
-            return
-        }
-        NotificationCenter.default.post(name: .rectangle, object: self, userInfo: [NotificationKey.color: rectangle.color, NotificationKey.alpha: rectangle.alpha])
+
+        NotificationCenter.default
+            .post(
+                name: .rectangle,
+                object: self,
+                userInfo: [NotificationKey.color: rectangle.color,
+                           NotificationKey.alpha: rectangle.alpha]
+            )
     }
+
+    /// - roundedAlpha 에서 +- 0.1 된 값이 넘겨질 것임
     //MARK: - 투명도 변경
     func changeAlpha(at index: Int, value: Double) {
         let roundedAlpha: Double = round(value * 10) / 10
-        let rectangle = self[index]
-        rectangle.changeAlpha(value: roundedAlpha)
-        if rectangle is Photo {
-            NotificationCenter.default.post(name: .photo, object: self, userInfo: [NotificationKey.color: rectangle.color, NotificationKey.alpha: rectangle.alpha])
-            return 
+        let shape = self[index]
+        shape.changeAlpha(value: roundedAlpha)
+        
+        if let rectangle = shape as? Rectangle {
+            NotificationCenter.default
+                .post(
+                    name: .rectangle,
+                    object: self,
+                    userInfo: [NotificationKey.color: rectangle.color,
+                               NotificationKey.alpha: shape.alpha]
+                )
+        } else {
+            NotificationCenter.default
+                .post(
+                    name: .photo,
+                    object: self,
+                    userInfo: [NotificationKey.color: Color.init(r: 0, g: 0, b: 0),
+                               NotificationKey.alpha: shape.alpha]
+                )
         }
-        //MARK: - roundedAlpha 에서 +- 0.1 된 값이 넘겨질 것임
-        NotificationCenter.default.post(name: .rectangle, object: self, userInfo: [NotificationKey.color: rectangle.color, NotificationKey.alpha: rectangle.alpha])
     }
 }

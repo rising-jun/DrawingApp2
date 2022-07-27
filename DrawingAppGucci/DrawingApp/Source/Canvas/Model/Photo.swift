@@ -7,12 +7,10 @@
 
 import Foundation
 
-final class Photo: Rectangle {
+final class Photo: Shape {
     
-    override init(id: String, size: Size, point: Point, color: Color, alpha: Alpha, bound: Bound) {
-        super.init(id: id, size: size, point: point, color: Color(r: 0, g: 0, b: 0), alpha: alpha, bound: bound)
-    }
+    init(shape: Shape) {
+        super.init(id: shape.id, size: shape.size, point: shape.point, alpha: shape.alpha, bound: shape.bound)
     
-    final override func setRandomColor() {
     }
 }

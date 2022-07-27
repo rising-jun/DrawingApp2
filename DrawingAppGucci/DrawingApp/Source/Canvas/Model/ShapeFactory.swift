@@ -1,5 +1,5 @@
 //
-//  Factory.swift
+//  ShapeFactory.swift
 //  DrawingApp
 //
 //  Created by YEONGJIN JANG on 2022/07/05.
@@ -7,42 +7,30 @@
 
 import Foundation
 
-final class Factory {
-    func generateRectangle(with: Drawing) -> Rectangle {
-        let uuid = makeUUID()
-        let width: Double = 150.0
-        let height: Double = 120.0
-        let size = Size(width: width, height: height)
-        let color = Color()
-        let point = Point(
-            x: Double.random(in: 0...ScreenSize.width),
-            y: Double.random(in: 0...ScreenSize.height)
-        )
-        let alpha: Alpha = makeAlpha()
-        let bound = Bound(size: size, point: point)
+final class ShapeFactory {
+    
+    //TODO: - Shape를 먼저 인잇하고 사각형엔 컬러 추가 하는 방식
+    func generateShape(with: BlueprintOfViewShape) -> Shape {
+        let size = Size(width: ShapeSize.width,
+                        height: ShapeSize.height)
+        let point = Point(x: Double.random(in: 0...ScreenSize.width),
+                          y: Double.random(in: 0...ScreenSize.height))
+        let shape = Shape(id: generateUUID(),
+                          size: size,
+                          point: point,
+                          alpha: generateAlpha(),
+                          bound: Bound(size: size, point: point))
+
+        switch with {
+        case .rectangle:
+            return Rectangle(shape: shape, color: Color())
+        case .photo:
+            return Photo(shape: shape)
+        }
         
-        let rectangle = Rectangle(
-            id: uuid,
-            size: size,
-            point: point,
-            color: color,
-            alpha: alpha,
-            bound: bound
-        )
-        
-        let photo = Photo(
-            id: uuid,
-            size: size,
-            point: point,
-            color: color,
-            alpha: alpha,
-            bound: bound
-        )
-        
-        return with == .rectangle ? rectangle : photo
     }
     
-     private func makeUUID() -> String {
+     private func generateUUID() -> String {
         let id = UUID()             // xxxx-xxxx-xxxx-xxxx
             .uuidString
             .components(separatedBy: "-")
@@ -64,7 +52,7 @@ final class Factory {
         return resultId
     }
     
-    private func makeAlpha() -> Alpha {
+    private func generateAlpha() -> Alpha {
         let randomAlpha = Int.random(in: 1...10)
         switch randomAlpha {
         case 1:

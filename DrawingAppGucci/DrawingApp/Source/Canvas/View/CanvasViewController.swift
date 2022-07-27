@@ -64,30 +64,34 @@ final class CanvasViewController: UIViewController {
     }
     
     //MARK: - 메인 화면에 한 점을 터치하면 실행되는 액션
-    /// 1. 사각형을 탭하는 경우와, 빈 공간을 탭하는 경우가 나뉜다.
-    /// 2. 사각형을 탭하면, 상태 창에 알리고, 테두리를 그린다.
-    /// 3. 빈 공간을 탭하면, 상태창을 숨기고, 이전에 선택한 사각형의 태두리를 지운다.
     @IBAction func tapView(_ sender: UITapGestureRecognizer) {
         let point = sender.location(in: self.view)
-        guard let selectedRectangleIndex = plane
+        //MARK: - 빈공간인지 아닌지 확인
+        guard let index = plane
                 .isTouched(at: (Double(point.x), Double(point.y))),
-              let selectedRectangle = plane.findTouchedRectangle(at: (Double(point.x), Double(point.y)))
+              let selectedShape = plane.findTouchedShape(at: (Double(point.x), Double(point.y)))
         else {
             statusView.isHidden = true
             beforeSelectedView = nil
             return
         }
-        let isPhoto = selectedRectangle is Photo
+
         //MARK: PhotoView와 SquareView 가 한데 들어감
         let squareViews: [UIView] = view.subviews.filter { $0 is Drawable }
-        let selectedView = squareViews[selectedRectangleIndex]
-        beforeSelectedView = selectedView
-        self.informSelectedViewToStatus(color: selectedRectangle.color, alpha: selectedRectangle.alpha, isPhoto: isPhoto)
+        beforeSelectedView = squareViews[index]
+        
+        //MARK: - 상태창에 알림
+        if let rectangle = selectedShape as? Rectangle {
+            self.informSelectedViewToStatus(color: rectangle.color, alpha: selectedShape.alpha, type: .rectangle)
+        } else {
+            self.informSelectedViewToStatus(color: Color(r: 0, g: 0, b: 0), alpha: selectedShape.alpha, type: .photo)
+        }
+        
     }
     
     //MARK: - 사각형 버튼 누르면 실행 되는 액션
     @IBAction func touchedRectangleButton(_ sender: Any) {
-        plane.makeRectangle()
+        plane.makeShape(with: .rectangle)
     }
     
     //MARK: - 객체들의 초기값 설정
@@ -106,8 +110,8 @@ final class CanvasViewController: UIViewController {
         rectangleButton.layer.cornerRadius = 10
     }
     
-    // MARK: - 노티피케이션 설정
-    private func setUpNotifications() {
+    // MARK: - 노티피케이션 옵저버 등록
+    private func addObservers() {
         // MARK: - 사각형 투명도 조절
         NotificationCenter.default
             .addObserver(
@@ -120,7 +124,7 @@ final class CanvasViewController: UIViewController {
                     else { return }
                     
                     self.adjustSliderAndStepper(color: color, alpha: alpha)
-                    self.informSelectedViewToStatus(color: color, alpha: alpha, isPhoto: false)
+                    self.informSelectedViewToStatus(color: color, alpha: alpha, type: .rectangle)
                 }
         
         // MARK: - 색 조절
@@ -135,7 +139,7 @@ final class CanvasViewController: UIViewController {
                     else { return }
                     
                     self.beforeSelectedView?.updateColorAndAlpha(color: color, alpha: alpha)
-                    self.informSelectedViewToStatus(color: color, alpha: alpha, isPhoto: false)
+                    self.informSelectedViewToStatus(color: color, alpha: alpha, type: .rectangle)
                 }
         
         //MARK: - 사각형 추가
@@ -176,7 +180,7 @@ final class CanvasViewController: UIViewController {
                     else { return }
                     photoView.updateAlpha(alpha: alpha)
                     self.adjustSliderAndStepper(color: color, alpha: alpha)
-                    self.informSelectedViewToStatus(color: color, alpha: alpha, isPhoto: true)
+                    self.informSelectedViewToStatus(color: color, alpha: alpha, type: .photo)
                 }
     }
     
@@ -188,7 +192,7 @@ final class CanvasViewController: UIViewController {
     // MARK: - 메모리 관리를 위해 노티 셋업을 willAppear 에서, 노티 해제를 willDisappear 에서 실행
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        setUpNotifications()
+        addObservers()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -206,9 +210,9 @@ extension CanvasViewController {
     /// 1. selectedView 에 값이 들어갔을 때, - 이때는 뷰의 값만 전달 할 수가 있음. 뷰의 UIColor 를 보고 컬러와 알파값을 구해내는게 가능한가?
     /// 2. 색상이나 알파값이 변경되었을 때 - 색상이나 알파값이 전달, 근데 사각형을 생성할 땐, 어떤 값이 들어가는지..? 아니면 렉탱글을 가지고 있으면 되는데 ...?
     /// 3. 빈공간이 터치되었을 때 - 구현 완
-    private func informSelectedViewToStatus(color: Color, alpha: Alpha, isPhoto: Bool) {
+    private func informSelectedViewToStatus(color: Color, alpha: Alpha, type blueprint: BlueprintOfViewShape) {
         statusView.isHidden = false
-        let buttonTitleString = isPhoto ? "비어있음" : color.hexaColor
+        let buttonTitleString = blueprint == .photo ? "비어있음" : color.hexaColor
         colorButton.setTitle(buttonTitleString, for: .normal)
         adjustSliderAndStepper(color: color, alpha: alpha)
     }
@@ -246,7 +250,7 @@ extension CanvasViewController: PHPickerViewControllerDelegate {
             result.itemProvider.loadObject(ofClass: UIImage.self) { reading, error in
                 guard let image = reading as? UIImage, error == nil else { return }
                 self.image = image
-                self.plane.makePhoto()
+                self.plane.makeShape(with: .photo)
             }
         }
     }

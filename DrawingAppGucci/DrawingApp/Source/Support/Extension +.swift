@@ -32,3 +32,8 @@ extension UIView {
     }
 
 }
+
+enum ShapeSize {
+    static let width: Double = 150.0
+    static let height: Double = 120.0
+}

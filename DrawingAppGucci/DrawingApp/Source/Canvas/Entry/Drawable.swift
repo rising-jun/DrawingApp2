@@ -6,28 +6,8 @@
 //
 
 import Foundation
-import UIKit
 
-enum Drawing {
-    case rectangle
-    case photo
-}
-
+// MARK: - SquareView 와 PhotoView 에 index 속성을 부여하고, 형변환이 가능하게 하는 프로토콜
 protocol Drawable {
-    
     var index: Int { get set }
-    
-//    func drawEdges(selected: Bool) { }
-//
-//    func updateColorAndAlpha(color: Color, alpha: Alpha) { }
-//
-//    init(index: Int) {
-//        self.index = index
-//    }
 }
-
-//extension Drawable: Equatable {
-//    static func ==(lhs: Drawable, rhs: Drawable) -> Bool {
-//        return lhs.index == rhs.index
-//    }
-//}
