@@ -49,7 +49,7 @@ final class ShapeFactory {
             resultId += String(word.element)
         }
 
-        return resultId
+        return resultId             // xxx-xxx-xxx
     }
     
     private func generateAlpha() -> Alpha {

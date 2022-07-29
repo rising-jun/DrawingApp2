@@ -108,3 +108,16 @@ final class Plane: Planable {
         }
     }
 }
+
+// 사각형이나 사진의 위치를 조정
+extension Plane {
+    func renewCenterOfShape(at center: Point) {
+        guard let touchedShape = self.findTouchedShape(at: (center.x, center.y)) else {
+            print("찾는 도형이 없어요")
+            return
+        }
+        touchedShape.movePlace(at: center)
+        
+        NotificationCenter.default.post(name: .move, object: self)
+    }
+}

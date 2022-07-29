@@ -32,6 +32,7 @@
 		00CC7C83288E6968009E0D0A /* Drawable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00CC7C82288E6968009E0D0A /* Drawable.swift */; };
 		00DE6F0C28784B7600738FC8 /* Extension +.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DE6F0B28784B7600738FC8 /* Extension +.swift */; };
 		00DE6F0E28784BD100738FC8 /* Plane.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DE6F0D28784BD100738FC8 /* Plane.swift */; };
+		00EC55E628936E0300254487 /* CanvasVC+GestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00EC55E528936E0300254487 /* CanvasVC+GestureRecognizer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -81,6 +82,7 @@
 		00CC7C82288E6968009E0D0A /* Drawable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Drawable.swift; sourceTree = "<group>"; };
 		00DE6F0B28784B7600738FC8 /* Extension +.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension +.swift"; sourceTree = "<group>"; };
 		00DE6F0D28784BD100738FC8 /* Plane.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Plane.swift; sourceTree = "<group>"; };
+		00EC55E528936E0300254487 /* CanvasVC+GestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CanvasVC+GestureRecognizer.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -172,6 +174,7 @@
 				00CC7C80288E47E3009E0D0A /* PhotoView.swift */,
 				0057428728743F9500080F14 /* Main.storyboard */,
 				0057428528743F9500080F14 /* CanvasViewController.swift */,
+				00EC55E528936E0300254487 /* CanvasVC+GestureRecognizer.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -366,6 +369,7 @@
 				00DE6F0C28784B7600738FC8 /* Extension +.swift in Sources */,
 				00CC7C7F288E3F8E009E0D0A /* Photo.swift in Sources */,
 				003E1D96288B1A0E0077783E /* Size.swift in Sources */,
+				00EC55E628936E0300254487 /* CanvasVC+GestureRecognizer.swift in Sources */,
 				003E1D98288B1A120077783E /* Point.swift in Sources */,
 				00A9D5D9287BFC68002A6049 /* SquareView.swift in Sources */,
 				00CC7C83288E6968009E0D0A /* Drawable.swift in Sources */,

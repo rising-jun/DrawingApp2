@@ -20,7 +20,7 @@ final class CanvasViewController: UIViewController {
     @IBOutlet weak var alphaLabel: UILabel!
     @IBOutlet weak var stepper: UIStepper!
     @IBOutlet weak var drawableStackview: UIStackView!
-    private let plane = Plane()
+    let plane = Plane()
     private var image: UIImage?
     private var beforeSelectedView: UIView? {
         //MARK: - 선택된 뷰의 테두리를 그리고, 이전에 있던 뷰의 테두리를 지우기
@@ -34,6 +34,13 @@ final class CanvasViewController: UIViewController {
             newValue.drawEdges(selected: true)
         }
     }
+    
+//    let panGestureRecognizer: UIPanGestureRecognizer = {
+//        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(panGestureHandler(_:)))
+//        panGesture.minimumNumberOfTouches = 2
+//        panGesture.maximumNumberOfTouches = 2
+//        return panGesture
+//    }()
     
     //MARK: - 사진 버튼 누르면 실행 되는 액션
     @IBAction func touchedPictureButton(_ sender: UIButton) {
@@ -108,6 +115,7 @@ final class CanvasViewController: UIViewController {
         rectangleButton.isOpaque = false
         statusView.isHidden = true
         rectangleButton.layer.cornerRadius = 10
+
     }
     
     // MARK: - 노티피케이션 옵저버 등록
@@ -182,6 +190,11 @@ final class CanvasViewController: UIViewController {
                     self.adjustSliderAndStepper(color: color, alpha: alpha)
                     self.informSelectedViewToStatus(color: color, alpha: alpha, type: .photo)
                 }
+        
+        // MARK: - 도형 이동
+        NotificationCenter.default.addObserver(forName: .move, object: nil, queue: .main) { _ in
+            self.view.reloadInputViews()
+        }
     }
     
     override func viewDidLoad() {
@@ -205,11 +218,6 @@ final class CanvasViewController: UIViewController {
 extension CanvasViewController {
     
     // MARK: - 상태창에 선택된 스퀘어 뷰를 알리기
-    /// 스퀘어 뷰를 넘길 것인지? 아니면 업데이트할 정보만 넘길 것인지?
-    /// 이게 어느때 불려야하는가?
-    /// 1. selectedView 에 값이 들어갔을 때, - 이때는 뷰의 값만 전달 할 수가 있음. 뷰의 UIColor 를 보고 컬러와 알파값을 구해내는게 가능한가?
-    /// 2. 색상이나 알파값이 변경되었을 때 - 색상이나 알파값이 전달, 근데 사각형을 생성할 땐, 어떤 값이 들어가는지..? 아니면 렉탱글을 가지고 있으면 되는데 ...?
-    /// 3. 빈공간이 터치되었을 때 - 구현 완
     private func informSelectedViewToStatus(color: Color, alpha: Alpha, type blueprint: BlueprintOfViewShape) {
         statusView.isHidden = false
         let buttonTitleString = blueprint == .photo ? "비어있음" : color.hexaColor
@@ -221,6 +229,8 @@ extension CanvasViewController {
     private func addSquareView(rect: Rectangle, index: Int) {
         let squareView = SquareView(rectangle: rect, index: index)
         view.addSubview(squareView)
+        createPanGestureRecognizer(targetView: squareView)
+//        squareView.addGestureRecognizer(panGestureRecognizer)
         view.bringSubviewToFront(drawableStackview)
     }
     
@@ -229,6 +239,9 @@ extension CanvasViewController {
         let photoView = PhotoView(photo: photo, index: index)
         photoView.image = image
         view.addSubview(photoView)
+        // 이 메서드가 작동이 안됨
+        createPanGestureRecognizer(targetView: (photoView as UIView))
+//        photoView.addGestureRecognizer(panGestureRecognizer)
         view.bringSubviewToFront(drawableStackview)
     }
     
@@ -239,6 +252,7 @@ extension CanvasViewController {
         self.beforeSelectedView?.updateColorAndAlpha(color: color, alpha: alpha)
         
     }
+
 }
 
 // MARK: - 사진 델리게이트
