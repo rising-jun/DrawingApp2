@@ -49,7 +49,6 @@ final class Plane: Planable {
             )
     }
     
-    // TODO: -  CanvasVC 에서 어떻게 쓰이는 지 확인 1
     // MARK: - 몇 번째 인덱스가 선택되었는지 반환
     func isTouched(at point: (Double, Double)) -> Int? {
         for (index, rectangle) in shapes.enumerated() {
@@ -61,7 +60,6 @@ final class Plane: Planable {
         return nil
     }
     
-    // TODO: -  CanvasVC 에서 어떻게 쓰이는 지 확인 2
     // MARK: - 선택된 인덱스의 사각형을 반환
     func findTouchedShape(at point: (Double, Double)) -> Shape? {
         guard let touchResultIndex = isTouched(at: point) else { return nil }
@@ -111,12 +109,11 @@ final class Plane: Planable {
 
 // 사각형이나 사진의 위치를 조정
 extension Plane {
-    func renewCenterOfShape(at center: Point) {
-        guard let touchedShape = self.findTouchedShape(at: (center.x, center.y)) else {
-            print("찾는 도형이 없어요")
+    func renewCenterOfShape(before origin: Point, after position: Point) {
+        guard let touchedShape = self.findTouchedShape(at: (origin.x, origin.y)) else {
             return
         }
-        touchedShape.movePlace(at: center)
+        touchedShape.movePlace(to: position)
         
         NotificationCenter.default.post(name: .move, object: self)
     }

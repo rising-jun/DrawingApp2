@@ -20,7 +20,8 @@ final class CanvasViewController: UIViewController {
     @IBOutlet weak var alphaLabel: UILabel!
     @IBOutlet weak var stepper: UIStepper!
     @IBOutlet weak var drawableStackview: UIStackView!
-    let plane = Plane()
+    internal let plane = Plane()
+    internal var initPostion: Point?
     private var image: UIImage?
     private var beforeSelectedView: UIView? {
         //MARK: - 선택된 뷰의 테두리를 그리고, 이전에 있던 뷰의 테두리를 지우기
@@ -34,13 +35,6 @@ final class CanvasViewController: UIViewController {
             newValue.drawEdges(selected: true)
         }
     }
-    
-//    let panGestureRecognizer: UIPanGestureRecognizer = {
-//        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(panGestureHandler(_:)))
-//        panGesture.minimumNumberOfTouches = 2
-//        panGesture.maximumNumberOfTouches = 2
-//        return panGesture
-//    }()
     
     //MARK: - 사진 버튼 누르면 실행 되는 액션
     @IBAction func touchedPictureButton(_ sender: UIButton) {
