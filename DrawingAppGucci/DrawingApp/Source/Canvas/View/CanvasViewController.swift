@@ -36,14 +36,17 @@ final class CanvasViewController: UIViewController {
         }
     }
     
-    //MARK: - 사진 버튼 누르면 실행 되는 액션
-    @IBAction func touchedPictureButton(_ sender: UIButton) {
+    private let phPickerViewController: PHPickerViewController = {
         var config = PHPickerConfiguration(photoLibrary: .shared())
         config.selectionLimit = 1
         config.filter = .images
         let vc = PHPickerViewController(configuration: config)
-        vc.delegate = self
-        present(vc, animated: true)
+        return vc
+    }()
+    
+    //MARK: - 사진 버튼 누르면 실행 되는 액션
+    @IBAction func touchedPictureButton(_ sender: UIButton) {
+        present(phPickerViewController, animated: true)
     }
     
     //MARK: - 상태창에 컬러 버튼 누르면 실행 되는 액션
@@ -109,6 +112,7 @@ final class CanvasViewController: UIViewController {
         rectangleButton.isOpaque = false
         statusView.isHidden = true
         rectangleButton.layer.cornerRadius = 10
+        phPickerViewController.delegate = self
 
     }
     
