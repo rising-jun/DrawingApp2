@@ -8,14 +8,31 @@
 import Foundation
 import UIKit
 
-struct Color {
-    private(set) var r: UInt8
-    private(set) var g: UInt8
-    private(set) var b: UInt8
+@propertyWrapper
+struct Fracktion {
+    private var value: UInt8 = 0
+    private(set) var projectedValue: Double = 0.0
     
-    var red: Double { return Double(self.r) / 255 }
-    var green: Double { return Double(self.g) / 255 }
-    var blue: Double { return Double(self.b) / 255 }
+    var wrappedValue: UInt8 {
+        get {
+            return value
+        }
+        set {
+            self.value = newValue
+            self.projectedValue = Double(newValue) / 255
+        }
+    }
+    
+    init(wrappedValue initalValue: UInt8) {
+        self.wrappedValue = initalValue
+    }
+}
+
+struct Color {
+    
+    @Fracktion private(set) var r: UInt8
+    @Fracktion private(set) var g: UInt8
+    @Fracktion private(set) var b: UInt8
     
     var hexaColor: String {
         var s = "#"

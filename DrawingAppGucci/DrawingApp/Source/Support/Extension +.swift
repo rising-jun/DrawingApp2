@@ -28,7 +28,7 @@ extension UIView {
     }
     
     func updateColorAndAlpha(color: Color, alpha: Alpha) {
-        self.backgroundColor = UIColor.init(red: color.red, green: color.green, blue: color.blue, alpha: alpha.value)
+        self.backgroundColor = UIColor.init(red: color.$r, green: color.$g, blue: color.$b, alpha: alpha.value)
     }
 
 }
