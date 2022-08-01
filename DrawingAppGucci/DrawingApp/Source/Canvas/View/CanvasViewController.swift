@@ -22,7 +22,7 @@ final class CanvasViewController: UIViewController {
     @IBOutlet weak var drawableStackview: UIStackView!
     internal let plane = Plane()
     internal var initPostion: Point?
-    private var image: UIImage?
+    
     private var beforeSelectedView: UIView? {
         //MARK: - 선택된 뷰의 테두리를 그리고, 이전에 있던 뷰의 테두리를 지우기
         didSet {
@@ -164,9 +164,9 @@ final class CanvasViewController: UIViewController {
                 object: nil,
                 queue: .main) { [unowned self] noti in
                     guard let photo = noti.userInfo?[NotificationKey.photo] as? Photo,
-                          let index = noti.userInfo?[NotificationKey.index] as? Int,
-                    let image = self.image else { return }
-                    addPhotoView(photo: photo, image: image, index: index)
+                          let index = noti.userInfo?[NotificationKey.index] as? Int
+                    else { return }
+                    addPhotoView(photo: photo, index: index)
                 }
         
         //MARK: - 사진 투명도 변경
@@ -222,20 +222,20 @@ extension CanvasViewController {
     // MARK: - 새로운 스퀘어뷰를 추가하는 메서드
     private func addSquareView(rect: Rectangle, index: Int) {
         let squareView = SquareView(rectangle: rect, index: index)
-        view.addSubview(squareView)
         createPanGestureRecognizer(targetView: squareView)
-//        squareView.addGestureRecognizer(panGestureRecognizer)
+
+        view.addSubview(squareView)
         view.bringSubviewToFront(drawableStackview)
     }
     
     // MARK: - 새로운 사진뷰를 추가하는 메서드
-    private func addPhotoView(photo: Photo, image: UIImage, index: Int) {
+    private func addPhotoView(photo: Photo, index: Int) {
         let photoView = PhotoView(photo: photo, index: index)
-        photoView.image = image
+        photoView.isUserInteractionEnabled = true
+        photoView.image = UIImage(data: photo.image)
+        createPanGestureRecognizer(targetView: photoView)
+        
         view.addSubview(photoView)
-        // 이 메서드가 작동이 안됨
-        createPanGestureRecognizer(targetView: (photoView as UIView))
-//        photoView.addGestureRecognizer(panGestureRecognizer)
         view.bringSubviewToFront(drawableStackview)
     }
     
@@ -255,10 +255,10 @@ extension CanvasViewController: PHPickerViewControllerDelegate {
         picker.dismiss(animated: true, completion: nil)
         
         results.forEach { result in
-            result.itemProvider.loadObject(ofClass: UIImage.self) { reading, error in
-                guard let image = reading as? UIImage, error == nil else { return }
-                self.image = image
-                self.plane.makeShape(with: .photo)
+            result.itemProvider.loadObject(ofClass: UIImage.self) { [unowned self] reading, error in
+                guard let imageData = reading as? UIImage, error == nil else { return }
+                let imagePngData = imageData.pngData()
+                self.plane.makeShape(with: .photo, image: imagePngData)
             }
         }
     }

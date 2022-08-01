@@ -8,7 +8,7 @@
 import Foundation
 
 protocol Planable {
-    func makeShape(with blueprint: BlueprintOfViewShape)
+    func makeShape(with blueprint: BlueprintOfViewShape, image data: Data?)
     func isTouched(at point: (Double, Double)) -> Int?
     func findTouchedShape(at point: (Double, Double)) -> Shape?
     func changeColor(at index: Int)
@@ -33,12 +33,12 @@ final class Plane: Planable {
         return 0 <= index && index < self.shapes.count
     }
 
-    func makeShape(with blueprint: BlueprintOfViewShape) {
+    func makeShape(with blueprint: BlueprintOfViewShape, image data: Data? = nil) {
         
         let isRectangle: Bool = blueprint == .rectangle
         let notiName: Notification.Name = isRectangle ? .rectangle : .photo
         let notiKey: NotificationKey = isRectangle ? .rectangle : .photo
-        let shape = factory.generateShape(with: blueprint)
+        let shape = factory.generateShape(with: blueprint, imageData: data)
         shapes.append(shape)
         NotificationCenter.default
             .post(
