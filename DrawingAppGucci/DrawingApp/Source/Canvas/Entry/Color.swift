@@ -18,11 +18,9 @@ struct Color {
     var blue: Double { return Double(self.b) / 255 }
     
     var hexaColor: String {
-        var string = "#"
-        string += String(format:"%02X", r)
-        string += String(format:"%02X", g)
-        string += String(format:"%02X", b)
-        return string
+        var s = "#"
+        [r,g,b].forEach { s += String(format: "%02X", $0) }
+        return s
     }
 
     init(r: UInt8, g: UInt8, b: UInt8) {
