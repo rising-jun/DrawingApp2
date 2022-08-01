@@ -27,15 +27,14 @@ extension CanvasViewController: UIGestureRecognizerDelegate {
         case .began:
             fallthrough
         case .changed:
-            sender.view?.layer.opacity = 0.5
-
+            sender.view?.alpha = plane[drawableView.index].alpha.value / 2
         //MARK: - 이동이 끝나면, 시작점과 이동점을 Plane에게 넘기고 모델을 재조정 요청
         case .ended:
             guard let changedOrigin = sender.view?.frame.origin else { return }
             
             let movedPoint = Point(x: changedOrigin.x, y: changedOrigin.y)
             self.plane.renewCenterOfShape(at: drawableView.index, after: movedPoint)
-            sender.view?.layer.opacity = 1.0
+            sender.view?.alpha = plane[drawableView.index].alpha.value
         default:
             break
         }
