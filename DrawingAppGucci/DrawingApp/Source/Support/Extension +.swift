@@ -37,3 +37,11 @@ enum ShapeSize {
     static let width: Double = 150.0
     static let height: Double = 120.0
 }
+
+extension UIImage {
+    func withAlpha(_ a: CGFloat) -> UIImage {
+        return UIGraphicsImageRenderer(size: size, format: imageRendererFormat).image { (_) in
+            draw(in: CGRect(origin: .zero, size: size), blendMode: .normal, alpha: a)
+        }
+    }
+}

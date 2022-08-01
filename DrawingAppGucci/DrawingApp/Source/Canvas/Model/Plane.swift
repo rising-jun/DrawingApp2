@@ -8,7 +8,7 @@
 import Foundation
 
 protocol Planable {
-    func makeShape(with blueprint: BlueprintOfViewShape, image data: Data?)
+    func makeShape(with blueprint: ShapeBlueprint, image data: Data?)
     func isTouched(at point: (Double, Double)) -> Int?
     func findTouchedShape(at point: (Double, Double)) -> Shape?
     func changeColor(at index: Int)
@@ -33,7 +33,7 @@ final class Plane: Planable {
         return 0 <= index && index < self.shapes.count
     }
 
-    func makeShape(with blueprint: BlueprintOfViewShape, image data: Data? = nil) {
+    func makeShape(with blueprint: ShapeBlueprint, image data: Data? = nil) {
         
         let isRectangle: Bool = blueprint == .rectangle
         let notiName: Notification.Name = isRectangle ? .rectangle : .photo
@@ -109,10 +109,8 @@ final class Plane: Planable {
 
 // 사각형이나 사진의 위치를 조정
 extension Plane {
-    func renewCenterOfShape(before origin: Point, after position: Point) {
-        guard let touchedShape = self.findTouchedShape(at: (origin.x, origin.y)) else {
-            return
-        }
+    func renewCenterOfShape(at index: Int, after position: Point) {
+        let touchedShape = self[index] 
         touchedShape.movePlace(to: position)
         
         NotificationCenter.default.post(name: .move, object: self)
