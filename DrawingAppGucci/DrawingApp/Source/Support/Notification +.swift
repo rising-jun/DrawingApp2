@@ -24,6 +24,5 @@ enum NotificationKey {
     case alpha
     case photo
     case index
-    case isUp
 }
 

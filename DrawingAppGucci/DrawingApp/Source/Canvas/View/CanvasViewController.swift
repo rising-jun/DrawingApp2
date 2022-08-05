@@ -324,14 +324,6 @@ extension CanvasViewController: PHPickerViewControllerDelegate {
     }
 }
 
-
-// 이게그러니까 노티를 여기서 날리면 저기서 어떤 기준으로 받을 건지에 대한 이야기..크기와 위치 정보를 나누는 것 정도는 괜찮아 보인다 .
-//근데 그렇게 처리를 했을 떄, VC에서 할일은 무엇인가> ?
-//1. 해당 뷰의 인덱스를 이용해서 실제 view 의 크기나 위치를 업데이트 하는 것
-//2. 상태알림창에 필요한 정보을 올리고 그 상태 창에서는 변경된 데이터에 값을 업데이트 하는 것
-//
-// 노티에 담을 요소
-// 몇번 째 view인지를 나타내는 인덱스와 변경된 사항에 대한 값을 넘겨주어야 한다.
 // MARK: - 크기와 위치에 관련한 노티피케이션 설정 추가
 extension CanvasViewController {
     func setUpPropertiesNotifications() {
@@ -339,9 +331,12 @@ extension CanvasViewController {
             forName: .x,
             object: nil,
             queue: .main) { [unowned self] noti in
-                guard let isUp = noti.userInfo?[NotificationKey.isUp] as? Bool else { return }
-                guard let currentView = beforeSelectedView else { return }
-                currentView.layer.frame.origin.x += isUp ? 1 : -1
+                guard
+                      let drawbleView = beforeSelectedView as? Drawable,
+                      let currentView = beforeSelectedView
+                else { return }
+                let shape = plane[drawbleView.index]
+                currentView.layer.frame.origin.x = shape.point.x
                 updatePropertiesLabels(with: currentView)
             }
         
@@ -349,9 +344,12 @@ extension CanvasViewController {
             forName: .y,
             object: nil,
             queue: .main) { [unowned self] noti in
-                guard let isUp = noti.userInfo?[NotificationKey.isUp] as? Bool else { return }
-                guard let currentView = beforeSelectedView else { return }
-                currentView.layer.frame.origin.y += isUp ? 1 : -1
+                guard
+                      let drawbleView = beforeSelectedView as? Drawable,
+                      let currentView = beforeSelectedView
+                else { return }
+                let shape = plane[drawbleView.index]
+                currentView.layer.frame.origin.y = shape.point.y
                 updatePropertiesLabels(with: currentView)
             }
         
@@ -359,18 +357,25 @@ extension CanvasViewController {
             forName: .width,
             object: nil,
             queue: .main) { [unowned self] noti in
-                guard let isUp = noti.userInfo?[NotificationKey.isUp] as? Bool else { return }
-                guard let currentView = beforeSelectedView else { return }
-                currentView.layer.frame = currentView.frame.insetBy(dx: isUp ? 1 : -1, dy: 0)
+                guard
+                      let drawbleView = beforeSelectedView as? Drawable,
+                      let currentView = beforeSelectedView
+                else { return }
+                let shape = plane[drawbleView.index]
+                currentView.frame = CGRect(x: shape.point.x, y: shape.point.y, width: shape.size.width, height: shape.size.height)
                 updatePropertiesLabels(with: currentView)
             }
+        
         NotificationCenter.default.addObserver(
             forName: .height,
             object: nil,
             queue: .main) { [unowned self] noti in
-                guard let isUp = noti.userInfo?[NotificationKey.isUp] as? Bool else { return }
-                guard let currentView = beforeSelectedView else { return }
-                currentView.layer.frame = currentView.frame.insetBy(dx: 0, dy: isUp ? 1 : -1)
+                guard
+                      let drawbleView = beforeSelectedView as? Drawable,
+                      let currentView = beforeSelectedView
+                else { return }
+                let shape = plane[drawbleView.index]
+                currentView.frame = CGRect(x: shape.point.x, y: shape.point.y, width: shape.size.width, height: shape.size.height)
                 updatePropertiesLabels(with: currentView)
             }
     }

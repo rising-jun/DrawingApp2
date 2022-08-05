@@ -120,44 +120,28 @@ extension Plane {
     func adjustWidth(index: Int, isUp: Bool) {
         let shape = self[index]
         shape.adjustWidth(isUp: isUp)
-        postPropertiesNotification(notiName: .width, isUp: isUp)
+        postPropertiesNotification(notiName: .width)
     }
     
     func adjustHeight(index: Int, isUp: Bool) {
         let shape = self[index]
         shape.adjustHeight(isUp: isUp)
-        postPropertiesNotification(notiName: .height, isUp: isUp)
+        postPropertiesNotification(notiName: .height)
     }
     
     func adjustX(index: Int, isUp: Bool) {
         let shape = self[index]
         shape.adjustX(isUp: isUp)
-        postPropertiesNotification(notiName: .x, isUp: isUp)
+        postPropertiesNotification(notiName: .x)
     }
     
     func adjustY(index: Int, isUp: Bool) {
         let shape = self[index]
         shape.adjustY(isUp: isUp)
-        postPropertiesNotification(notiName: .y, isUp: isUp)
+        postPropertiesNotification(notiName: .y)
     }
     
-    private func postPropertiesNotification(notiName: Notification.Name, isUp: Bool) {
-        NotificationCenter.default.post(name: notiName, object: self, userInfo: [NotificationKey.isUp: isUp])
+    private func postPropertiesNotification(notiName: Notification.Name) {
+        NotificationCenter.default.post(name: notiName, object: self)
     }
 }
-
-
-// 이게그러니까 노티를 여기서 날리면 저기서 어떤 기준으로 받을 건지에 대한 이야기..크기와 위치 정보를 나누는 것 정도는 괜찮아 보인다 .
-//근데 그렇게 처리를 했을 떄, VC에서 할일은 무엇인가> ?
-//1. 해당 뷰의 인덱스를 이용해서 실제 view 의 크기나 위치를 업데이트 하는 것
-//2. 상태알림창에 필요한 정보을 올리고 그 상태 창에서는 변경된 데이터에 값을 업데이트 하는 것
-//
-// 노티에 담을 요소
-// 몇번 째 view인지를 나타내는 인덱스와 변경된 사항에 대한 값을 넘겨주어야 한다. 변경된 사항만을 넘길 것이냐 전체 shape 를 넘길 것이냐 .아니다 넘길 필요도 없다.
-// 상태알림창에서 변경이 일어나는 것은 label 하나다.
-// 그러므로 기존에 가지고 있는 값에서 +- 1 정도만 하면 되지 값도 넘길 필요가 없다. 해당 요소를 업데이트하라는 신호를 넘기면 된다.
-// 예
-// 노티 종류 - width, 노티 키 up, 노티키 인덱스
-// 노티 종류 - height, 노티 키 down, 노티키 인덱스
-// 노티 종류 - x, 노티 키 down, 노티키 인덱스
-// 노티 종류 - y, 노티 키 up, 노티키 인덱스
