@@ -21,13 +21,16 @@ extension CanvasViewController: UIGestureRecognizerDelegate {
     
     //MARK: - view를 드래깅 하는 GestureRecognizer
     @objc func panGestureHandler(_ sender: UIPanGestureRecognizer) {
-        guard let drawableView = sender.view as? Drawable else { return }
+        guard let drawableView = sender.view as? Drawable,
+              let currentView = sender.view 
+        else { return }
         switch sender.state {
         //MARK: - 움직이기 시작하면 시작점을 "self.initPosition" 에 저장
         case .began:
             fallthrough
         case .changed:
             sender.view?.alpha = plane[drawableView.index].alpha.value / 2
+            updatePropertiesLabels(with: currentView)
         //MARK: - 이동이 끝나면, 시작점과 이동점을 Plane에게 넘기고 모델을 재조정 요청
         case .ended:
             guard let changedOrigin = sender.view?.frame.origin else { return }
@@ -35,6 +38,7 @@ extension CanvasViewController: UIGestureRecognizerDelegate {
             let movedPoint = Point(x: changedOrigin.x, y: changedOrigin.y)
             self.plane.renewCenterOfShape(at: drawableView.index, after: movedPoint)
             sender.view?.alpha = plane[drawableView.index].alpha.value
+            updatePropertiesLabels(with: currentView)
         default:
             break
         }

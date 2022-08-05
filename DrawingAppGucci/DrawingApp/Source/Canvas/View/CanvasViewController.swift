@@ -272,7 +272,7 @@ extension CanvasViewController {
         adjustSliderAndStepper(color: color, alpha: alpha)
     }
     
-    private func updatePropertiesLabels(with view: UIView) {
+    func updatePropertiesLabels(with view: UIView) {
         self.xLabel.text = "X :: \(Int(view.layer.frame.origin.x))"
         self.yLabel.text = "Y :: \(Int(view.layer.frame.origin.y))"
         self.widthLabel.text = "W :: \(Int(view.layer.frame.width))"

@@ -24,7 +24,7 @@ enum ScreenSize {
 
 extension UIView {
     func drawEdges(selected: Bool) {
-        self.layer.borderWidth = selected ? 10 : 0
+        self.layer.borderWidth = selected ? 3 : 0
     }
     
     func updateColorAndAlpha(color: Color, alpha: Alpha) {
