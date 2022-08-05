@@ -29,16 +29,19 @@ extension CanvasViewController: UIGestureRecognizerDelegate {
         case .began:
             fallthrough
         case .changed:
-            sender.view?.alpha = plane[drawableView.index].alpha.value / 2
-            updatePropertiesLabels(with: currentView)
+            DispatchQueue.main.async { [unowned self] in
+                sender.view?.alpha = CGFloat(self.plane[drawableView.index].alpha.value / 2)
+                self.updatePropertiesLabels(with: currentView)
+            }
         //MARK: - 이동이 끝나면, 시작점과 이동점을 Plane에게 넘기고 모델을 재조정 요청
         case .ended:
             guard let changedOrigin = sender.view?.frame.origin else { return }
-            
             let movedPoint = Point(x: changedOrigin.x, y: changedOrigin.y)
-            self.plane.renewCenterOfShape(at: drawableView.index, after: movedPoint)
-            sender.view?.alpha = plane[drawableView.index].alpha.value
-            updatePropertiesLabels(with: currentView)
+            DispatchQueue.main.async { [unowned self] in
+                self.plane.renewCenterOfShape(at: drawableView.index, after: movedPoint)
+                sender.view?.alpha = CGFloat(self.plane[drawableView.index].alpha.value)
+                self.updatePropertiesLabels(with: currentView)
+            }
         default:
             break
         }
