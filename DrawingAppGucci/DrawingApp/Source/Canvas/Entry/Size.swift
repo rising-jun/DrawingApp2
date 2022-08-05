@@ -8,6 +8,6 @@
 import Foundation
 
 struct Size {
-    let width: Double
-    let height: Double
+    var width: Double
+    var height: Double
 }

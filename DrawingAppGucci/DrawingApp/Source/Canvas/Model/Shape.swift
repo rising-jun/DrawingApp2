@@ -10,7 +10,11 @@ import Foundation
 class Shape {
     
     let id: String
-    let size: Size
+    var size: Size {
+        didSet {
+            self.bound = Bound(size: self.size, point: self.point)
+        }
+    }
     var point: Point {
         didSet {
             self.bound = Bound(size: self.size, point: self.point)
@@ -35,5 +39,21 @@ class Shape {
     func movePlace(to point: Point) {
         self.point.x = point.x
         self.point.y = point.y
+    }
+    
+    func adjustWidth(isUp: Bool) {
+        self.size.width += isUp ? 1 : -1
+    }
+    
+    func adjustHeight(isUp: Bool) {
+        self.size.height += isUp ? 1 : -1
+    }
+    
+    func adjustX(isUp: Bool) {
+        self.point.x += isUp ? 1 : -1
+    }
+    
+    func adjustY(isUp: Bool) {
+        self.point.y += isUp ? 1 : -1
     }
 }

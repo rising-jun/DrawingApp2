@@ -24,14 +24,20 @@ final class CanvasViewController: UIViewController {
     @IBOutlet weak var pointYView: UIView!
     @IBOutlet weak var sizeWView: UIView!
     @IBOutlet weak var sizeHView: UIView!
+    @IBOutlet weak var xLabel: UILabel!
+    @IBOutlet weak var yLabel: UILabel!
+    @IBOutlet weak var widthLabel: UILabel!
+    @IBOutlet weak var heightLabel: UILabel!
     internal let plane = Plane()
     internal var initPostion: Point?
     
     private var beforeSelectedView: UIView? {
         //MARK: - 선택된 뷰의 테두리를 그리고, 이전에 있던 뷰의 테두리를 지우기
         didSet {
-            guard oldValue != beforeSelectedView else { return }
+            guard oldValue != beforeSelectedView,
+                let currentView = beforeSelectedView else { return }
             oldValue?.drawEdges(selected: false)
+            updatePropertiesLabels(with: currentView)
         }
         
         willSet {
@@ -47,6 +53,41 @@ final class CanvasViewController: UIViewController {
         let vc = PHPickerViewController(configuration: config)
         return vc
     }()
+    
+    
+    
+    @IBAction func touchedXUp(_ sender: UIButton) {
+        guard let currentView = beforeSelectedView as? SquareView else { return }
+        plane.adjustX(index: currentView.index, isUp: true)
+    }
+    @IBAction func touchedXDown(_ sender: UIButton) {
+        guard let currentView = beforeSelectedView as? SquareView else { return }
+        plane.adjustX(index: currentView.index, isUp: false)
+    }
+    @IBAction func touchedYUp(_ sender: UIButton) {
+        guard let currentView = beforeSelectedView as? SquareView else { return }
+        plane.adjustY(index: currentView.index, isUp: true)
+    }
+    @IBAction func touchedYDown(_ sender: UIButton) {
+        guard let currentView = beforeSelectedView as? SquareView else { return }
+        plane.adjustY(index: currentView.index, isUp: false)
+    }
+    @IBAction func touchedWUp(_ sender: UIButton) {
+        guard let currentView = beforeSelectedView as? SquareView else { return }
+        plane.adjustWidth(index: currentView.index, isUp: true)
+    }
+    @IBAction func touchedWDown(_ sender: UIButton) {
+        guard let currentView = beforeSelectedView as? SquareView else { return }
+        plane.adjustWidth(index: currentView.index, isUp: false)
+    }
+    @IBAction func touchedHUp(_ sender: UIButton) {
+        guard let currentView = beforeSelectedView as? SquareView else { return }
+        plane.adjustHeight(index: currentView.index, isUp: true)
+    }
+    @IBAction func touchedHDown(_ sender: UIButton) {
+        guard let currentView = beforeSelectedView as? SquareView else { return }
+        plane.adjustHeight(index: currentView.index, isUp: false)
+    }
     
     //MARK: - 사진 버튼 누르면 실행 되는 액션
     @IBAction func touchedPictureButton(_ sender: UIButton) {
@@ -117,7 +158,7 @@ final class CanvasViewController: UIViewController {
         statusView.isHidden = true
         rectangleButton.layer.cornerRadius = 10
         phPickerViewController.delegate = self
-        [pointXView, pointYView, sizeWView, sizeHView].forEach { 
+        [pointXView, pointYView, sizeWView, sizeHView].forEach {
             guard let view = $0 else { return }
             view.layer.borderWidth = 0.5
             view.layer.cornerRadius = 10
@@ -213,6 +254,7 @@ final class CanvasViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         addObservers()
+        setUpPropertiesNotifications()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -231,6 +273,13 @@ extension CanvasViewController {
         colorButton.setTitle(buttonTitleString, for: .normal)
         colorButton.isEnabled = blueprint == .rectangle ? true : false
         adjustSliderAndStepper(color: color, alpha: alpha)
+    }
+    
+    private func updatePropertiesLabels(with view: UIView) {
+        self.xLabel.text = "X :: \(Int(view.layer.frame.origin.x))"
+        self.yLabel.text = "Y :: \(Int(view.layer.frame.origin.y))"
+        self.widthLabel.text = "W :: \(Int(view.layer.frame.width))"
+        self.heightLabel.text = "H :: \(Int(view.layer.frame.height))"
     }
     
     // MARK: - 새로운 스퀘어뷰를 추가하는 메서드
@@ -275,5 +324,65 @@ extension CanvasViewController: PHPickerViewControllerDelegate {
                 self.plane.makeShape(with: .photo, image: imagePngData)
             }
         }
+    }
+}
+
+
+// 이게그러니까 노티를 여기서 날리면 저기서 어떤 기준으로 받을 건지에 대한 이야기..크기와 위치 정보를 나누는 것 정도는 괜찮아 보인다 .
+//근데 그렇게 처리를 했을 떄, VC에서 할일은 무엇인가> ?
+//1. 해당 뷰의 인덱스를 이용해서 실제 view 의 크기나 위치를 업데이트 하는 것
+//2. 상태알림창에 필요한 정보을 올리고 그 상태 창에서는 변경된 데이터에 값을 업데이트 하는 것
+//
+// 노티에 담을 요소
+// 몇번 째 view인지를 나타내는 인덱스와 변경된 사항에 대한 값을 넘겨주어야 한다.
+// MARK: - 크기와 위치에 관련한 노티피케이션 설정 추가
+extension CanvasViewController {
+    func setUpPropertiesNotifications() {
+        NotificationCenter.default.addObserver(
+            forName: .x,
+            object: nil,
+            queue: .main) { [unowned self] noti in
+                // TODO: - beforeSelectedView 에서 값 조정하기
+                // TODO: - Status View에 알리기
+                guard let isUp = noti.userInfo?[NotificationKey.isUp] as? Bool else { return }
+                guard let currentView = beforeSelectedView else { return }
+                currentView.layer.frame.origin.x += isUp ? 1 : -1
+                updatePropertiesLabels(with: currentView)
+            }
+        
+        NotificationCenter.default.addObserver(
+            forName: .y,
+            object: nil,
+            queue: .main) { [unowned self] noti in
+                // TODO: - beforeSelectedView 에서 값 조정하기
+                // TODO: - Status View에 알리기
+                guard let isUp = noti.userInfo?[NotificationKey.isUp] as? Bool else { return }
+                guard let currentView = beforeSelectedView else { return }
+                currentView.layer.frame.origin.y += isUp ? 1 : -1
+                updatePropertiesLabels(with: currentView)
+            }
+        
+        NotificationCenter.default.addObserver(
+            forName: .width,
+            object: nil,
+            queue: .main) { [unowned self] noti in
+                // TODO: - beforeSelectedView 에서 값 조정하기
+                // TODO: - Status View에 알리기
+                guard let isUp = noti.userInfo?[NotificationKey.isUp] as? Bool else { return }
+                guard let currentView = beforeSelectedView else { return }
+                currentView.layer.frame = currentView.frame.insetBy(dx: isUp ? 1 : -1, dy: 0)
+                updatePropertiesLabels(with: currentView)
+            }
+        NotificationCenter.default.addObserver(
+            forName: .height,
+            object: nil,
+            queue: .main) { [unowned self] noti in
+                // TODO: - beforeSelectedView 에서 값 조정하기
+                // TODO: - Status View에 알리기
+                guard let isUp = noti.userInfo?[NotificationKey.isUp] as? Bool else { return }
+                guard let currentView = beforeSelectedView else { return }
+                currentView.layer.frame = currentView.frame.insetBy(dx: 0, dy: isUp ? 1 : -1)
+                updatePropertiesLabels(with: currentView)
+            }
     }
 }

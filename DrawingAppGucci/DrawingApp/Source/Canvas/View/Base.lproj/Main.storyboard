@@ -81,6 +81,9 @@
                                                                 <color key="tintColor" systemColor="systemGrayColor"/>
                                                                 <state key="normal" title="Button"/>
                                                                 <buttonConfiguration key="configuration" style="plain" image="arrowtriangle.up.fill" catalog="system" title=""/>
+                                                                <connections>
+                                                                    <action selector="touchedXUp:" destination="BYZ-38-t0r" eventType="touchUpInside" id="cvx-zU-a84"/>
+                                                                </connections>
                                                             </button>
                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="v0v-fv-HR2">
                                                                 <rect key="frame" x="0.0" y="20" width="20" height="20"/>
@@ -91,6 +94,9 @@
                                                                 <color key="tintColor" systemColor="systemGrayColor"/>
                                                                 <state key="normal" title="Button"/>
                                                                 <buttonConfiguration key="configuration" style="plain" image="arrowtriangle.down.fill" catalog="system" title=""/>
+                                                                <connections>
+                                                                    <action selector="touchedXDown:" destination="BYZ-38-t0r" eventType="touchUpInside" id="d7h-aJ-STQ"/>
+                                                                </connections>
                                                             </button>
                                                         </subviews>
                                                     </stackView>
@@ -129,6 +135,9 @@
                                                                 <color key="tintColor" systemColor="systemGrayColor"/>
                                                                 <state key="normal" title="Button"/>
                                                                 <buttonConfiguration key="configuration" style="plain" image="arrowtriangle.up.fill" catalog="system" title=""/>
+                                                                <connections>
+                                                                    <action selector="touchedYUp:" destination="BYZ-38-t0r" eventType="touchUpInside" id="mTo-sA-plE"/>
+                                                                </connections>
                                                             </button>
                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2hw-F4-7CP">
                                                                 <rect key="frame" x="0.0" y="20" width="20" height="20"/>
@@ -139,6 +148,9 @@
                                                                 <color key="tintColor" systemColor="systemGrayColor"/>
                                                                 <state key="normal" title="Button"/>
                                                                 <buttonConfiguration key="configuration" style="plain" image="arrowtriangle.down.fill" catalog="system" title=""/>
+                                                                <connections>
+                                                                    <action selector="touchedYDown:" destination="BYZ-38-t0r" eventType="touchUpInside" id="ynf-FL-r2y"/>
+                                                                </connections>
                                                             </button>
                                                         </subviews>
                                                     </stackView>
@@ -177,6 +189,9 @@
                                                                 <color key="tintColor" systemColor="systemGrayColor"/>
                                                                 <state key="normal" title="Button"/>
                                                                 <buttonConfiguration key="configuration" style="plain" image="arrowtriangle.up.fill" catalog="system" title=""/>
+                                                                <connections>
+                                                                    <action selector="touchedWUp:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Tfk-kO-ep4"/>
+                                                                </connections>
                                                             </button>
                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hIx-V3-Tvo">
                                                                 <rect key="frame" x="0.0" y="20" width="20" height="20"/>
@@ -187,6 +202,9 @@
                                                                 <color key="tintColor" systemColor="systemGrayColor"/>
                                                                 <state key="normal" title="Button"/>
                                                                 <buttonConfiguration key="configuration" style="plain" image="arrowtriangle.down.fill" catalog="system" title=""/>
+                                                                <connections>
+                                                                    <action selector="touchedWDown:" destination="BYZ-38-t0r" eventType="touchUpInside" id="aKh-Gm-txd"/>
+                                                                </connections>
                                                             </button>
                                                         </subviews>
                                                     </stackView>
@@ -225,6 +243,9 @@
                                                                 <color key="tintColor" systemColor="systemGrayColor"/>
                                                                 <state key="normal" title="Button"/>
                                                                 <buttonConfiguration key="configuration" style="plain" image="arrowtriangle.up.fill" catalog="system" title=""/>
+                                                                <connections>
+                                                                    <action selector="touchedHUp:" destination="BYZ-38-t0r" eventType="touchUpInside" id="tSS-in-tYj"/>
+                                                                </connections>
                                                             </button>
                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6aC-X2-Udj">
                                                                 <rect key="frame" x="0.0" y="20" width="20" height="20"/>
@@ -235,6 +256,9 @@
                                                                 <color key="tintColor" systemColor="systemGrayColor"/>
                                                                 <state key="normal" title="Button"/>
                                                                 <buttonConfiguration key="configuration" style="plain" image="arrowtriangle.down.fill" catalog="system" title=""/>
+                                                                <connections>
+                                                                    <action selector="touchedHDown:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Geu-T5-Mfu"/>
+                                                                </connections>
                                                             </button>
                                                         </subviews>
                                                     </stackView>
@@ -348,6 +372,7 @@
                         <outlet property="colorButton" destination="rd0-TC-Ekx" id="Nfm-mN-M70"/>
                         <outlet property="colorLabel" destination="7Nh-d9-PsU" id="xEU-hf-8ON"/>
                         <outlet property="drawableStackview" destination="SfJ-tN-geC" id="vk6-Vt-Kh4"/>
+                        <outlet property="heightLabel" destination="Ne0-gz-1J9" id="30I-CH-kWR"/>
                         <outlet property="pointXView" destination="2lt-1M-Oeh" id="SKS-T7-iu7"/>
                         <outlet property="pointYView" destination="aip-n3-Kfp" id="pPZ-hh-JUM"/>
                         <outlet property="rectangleButton" destination="lwj-Gd-drK" id="qEH-nL-GQt"/>
@@ -356,6 +381,9 @@
                         <outlet property="slider" destination="EsB-tQ-o8q" id="hjy-1q-Z2k"/>
                         <outlet property="statusView" destination="wEe-lM-fZ5" id="7FD-Fz-mtZ"/>
                         <outlet property="stepper" destination="dPq-A1-Z09" id="cAp-QF-agK"/>
+                        <outlet property="widthLabel" destination="E7j-WQ-jl7" id="lLn-8d-MxY"/>
+                        <outlet property="xLabel" destination="1P6-bD-z5S" id="fCW-3V-cff"/>
+                        <outlet property="yLabel" destination="rDb-Hx-8wx" id="XKc-vn-R9f"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
