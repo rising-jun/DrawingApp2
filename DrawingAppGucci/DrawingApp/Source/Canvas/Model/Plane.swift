@@ -111,32 +111,37 @@ final class Plane: Planable {
 // MARK: - 사각형이나 사진의 위치, 크기를 조정
 extension Plane {
     func renewCenterOfShape(at index: Int, after position: Point) {
-        let touchedShape = self[index] 
-        touchedShape.movePlace(to: position)
+        let shape = self[index]
+        guard shape.point.x >= 1 && shape.point.y >= 1 else { return }
+        shape.movePlace(to: position)
         
         NotificationCenter.default.post(name: .move, object: self)
     }
     
     func adjustWidth(index: Int, isUp: Bool) {
         let shape = self[index]
+        guard shape.size.width >= 1 else { return }
         shape.adjustWidth(isUp: isUp)
         postPropertiesNotification(notiName: .width)
     }
     
     func adjustHeight(index: Int, isUp: Bool) {
         let shape = self[index]
+        guard shape.size.height >= 1 else { return }
         shape.adjustHeight(isUp: isUp)
         postPropertiesNotification(notiName: .height)
     }
     
     func adjustX(index: Int, isUp: Bool) {
         let shape = self[index]
+        guard shape.point.x >= 1 else { return }
         shape.adjustX(isUp: isUp)
         postPropertiesNotification(notiName: .x)
     }
     
     func adjustY(index: Int, isUp: Bool) {
         let shape = self[index]
+        guard shape.point.y >= 1 else { return }
         shape.adjustY(isUp: isUp)
         postPropertiesNotification(notiName: .y)
     }
