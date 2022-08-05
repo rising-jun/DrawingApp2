@@ -35,6 +35,31 @@ enum Alpha {
             return 1.0
         }
     }
+    
+    mutating func change(value: Double) {
+        switch value {
+        case 0.1:
+            self =  .one
+        case 0.2:
+            self = .two
+        case 0.3:
+            self = .three
+        case 0.4:
+            self = .four
+        case 0.5:
+            self = .five
+        case 0.6:
+            self = .six
+        case 0.7:
+            self = .seven
+        case 0.8:
+            self = .eight
+        case 0.9:
+            self = .nine
+        default:
+            self = .ten
+        }
+    }
 }
 
 

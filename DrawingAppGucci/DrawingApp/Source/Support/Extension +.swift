@@ -21,3 +21,19 @@ enum ScreenSize {
     static let width = UIScreen.main.bounds.size.width - 120.0
     static let height = UIScreen.main.bounds.size.height - 150.0
 }
+
+extension UIView {
+    func drawEdges(selected: Bool) {
+        self.layer.borderWidth = selected ? 3 : 0
+    }
+    
+    func updateColorAndAlpha(color: Color, alpha: Alpha) {
+        self.backgroundColor = UIColor.init(red: color.$r, green: color.$g, blue: color.$b, alpha: alpha.value)
+    }
+
+}
+
+enum ShapeSize {
+    static let width: Double = 150.0
+    static let height: Double = 120.0
+}
