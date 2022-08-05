@@ -34,15 +34,12 @@ final class CanvasViewController: UIViewController {
     private var beforeSelectedView: UIView? {
         //MARK: - 선택된 뷰의 테두리를 그리고, 이전에 있던 뷰의 테두리를 지우기
         didSet {
-            guard oldValue != beforeSelectedView,
-                let currentView = beforeSelectedView else { return }
-            oldValue?.drawEdges(selected: false)
+            guard let currentView = beforeSelectedView else { return }
             updatePropertiesLabels(with: currentView)
         }
-        
         willSet {
-            guard let newValue = newValue else { return }
-            newValue.drawEdges(selected: true)
+            self.beforeSelectedView?.drawEdges(selected: false)
+            newValue?.drawEdges(selected: true)
         }
     }
     
@@ -57,35 +54,35 @@ final class CanvasViewController: UIViewController {
     
     
     @IBAction func touchedXUp(_ sender: UIButton) {
-        guard let currentView = beforeSelectedView as? SquareView else { return }
+        guard let currentView = beforeSelectedView as? Drawable else { return }
         plane.adjustX(index: currentView.index, isUp: true)
     }
     @IBAction func touchedXDown(_ sender: UIButton) {
-        guard let currentView = beforeSelectedView as? SquareView else { return }
+        guard let currentView = beforeSelectedView as? Drawable else { return }
         plane.adjustX(index: currentView.index, isUp: false)
     }
     @IBAction func touchedYUp(_ sender: UIButton) {
-        guard let currentView = beforeSelectedView as? SquareView else { return }
+        guard let currentView = beforeSelectedView as? Drawable else { return }
         plane.adjustY(index: currentView.index, isUp: true)
     }
     @IBAction func touchedYDown(_ sender: UIButton) {
-        guard let currentView = beforeSelectedView as? SquareView else { return }
+        guard let currentView = beforeSelectedView as? Drawable else { return }
         plane.adjustY(index: currentView.index, isUp: false)
     }
     @IBAction func touchedWUp(_ sender: UIButton) {
-        guard let currentView = beforeSelectedView as? SquareView else { return }
+        guard let currentView = beforeSelectedView as? Drawable else { return }
         plane.adjustWidth(index: currentView.index, isUp: true)
     }
     @IBAction func touchedWDown(_ sender: UIButton) {
-        guard let currentView = beforeSelectedView as? SquareView else { return }
+        guard let currentView = beforeSelectedView as? Drawable else { return }
         plane.adjustWidth(index: currentView.index, isUp: false)
     }
     @IBAction func touchedHUp(_ sender: UIButton) {
-        guard let currentView = beforeSelectedView as? SquareView else { return }
+        guard let currentView = beforeSelectedView as? Drawable else { return }
         plane.adjustHeight(index: currentView.index, isUp: true)
     }
     @IBAction func touchedHDown(_ sender: UIButton) {
-        guard let currentView = beforeSelectedView as? SquareView else { return }
+        guard let currentView = beforeSelectedView as? Drawable else { return }
         plane.adjustHeight(index: currentView.index, isUp: false)
     }
     
@@ -124,7 +121,7 @@ final class CanvasViewController: UIViewController {
             beforeSelectedView = nil
             return
         }
-
+        
         //MARK: PhotoView와 SquareView 가 한데 들어감
         let squareViews: [UIView] = view.subviews.filter { $0 is Drawable }
         beforeSelectedView = squareViews[index]
@@ -286,7 +283,7 @@ extension CanvasViewController {
     private func addSquareView(rect: Rectangle, index: Int) {
         let squareView = SquareView(rectangle: rect, index: index)
         createPanGestureRecognizer(targetView: squareView)
-
+        
         view.addSubview(squareView)
         view.bringSubviewToFront(drawableStackview)
     }
@@ -309,7 +306,7 @@ extension CanvasViewController {
         self.beforeSelectedView?.updateColorAndAlpha(color: color, alpha: alpha)
         
     }
-
+    
 }
 
 // MARK: - 사진 델리게이트
@@ -342,8 +339,6 @@ extension CanvasViewController {
             forName: .x,
             object: nil,
             queue: .main) { [unowned self] noti in
-                // TODO: - beforeSelectedView 에서 값 조정하기
-                // TODO: - Status View에 알리기
                 guard let isUp = noti.userInfo?[NotificationKey.isUp] as? Bool else { return }
                 guard let currentView = beforeSelectedView else { return }
                 currentView.layer.frame.origin.x += isUp ? 1 : -1
@@ -354,8 +349,6 @@ extension CanvasViewController {
             forName: .y,
             object: nil,
             queue: .main) { [unowned self] noti in
-                // TODO: - beforeSelectedView 에서 값 조정하기
-                // TODO: - Status View에 알리기
                 guard let isUp = noti.userInfo?[NotificationKey.isUp] as? Bool else { return }
                 guard let currentView = beforeSelectedView else { return }
                 currentView.layer.frame.origin.y += isUp ? 1 : -1
@@ -366,8 +359,6 @@ extension CanvasViewController {
             forName: .width,
             object: nil,
             queue: .main) { [unowned self] noti in
-                // TODO: - beforeSelectedView 에서 값 조정하기
-                // TODO: - Status View에 알리기
                 guard let isUp = noti.userInfo?[NotificationKey.isUp] as? Bool else { return }
                 guard let currentView = beforeSelectedView else { return }
                 currentView.layer.frame = currentView.frame.insetBy(dx: isUp ? 1 : -1, dy: 0)
@@ -377,8 +368,6 @@ extension CanvasViewController {
             forName: .height,
             object: nil,
             queue: .main) { [unowned self] noti in
-                // TODO: - beforeSelectedView 에서 값 조정하기
-                // TODO: - Status View에 알리기
                 guard let isUp = noti.userInfo?[NotificationKey.isUp] as? Bool else { return }
                 guard let currentView = beforeSelectedView else { return }
                 currentView.layer.frame = currentView.frame.insetBy(dx: 0, dy: isUp ? 1 : -1)
