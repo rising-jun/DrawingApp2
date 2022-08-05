@@ -24,8 +24,7 @@ final class Plane: Planable {
     var count: Int { shapes.count }
     
     subscript(index: Int) -> Shape {
-        //MARK: - Debug == assert, release == precondition
-        assert(isIndexValid(index: index), "out of index")
+        precondition(isIndexValid(index: index), "shapes is out of index")
         return self.shapes[index]
     }
     
@@ -38,8 +37,10 @@ final class Plane: Planable {
         let isRectangle: Bool = blueprint == .rectangle
         let notiName: Notification.Name = isRectangle ? .rectangle : .photo
         let notiKey: NotificationKey = isRectangle ? .rectangle : .photo
+        
         let shape = factory.generateShape(with: blueprint, imageData: data)
         shapes.append(shape)
+        
         NotificationCenter.default
             .post(
                 name: notiName,
@@ -107,7 +108,7 @@ final class Plane: Planable {
     }
 }
 
-// 사각형이나 사진의 위치를 조정
+// MARK: - 사각형이나 사진의 위치를 조정
 extension Plane {
     func renewCenterOfShape(at index: Int, after position: Point) {
         let touchedShape = self[index] 

@@ -20,11 +20,8 @@ final class PhotoView: UIImageView, Drawable {
                 width: photo.size.width,
                 height: photo.size.height)
         )
-//        super.isOpaque = false
         super.isUserInteractionEnabled = true
         super.alpha = photo.alpha.value
-        
-//        super.backgroundColor = UIColor(displayP3Red: .zero, green: .zero, blue: .zero, alpha: photo.alpha.value)
         super.layer.borderColor = tintColor.cgColor
     }
     
@@ -39,7 +36,5 @@ final class PhotoView: UIImageView, Drawable {
     
     func updateAlpha(alpha: Alpha) {
         self.alpha = alpha.value
-//        self.image = self.image?.withAlpha(alpha.value)
-//        self.backgroundColor = UIColor(displayP3Red: .zero, green: .zero, blue: .zero, alpha: alpha.value)
     }
 }

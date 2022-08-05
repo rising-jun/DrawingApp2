@@ -20,6 +20,10 @@ final class CanvasViewController: UIViewController {
     @IBOutlet weak var alphaLabel: UILabel!
     @IBOutlet weak var stepper: UIStepper!
     @IBOutlet weak var drawableStackview: UIStackView!
+    @IBOutlet weak var pointXView: UIView!
+    @IBOutlet weak var pointYView: UIView!
+    @IBOutlet weak var sizeWView: UIView!
+    @IBOutlet weak var sizeHView: UIView!
     internal let plane = Plane()
     internal var initPostion: Point?
     
@@ -113,7 +117,12 @@ final class CanvasViewController: UIViewController {
         statusView.isHidden = true
         rectangleButton.layer.cornerRadius = 10
         phPickerViewController.delegate = self
-
+        [pointXView, pointYView, sizeWView, sizeHView].forEach { 
+            guard let view = $0 else { return }
+            view.layer.borderWidth = 0.5
+            view.layer.cornerRadius = 10
+            view.layer.borderColor = UIColor.darkGray.cgColor
+        }
     }
     
     // MARK: - 노티피케이션 옵저버 등록

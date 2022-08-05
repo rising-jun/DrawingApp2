@@ -7,10 +7,9 @@
 
 import Foundation
 
-class Rectangle: Shape, CustomStringConvertible  {
+final class Rectangle: Shape, CustomStringConvertible  {
     lazy var description: String = "(\(id)), X\(point.x), Y\(point.y), W\(size.width), H\(size.height) R: \(color.r), G: \(color.g), B: \(color.b), alpha: \(alpha.value)"
    
-    
     private(set) var color: Color
     
     init(shape: Shape, color: Color) {
