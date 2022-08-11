@@ -31,7 +31,7 @@ final class ShapeFactory {
             return Photo(shape: shape, imageData: imageData)
         case .text:
             let string = makeRandomText()
-            let textSize = Size(width: Double(string.count) * 17, height: 35)
+            let textSize = Size(width: Double(string.count) * 13, height: 35)
             shape.size = textSize
             return Text(shape: shape, string: string)
         }

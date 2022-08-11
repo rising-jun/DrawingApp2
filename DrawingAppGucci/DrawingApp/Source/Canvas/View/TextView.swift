@@ -12,13 +12,14 @@ class TextView: UILabel, Drawable {
     
     init(text: Text, index: Int) {
         self.index = index
-        super.init(frame: CGRect(x: text.point.x, y: text.point.y, width: text.size.width, height: text.size.height))
+        super.init(frame: CGRect(x: text.point.x, y: text.point.y, width: .zero, height: text.size.height))
         super.layer.borderColor = tintColor.cgColor
         super.text = text.string
         super.textColor = UIColor.label.withAlphaComponent(text.alpha.value)
         super.font = .systemFont(ofSize: 32, weight: .bold)
         super.isUserInteractionEnabled = true
         super.isEnabled = true
+        super.sizeToFit()
     }
     
     required init?(coder: NSCoder) {
