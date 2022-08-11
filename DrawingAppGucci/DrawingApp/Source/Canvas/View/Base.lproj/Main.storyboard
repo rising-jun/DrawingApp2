@@ -360,6 +360,25 @@
                                     </button>
                                 </subviews>
                             </stackView>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="gwH-jC-mel" userLabel="Layer Table View">
+                                <rect key="frame" x="0.0" y="24" width="165" height="796"/>
+                                <color key="backgroundColor" systemColor="systemGray5Color"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="165" id="BB1-W0-8Jz"/>
+                                </constraints>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="LayerTableViewCell" id="6vq-Qz-w2s" customClass="LayerTableViewCell" customModule="DrawingApp" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="44.5" width="165" height="43.5"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="6vq-Qz-w2s" id="bVr-0t-HzI">
+                                            <rect key="frame" x="0.0" y="0.0" width="165" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                        <color key="backgroundColor" systemColor="systemGray5Color"/>
+                                        <color key="tintColor" systemColor="labelColor"/>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -367,7 +386,10 @@
                         <constraints>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="SfJ-tN-geC" secondAttribute="bottom" constant="50" id="8yY-hL-cGe"/>
                             <constraint firstItem="wEe-lM-fZ5" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" multiplier="0.2" id="EIA-S5-HqB"/>
+                            <constraint firstAttribute="bottom" secondItem="gwH-jC-mel" secondAttribute="bottom" id="GEy-5r-zCX"/>
                             <constraint firstAttribute="bottom" secondItem="wEe-lM-fZ5" secondAttribute="bottom" id="GH7-dg-SFA"/>
+                            <constraint firstItem="gwH-jC-mel" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="Oaz-9Q-AIg"/>
+                            <constraint firstItem="gwH-jC-mel" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="QMi-fy-aLF"/>
                             <constraint firstItem="wEe-lM-fZ5" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="XEN-M8-ngE"/>
                             <constraint firstItem="SfJ-tN-geC" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="ksl-Mp-H8v"/>
                             <constraint firstAttribute="trailing" secondItem="wEe-lM-fZ5" secondAttribute="trailing" id="ybf-dv-sWW"/>
@@ -390,6 +412,7 @@
                         <outlet property="slider" destination="EsB-tQ-o8q" id="hjy-1q-Z2k"/>
                         <outlet property="statusView" destination="wEe-lM-fZ5" id="7FD-Fz-mtZ"/>
                         <outlet property="stepper" destination="dPq-A1-Z09" id="cAp-QF-agK"/>
+                        <outlet property="tableView" destination="gwH-jC-mel" id="YR5-HX-ApQ"/>
                         <outlet property="widthLabel" destination="E7j-WQ-jl7" id="lLn-8d-MxY"/>
                         <outlet property="xLabel" destination="1P6-bD-z5S" id="fCW-3V-cff"/>
                         <outlet property="yLabel" destination="rDb-Hx-8wx" id="XKc-vn-R9f"/>
@@ -416,6 +439,9 @@
         </systemColor>
         <systemColor name="systemGray3Color">
             <color red="0.7803921568627451" green="0.7803921568627451" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemGray5Color">
+            <color red="0.89803921568627454" green="0.89803921568627454" blue="0.91764705882352937" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemGrayColor">
             <color red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

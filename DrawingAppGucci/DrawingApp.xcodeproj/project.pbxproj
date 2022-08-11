@@ -32,6 +32,8 @@
 		00CC7C7F288E3F8E009E0D0A /* Photo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00CC7C7E288E3F8E009E0D0A /* Photo.swift */; };
 		00CC7C81288E47E3009E0D0A /* PhotoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00CC7C80288E47E3009E0D0A /* PhotoView.swift */; };
 		00CC7C83288E6968009E0D0A /* Drawable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00CC7C82288E6968009E0D0A /* Drawable.swift */; };
+		00DA93BA28A50393000DBC48 /* LayerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DA93B928A50393000DBC48 /* LayerTableViewCell.swift */; };
+		00DA93BD28A50510000DBC48 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 00DA93BC28A50510000DBC48 /* SnapKit */; };
 		00DE6F0C28784B7600738FC8 /* Extension +.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DE6F0B28784B7600738FC8 /* Extension +.swift */; };
 		00DE6F0E28784BD100738FC8 /* Plane.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DE6F0D28784BD100738FC8 /* Plane.swift */; };
 		00EC55E628936E0300254487 /* CanvasVC+GestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00EC55E528936E0300254487 /* CanvasVC+GestureRecognizer.swift */; };
@@ -84,6 +86,7 @@
 		00CC7C7E288E3F8E009E0D0A /* Photo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Photo.swift; sourceTree = "<group>"; };
 		00CC7C80288E47E3009E0D0A /* PhotoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoView.swift; sourceTree = "<group>"; };
 		00CC7C82288E6968009E0D0A /* Drawable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Drawable.swift; sourceTree = "<group>"; };
+		00DA93B928A50393000DBC48 /* LayerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayerTableViewCell.swift; sourceTree = "<group>"; };
 		00DE6F0B28784B7600738FC8 /* Extension +.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension +.swift"; sourceTree = "<group>"; };
 		00DE6F0D28784BD100738FC8 /* Plane.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Plane.swift; sourceTree = "<group>"; };
 		00EC55E528936E0300254487 /* CanvasVC+GestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CanvasVC+GestureRecognizer.swift"; sourceTree = "<group>"; };
@@ -94,6 +97,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				00DA93BD28A50510000DBC48 /* SnapKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -180,6 +184,7 @@
 				00A9D5D8287BFC68002A6049 /* SquareView.swift */,
 				00CC7C80288E47E3009E0D0A /* PhotoView.swift */,
 				001B7D6328A0E4C700BEF034 /* TextView.swift */,
+				00DA93B928A50393000DBC48 /* LayerTableViewCell.swift */,
 				0057428728743F9500080F14 /* Main.storyboard */,
 			);
 			path = View;
@@ -248,6 +253,9 @@
 			dependencies = (
 			);
 			name = DrawingApp;
+			packageProductDependencies = (
+				00DA93BC28A50510000DBC48 /* SnapKit */,
+			);
 			productName = DrawingApp;
 			productReference = 0057427E28743F9500080F14 /* DrawingApp.app */;
 			productType = "com.apple.product-type.application";
@@ -320,6 +328,9 @@
 				Base,
 			);
 			mainGroup = 0057427528743F9500080F14;
+			packageReferences = (
+				00DA93BB28A50510000DBC48 /* XCRemoteSwiftPackageReference "SnapKit" */,
+			);
 			productRefGroup = 0057427F28743F9500080F14 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -370,6 +381,7 @@
 				00CC7C7D288E2577009E0D0A /* Notification +.swift in Sources */,
 				00CA7E8C2890FA78008974EF /* Shape.swift in Sources */,
 				003E1D9C288B1A1C0077783E /* Bound.swift in Sources */,
+				00DA93BA28A50393000DBC48 /* LayerTableViewCell.swift in Sources */,
 				0057428228743F9500080F14 /* AppDelegate.swift in Sources */,
 				0057428428743F9500080F14 /* SceneDelegate.swift in Sources */,
 				003E1D9A288B1A170077783E /* Color.swift in Sources */,
@@ -752,6 +764,25 @@
 			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		00DA93BB28A50510000DBC48 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
+			requirement = {
+				branch = develop;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		00DA93BC28A50510000DBC48 /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 00DA93BB28A50510000DBC48 /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 0057427628743F9500080F14 /* Project object */;
 }

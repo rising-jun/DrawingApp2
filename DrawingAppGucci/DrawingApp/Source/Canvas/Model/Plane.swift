@@ -23,6 +23,11 @@ final class Plane: Planable {
     private let factory = ShapeFactory()
     var count: Int { shapes.count }
     
+    private(set) var rectangleCounter: Int = 0
+    private(set) var photoCounter: Int = 0
+    private(set) var textCounter: Int = 0
+    
+    
     subscript(index: Int) -> Shape {
         precondition(isIndexValid(index: index), "shapes is out of index")
         return self.shapes[index]
@@ -41,12 +46,15 @@ final class Plane: Planable {
         case .rectangle:
             notiName = .rectangle
             notiKey = .rectangle
+            rectangleCounter += 1
         case .photo:
             notiName = .photo
             notiKey = .photo
+            photoCounter += 1
         case .text:
             notiKey = .text
             notiName = .text
+            textCounter += 1
         }
         
         let shape = factory.generateShape(with: blueprint, imageData: data)

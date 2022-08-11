@@ -33,7 +33,6 @@ extension CanvasViewController: UIGestureRecognizerDelegate {
                 sender.view?.alpha = CGFloat(self.plane[drawableView.index].alpha.value / 2)
                 self.updatePropertiesLabels(with: currentView)
             }
-            currentView.layoutSubviews()
         //MARK: - 이동이 끝나면, 시작점과 이동점을 Plane에게 넘기고 모델을 재조정 요청
         case .ended:
             guard let changedOrigin = sender.view?.frame.origin else { return }
@@ -43,7 +42,6 @@ extension CanvasViewController: UIGestureRecognizerDelegate {
                 sender.view?.alpha = CGFloat(self.plane[drawableView.index].alpha.value)
                 self.updatePropertiesLabels(with: currentView)
             }
-            currentView.layoutIfNeeded()
         default:
             break
         }

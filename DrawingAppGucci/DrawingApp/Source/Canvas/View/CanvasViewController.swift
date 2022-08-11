@@ -28,7 +28,8 @@ final class CanvasViewController: UIViewController {
     @IBOutlet weak var yLabel: UILabel!
     @IBOutlet weak var widthLabel: UILabel!
     @IBOutlet weak var heightLabel: UILabel!
-    internal let plane = Plane()    
+    @IBOutlet weak var tableView: UITableView!
+    internal let plane = Plane()
     
     private var beforeSelectedView: UIView? {
         //MARK: - 선택된 뷰의 테두리를 그리고, 이전에 있던 뷰의 테두리를 지우기
@@ -156,6 +157,7 @@ final class CanvasViewController: UIViewController {
         statusView.isHidden = true
         rectangleButton.layer.cornerRadius = 10
         phPickerViewController.delegate = self
+        tableView.dataSource = self
         [pointXView, pointYView, sizeWView, sizeHView].forEach {
             guard let view = $0 else { return }
             view.layer.borderWidth = 0.5
@@ -193,6 +195,7 @@ final class CanvasViewController: UIViewController {
                     else { return }
                     
                     self.addSquareView(rect: rectangle, index: index)
+                    self.tableView.reloadData()
                 }
         
         //MARK: - 사진 추가
@@ -205,6 +208,7 @@ final class CanvasViewController: UIViewController {
                           let index = noti.userInfo?[NotificationKey.index] as? Int
                     else { return }
                     addPhotoView(photo: photo, index: index)
+                    self.tableView.reloadData()
                 }
         
         //MARK: - 텍스트 추가
@@ -217,6 +221,7 @@ final class CanvasViewController: UIViewController {
                           let index = noti.userInfo?[NotificationKey.index] as? Int
                     else { return }
                     addTextView(text: text, index: index)
+                    self.tableView.reloadData()
         }
         
         //MARK: - 사진 투명도 변경
@@ -397,5 +402,51 @@ extension CanvasViewController {
                 currentView.frame = CGRect(x: shape.point.x, y: shape.point.y, width: shape.size.width, height: shape.size.height)
                 updatePropertiesLabels(with: currentView)
             }
+    }
+}
+
+extension CanvasViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return plane.count
+    }
+    
+    //MARK: - 여기서 요구하는 것을 하기 위해선, 서로 다른 Plane에서 다른 모델을 들고 있어야함. 그래야 전체 카운트가 몇개인지 알수 잇는데, 음..만약 플레인을 추가할 때마다 어떤 카운터에 숫자를 더하면 어떨까? 그리고 그 카운터의 값을 리턴을 하는것이지!
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "LayerTableViewCell", for: indexPath) as? LayerTableViewCell else { return UITableViewCell() }
+
+        switch plane[indexPath.row] {
+        case _ as Rectangle:
+            var counter = plane.rectangleCounter
+            for index in 0..<indexPath.row {
+                if case _ as Rectangle = plane[index]  {
+                    counter -= 1
+                }
+            }
+            cell.setUp(with: .rectangle, at: indexPath.row, printNumber: counter)
+        case _ as Photo:
+            var counter = plane.photoCounter
+            for index in 0..<indexPath.row {
+                if case _ as Photo = plane[index]  {
+                    counter -= 1
+                }
+            }
+            cell.setUp(with: .photo, at: indexPath.row, printNumber: counter)
+        case _ as Text:
+            var counter = plane.textCounter
+            for index in 0..<indexPath.row {
+                if case _ as Text = plane[index]  {
+                    counter -= 1
+                }
+            }
+            cell.setUp(with: .text, at: indexPath.row, printNumber: counter)
+        default:
+            break
+        }
+        
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return "레이어"
     }
 }
