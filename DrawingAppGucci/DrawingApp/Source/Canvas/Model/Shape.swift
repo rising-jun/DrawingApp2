@@ -57,3 +57,9 @@ class Shape {
         self.point.y += isUp ? 1 : -1
     }
 }
+
+extension Shape: Equatable {
+    static func == (lhs: Shape, rhs: Shape) -> Bool {
+        return lhs.id == rhs.id
+    }
+}

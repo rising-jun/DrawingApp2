@@ -24,8 +24,8 @@ extension CanvasViewController: UIGestureRecognizerDelegate {
         guard let drawableView = sender.view as? Drawable,
               let currentView = sender.view
         else { return }
+        
         switch sender.state {
-        //MARK: - 움직이기 시작하면 시작점을 "self.initPosition" 에 저장
         case .began:
             fallthrough
         case .changed:

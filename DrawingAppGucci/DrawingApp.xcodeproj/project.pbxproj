@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		001B7D6228A0D82100BEF034 /* Text.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001B7D6128A0D82100BEF034 /* Text.swift */; };
+		001B7D6428A0E4C700BEF034 /* TextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001B7D6328A0E4C700BEF034 /* TextView.swift */; };
 		003E1D96288B1A0E0077783E /* Size.swift in Sources */ = {isa = PBXBuildFile; fileRef = 003E1D95288B1A0E0077783E /* Size.swift */; };
 		003E1D98288B1A120077783E /* Point.swift in Sources */ = {isa = PBXBuildFile; fileRef = 003E1D97288B1A120077783E /* Point.swift */; };
 		003E1D9A288B1A170077783E /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 003E1D99288B1A170077783E /* Color.swift */; };
@@ -53,6 +55,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		001B7D6128A0D82100BEF034 /* Text.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Text.swift; sourceTree = "<group>"; };
+		001B7D6328A0E4C700BEF034 /* TextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextView.swift; sourceTree = "<group>"; };
 		003E1D95288B1A0E0077783E /* Size.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Size.swift; sourceTree = "<group>"; };
 		003E1D97288B1A120077783E /* Point.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Point.swift; sourceTree = "<group>"; };
 		003E1D99288B1A170077783E /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
@@ -163,6 +167,7 @@
 				00CC7C7E288E3F8E009E0D0A /* Photo.swift */,
 				00DE6F0D28784BD100738FC8 /* Plane.swift */,
 				005742B528744CAC00080F14 /* ShapeFactory.swift */,
+				001B7D6128A0D82100BEF034 /* Text.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -170,11 +175,12 @@
 		003E1D94288B16410077783E /* View */ = {
 			isa = PBXGroup;
 			children = (
+				00EC55E528936E0300254487 /* CanvasVC+GestureRecognizer.swift */,
+				0057428528743F9500080F14 /* CanvasViewController.swift */,
 				00A9D5D8287BFC68002A6049 /* SquareView.swift */,
 				00CC7C80288E47E3009E0D0A /* PhotoView.swift */,
+				001B7D6328A0E4C700BEF034 /* TextView.swift */,
 				0057428728743F9500080F14 /* Main.storyboard */,
-				0057428528743F9500080F14 /* CanvasViewController.swift */,
-				00EC55E528936E0300254487 /* CanvasVC+GestureRecognizer.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -358,6 +364,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0057428628743F9500080F14 /* CanvasViewController.swift in Sources */,
+				001B7D6428A0E4C700BEF034 /* TextView.swift in Sources */,
 				005742B428744AA400080F14 /* Alpha.swift in Sources */,
 				005742B628744CAC00080F14 /* ShapeFactory.swift in Sources */,
 				00CC7C7D288E2577009E0D0A /* Notification +.swift in Sources */,
@@ -367,6 +374,7 @@
 				0057428428743F9500080F14 /* SceneDelegate.swift in Sources */,
 				003E1D9A288B1A170077783E /* Color.swift in Sources */,
 				00DE6F0C28784B7600738FC8 /* Extension +.swift in Sources */,
+				001B7D6228A0D82100BEF034 /* Text.swift in Sources */,
 				00CC7C7F288E3F8E009E0D0A /* Photo.swift in Sources */,
 				003E1D96288B1A0E0077783E /* Size.swift in Sources */,
 				00EC55E628936E0300254487 /* CanvasVC+GestureRecognizer.swift in Sources */,

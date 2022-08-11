@@ -29,6 +29,11 @@ final class ShapeFactory {
                 assert(false, "imageData is nil")
             }
             return Photo(shape: shape, imageData: imageData)
+        case .text:
+            let string = makeRandomText()
+            let textSize = Size(width: Double(string.count) * 17, height: 35)
+            shape.size = textSize
+            return Text(shape: shape, string: string)
         }
         
     }
@@ -79,5 +84,20 @@ final class ShapeFactory {
         default:
             return .ten
         }
+    }
+    
+    private func makeRandomText() -> String {
+        let string: String = """
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Egestas tellus rutrum tellus pellentesque eu. Viverra justo nec ultrices dui sapien eget mi proin sed. Vel pretium lectus quam id leo. Molestie at elementum eu facilisis sed odio morbi quis commodo. Risus at ultrices mi tempus imperdiet nulla malesuada. In est ante in nibh mauris cursus mattis molestie a. Venenatis urna cursus eget nunc. Eget velit aliquet sagittis id consectetur purus ut. Amet consectetur adipiscing elit pellentesque habitant morbi tristique senectus. Consequat nisl vel pretium lectus quam id. Nisl vel pretium lectus quam id leo in vitae turpis. Purus faucibus ornare suspendisse sed. Amet mauris commodo quis imperdiet.
+                            """
+        let dividedStringBySpace: [String] = string.split(separator: " ").map { String($0) }
+        let randomInt = Int.random(in: 0...Int.max)
+        var result = ""
+        for index in randomInt..<randomInt + 5 {
+            let tempIndex = index % dividedStringBySpace.count
+            result += "\(dividedStringBySpace[tempIndex]) "
+        }
+        result.removeLast()
+        return result
     }
 }

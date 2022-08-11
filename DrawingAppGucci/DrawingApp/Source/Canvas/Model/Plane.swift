@@ -31,12 +31,23 @@ final class Plane: Planable {
     private func isIndexValid(index: Int) -> Bool {
         return 0 <= index && index < self.shapes.count
     }
-
+    
     func makeShape(with blueprint: ShapeBlueprint, image data: Data? = nil) {
         
-        let isRectangle: Bool = blueprint == .rectangle
-        let notiName: Notification.Name = isRectangle ? .rectangle : .photo
-        let notiKey: NotificationKey = isRectangle ? .rectangle : .photo
+        var notiName: Notification.Name
+        var notiKey: NotificationKey
+        
+        switch blueprint {
+        case .rectangle:
+            notiName = .rectangle
+            notiKey = .rectangle
+        case .photo:
+            notiName = .photo
+            notiKey = .photo
+        case .text:
+            notiKey = .text
+            notiName = .text
+        }
         
         let shape = factory.generateShape(with: blueprint, imageData: data)
         shapes.append(shape)
@@ -71,7 +82,7 @@ final class Plane: Planable {
     func changeColor(at index: Int) {
         guard let rectangle = self[index] as? Rectangle else { return }
         rectangle.setRandomColor()
-
+        
         NotificationCenter.default
             .post(
                 name: .rectangle,
@@ -80,7 +91,7 @@ final class Plane: Planable {
                            NotificationKey.alpha: rectangle.alpha]
             )
     }
-
+    
     /// - roundedAlpha 에서 +- 0.1 된 값이 넘겨질 것임
     //MARK: - 투명도 변경
     func changeAlpha(at index: Int, value: Double) {
@@ -96,10 +107,18 @@ final class Plane: Planable {
                     userInfo: [NotificationKey.color: rectangle.color,
                                NotificationKey.alpha: shape.alpha]
                 )
-        } else {
+        } else if shape is Photo {
             NotificationCenter.default
                 .post(
                     name: .photo,
+                    object: self,
+                    userInfo: [NotificationKey.color: Color.init(r: 0, g: 0, b: 0),
+                               NotificationKey.alpha: shape.alpha]
+                )
+        } else if shape is Text {
+            NotificationCenter.default
+                .post(
+                    name: .text,
                     object: self,
                     userInfo: [NotificationKey.color: Color.init(r: 0, g: 0, b: 0),
                                NotificationKey.alpha: shape.alpha]

@@ -11,4 +11,5 @@ import Foundation
 enum ShapeBlueprint {
     case rectangle
     case photo
+    case text
 }

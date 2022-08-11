@@ -28,8 +28,7 @@ final class CanvasViewController: UIViewController {
     @IBOutlet weak var yLabel: UILabel!
     @IBOutlet weak var widthLabel: UILabel!
     @IBOutlet weak var heightLabel: UILabel!
-    internal let plane = Plane()
-    internal var initPostion: Point?
+    internal let plane = Plane()    
     
     private var beforeSelectedView: UIView? {
         //MARK: - 선택된 뷰의 테두리를 그리고, 이전에 있던 뷰의 테두리를 지우기
@@ -51,7 +50,9 @@ final class CanvasViewController: UIViewController {
         return vc
     }()
     
-    
+    @IBAction func touchedTextButton(_ sender: UIButton) {
+        plane.makeShape(with: .text)
+    }
     
     @IBAction func touchedXUp(_ sender: UIButton) {
         guard let currentView = beforeSelectedView as? Drawable else { return }
@@ -165,22 +166,8 @@ final class CanvasViewController: UIViewController {
     
     // MARK: - 노티피케이션 옵저버 등록
     private func addObservers() {
-        // MARK: - 사각형 투명도 조절
-        NotificationCenter.default
-            .addObserver(
-                forName: .rectangle,
-                object: nil,
-                queue: .main) { [unowned self] noti in
-                    guard
-                        let alpha = noti.userInfo?[NotificationKey.alpha] as? Alpha,
-                        let color = noti.userInfo?[NotificationKey.color] as? Color
-                    else { return }
-                    
-                    self.adjustSliderAndStepper(color: color, alpha: alpha)
-                    self.informSelectedViewToStatus(color: color, alpha: alpha, type: .rectangle)
-                }
         
-        // MARK: - 색 조절
+        // MARK: - 사각형 색 및 투명도 조절
         NotificationCenter.default
             .addObserver(
                 forName: .rectangle,
@@ -220,6 +207,18 @@ final class CanvasViewController: UIViewController {
                     addPhotoView(photo: photo, index: index)
                 }
         
+        //MARK: - 텍스트 추가
+        NotificationCenter.default
+            .addObserver(
+                forName: .text,
+                object: nil,
+                queue: .main) { [unowned self] noti in
+                    guard let text = noti.userInfo?[NotificationKey.text] as? Text,
+                          let index = noti.userInfo?[NotificationKey.index] as? Int
+                    else { return }
+                    addTextView(text: text, index: index)
+        }
+        
         //MARK: - 사진 투명도 변경
         NotificationCenter.default
             .addObserver(
@@ -232,8 +231,22 @@ final class CanvasViewController: UIViewController {
                         let photoView = beforeSelectedView as? PhotoView
                     else { return }
                     photoView.updateAlpha(alpha: alpha)
-                    self.adjustSliderAndStepper(color: color, alpha: alpha)
                     self.informSelectedViewToStatus(color: color, alpha: alpha, type: .photo)
+                }
+        
+        //MARK: - 텍스트 투명도 변경
+        NotificationCenter.default
+            .addObserver(
+                forName: .text,
+                object: nil,
+                queue: .main) { [unowned self] noti in
+                    guard
+                        let alpha = noti.userInfo?[NotificationKey.alpha] as? Alpha,
+                        let color = noti.userInfo?[NotificationKey.color] as? Color,
+                        let textView = beforeSelectedView as? TextView
+                    else { return }
+                    textView.updateAlpha(alpha: alpha)
+                    self.informSelectedViewToStatus(color: color, alpha: alpha, type: .text)
                 }
         
         // MARK: - 도형 이동
@@ -266,7 +279,7 @@ extension CanvasViewController {
     // MARK: - 상태창에 선택된 스퀘어 뷰를 알리기
     private func informSelectedViewToStatus(color: Color, alpha: Alpha, type blueprint: ShapeBlueprint) {
         statusView.isHidden = false
-        let buttonTitleString = blueprint == .photo ? "비어있음" : color.hexaColor
+        let buttonTitleString = blueprint == .rectangle ? color.hexaColor : "비어있음"
         colorButton.setTitle(buttonTitleString, for: .normal)
         colorButton.isEnabled = blueprint == .rectangle ? true : false
         adjustSliderAndStepper(color: color, alpha: alpha)
@@ -291,20 +304,26 @@ extension CanvasViewController {
     // MARK: - 새로운 사진뷰를 추가하는 메서드
     private func addPhotoView(photo: Photo, index: Int) {
         let photoView = PhotoView(photo: photo, index: index)
-        photoView.isUserInteractionEnabled = true
-        photoView.image = UIImage(data: photo.image)
         createPanGestureRecognizer(targetView: photoView)
         
         view.addSubview(photoView)
         view.bringSubviewToFront(drawableStackview)
     }
     
+    // MARK: - 새로운 텍스트뷰를 추가하는 메서드
+    private func addTextView(text: Text, index: Int) {
+        let textView = TextView(text: text, index: index)
+        createPanGestureRecognizer(targetView: textView)
+        
+        view.addSubview(textView)
+        view.bringSubviewToFront(drawableStackview)
+    }
+
+    
     // MARK: - 스테퍼와 슬라이더의 값을 조정하는 메서드
     private func adjustSliderAndStepper(color: Color, alpha: Alpha) {
         slider.value = Float(alpha.value)
         stepper.value = alpha.value
-        self.beforeSelectedView?.updateColorAndAlpha(color: color, alpha: alpha)
-        
     }
     
 }
