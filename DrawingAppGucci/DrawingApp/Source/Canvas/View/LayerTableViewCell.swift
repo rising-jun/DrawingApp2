@@ -41,7 +41,7 @@ final class LayerTableViewCell: UITableViewCell {
     
     func setUp(with blueprint: ShapeBlueprint, at index: Int, printNumber number: Int) {
         self.shapeIndex = index
-        title.text = "\(blueprint.rawValue.uppercased()) \(number)"
+        title.text = "\(blueprint.rawValue) \(number)"
         switch blueprint {
         case .rectangle:
             shapeImageView.image = UIImage(systemName: "rectangle")

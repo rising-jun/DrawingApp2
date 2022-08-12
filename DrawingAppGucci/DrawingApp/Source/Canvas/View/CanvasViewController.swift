@@ -114,6 +114,7 @@ final class CanvasViewController: UIViewController {
     //MARK: - 메인 화면에 한 점을 터치하면 실행되는 액션
     @IBAction func tapView(_ sender: UITapGestureRecognizer) {
         let point = sender.location(in: self.view)
+        sender.cancelsTouchesInView = false
         //MARK: - 빈공간인지 아닌지 확인
         guard let index = plane
                 .isTouched(at: (Double(point.x), Double(point.y))),
@@ -158,6 +159,8 @@ final class CanvasViewController: UIViewController {
         rectangleButton.layer.cornerRadius = 10
         phPickerViewController.delegate = self
         tableView.dataSource = self
+        tableView.delegate = self
+        
         [pointXView, pointYView, sizeWView, sizeHView].forEach {
             guard let view = $0 else { return }
             view.layer.borderWidth = 0.5
@@ -448,5 +451,22 @@ extension CanvasViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return "레이어"
+    }
+}
+
+extension CanvasViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let shape = plane[indexPath.row]
+        let squareViews: [UIView] = view.subviews.filter { $0 is Drawable }
+        beforeSelectedView = squareViews[indexPath.row]
+        
+        //MARK: - 상태창에 알림
+        if let rectangle = shape as? Rectangle {
+            self.informSelectedViewToStatus(color: rectangle.color, alpha: shape.alpha, type: .rectangle)
+        } else {
+            self.informSelectedViewToStatus(color: Color(r: 0, g: 0, b: 0), alpha: shape.alpha, type: .photo)
+        }
+        tableView.cellForRow(at: indexPath)?.isSelected = false
+        return
     }
 }

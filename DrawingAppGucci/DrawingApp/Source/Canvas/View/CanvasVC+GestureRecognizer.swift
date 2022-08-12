@@ -12,7 +12,6 @@ extension CanvasViewController: UIGestureRecognizerDelegate {
     //MARK: - 뷰가 생성될 때마다 아래 panGesture가 생성되어 gesture recognizer 로 추가 
     func createPanGestureRecognizer(targetView: UIView) {
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(panGestureHandler(_:)))
-
         panGesture.minimumNumberOfTouches = 2
         panGesture.maximumNumberOfTouches = 2
         

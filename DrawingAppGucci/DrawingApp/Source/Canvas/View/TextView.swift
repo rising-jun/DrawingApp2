@@ -16,7 +16,7 @@ class TextView: UILabel, Drawable {
         super.layer.borderColor = tintColor.cgColor
         super.text = text.string
         super.textColor = UIColor.label.withAlphaComponent(text.alpha.value)
-        super.font = .systemFont(ofSize: 32, weight: .bold)
+        super.font = UIFont(name: "Optima", size:  32)
         super.isUserInteractionEnabled = true
         super.isEnabled = true
         super.sizeToFit()
