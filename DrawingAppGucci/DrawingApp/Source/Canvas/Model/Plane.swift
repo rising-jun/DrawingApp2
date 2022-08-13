@@ -23,6 +23,8 @@ final class Plane: Planable {
     private let factory = ShapeFactory()
     var count: Int { shapes.count }
     
+    var onUpdate: () -> Void = { }
+    
     private(set) var rectangleCounter: Int = 0
     private(set) var photoCounter: Int = 0
     private(set) var textCounter: Int = 0
@@ -175,5 +177,38 @@ extension Plane {
     
     private func postPropertiesNotification(notiName: Notification.Name) {
         NotificationCenter.default.post(name: notiName, object: self)
+    }
+}
+
+//MARK: - 목록에서 오브젝트 순서 변경 메서드
+extension Plane {
+    func moveforward(with index: Int) {
+        guard index > 0 else { return }
+        let backShape = shapes[index - 1]
+        shapes[index - 1] = shapes[index]
+        shapes[index] = backShape
+    }
+    
+    func moveFormost(with index: Int) {
+        var index = index
+        while index > 0 {
+            moveforward(with: index)
+            index -= 1
+        }
+    }
+    
+    func moveBack(with index: Int) {
+        guard index < shapes.count - 1 else { return }
+        let forwardShape = shapes[index + 1]
+        shapes[index + 1] = shapes[index]
+        shapes[index] = forwardShape
+    }
+    
+    func moveBackmost(with index: Int) {
+        var index = index
+        while index < shapes.count - 1  {
+            moveBack(with: index)
+            index += 1
+        }
     }
 }

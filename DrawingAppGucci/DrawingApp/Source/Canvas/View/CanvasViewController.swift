@@ -143,6 +143,14 @@ final class CanvasViewController: UIViewController {
         plane.makeShape(with: .rectangle)
     }
     
+    private func bind() {
+        plane.onUpdate = {
+            DispatchQueue.main.async { [unowned self] in
+                self.tableView.reloadData()
+            }
+        }
+    }
+    
     //MARK: - 객체들의 초기값 설정
     private func attribute() {
         colorLabel.text = "색상"
@@ -266,6 +274,7 @@ final class CanvasViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         attribute()
+        bind()
     }
     
     // MARK: - 메모리 관리를 위해 노티 셋업을 willAppear 에서, 노티 해제를 willDisappear 에서 실행
@@ -468,5 +477,37 @@ extension CanvasViewController: UITableViewDelegate {
         }
         tableView.cellForRow(at: indexPath)?.isSelected = false
         return
+    }
+    
+    func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+
+        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { [unowned self] suggestedActions in
+            let backMostAction =
+                UIAction(title: NSLocalizedString("맨 뒤로 보내기", comment: ""),
+                         image: UIImage(systemName: "arrow.up.to.line")) { [unowned self] action in
+                    self.plane.moveFormost(with: indexPath.row)
+                    tableView.reloadData()
+                }
+            let backwardAction =
+                UIAction(title: NSLocalizedString("뒤로 보내기", comment: ""),
+                         image: UIImage(systemName: "arrow.up.square")) { [unowned self] action in
+                    self.plane.moveforward(with: indexPath.row)
+                    tableView.reloadData()
+                }
+            let forwardAction =
+                UIAction(title: NSLocalizedString("앞으로 보내기", comment: ""),
+                         image: UIImage(systemName: "arrow.down.square")) { [unowned self] action in
+                    self.plane.moveBack(with: indexPath.row)
+                    tableView.reloadData()
+                }
+            let foreMostAction =
+            UIAction(title: NSLocalizedString("맨 앞으로 보내기", comment: ""),
+                     image: UIImage(systemName: "arrow.down.to.line")) { [unowned self] action in
+                self.plane.moveBackmost(with: indexPath.row)
+                tableView.reloadData()
+            }
+    
+            return UIMenu(title: "", children: [backMostAction, backwardAction, forwardAction, foreMostAction])
+        }
     }
 }
