@@ -18,18 +18,10 @@ protocol Planable {
 
 final class Plane: Planable {
     
-    //MARK: - photo가 rectangle을 상속받음
     private(set) var shapes: [Shape] = []
     private let factory = ShapeFactory()
     var count: Int { shapes.count }
-    
-    var onUpdate: () -> Void = { }
-    
-    private(set) var rectangleCounter: Int = 0
-    private(set) var photoCounter: Int = 0
-    private(set) var textCounter: Int = 0
-    
-    
+
     subscript(index: Int) -> Shape {
         precondition(isIndexValid(index: index), "shapes is out of index")
         return self.shapes[index]
@@ -39,34 +31,16 @@ final class Plane: Planable {
         return 0 <= index && index < self.shapes.count
     }
     
+    //MARK: - 도형 추가
     func makeShape(with blueprint: ShapeBlueprint, image data: Data? = nil) {
-        
-        var notiName: Notification.Name
-        var notiKey: NotificationKey
-        
-        switch blueprint {
-        case .rectangle:
-            notiName = .rectangle
-            notiKey = .rectangle
-            rectangleCounter += 1
-        case .photo:
-            notiName = .photo
-            notiKey = .photo
-            photoCounter += 1
-        case .text:
-            notiKey = .text
-            notiName = .text
-            textCounter += 1
-        }
-        
         let shape = factory.generateShape(with: blueprint, imageData: data)
         shapes.append(shape)
         
         NotificationCenter.default
             .post(
-                name: notiName,
+                name: .add,
                 object: self,
-                userInfo: [notiKey: shape,
+                userInfo: [NotificationKey.shape: shape,
                            NotificationKey.index: count - 1]
             )
     }

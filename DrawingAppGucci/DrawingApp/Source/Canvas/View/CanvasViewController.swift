@@ -31,6 +31,7 @@ final class CanvasViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     internal let plane = Plane()
     
+    private var shapeFrameViews: [UIView] = []
     private var beforeSelectedView: UIView? {
         //MARK: - 선택된 뷰의 테두리를 그리고, 이전에 있던 뷰의 테두리를 지우기
         didSet {
@@ -115,6 +116,8 @@ final class CanvasViewController: UIViewController {
     @IBAction func tapView(_ sender: UITapGestureRecognizer) {
         let point = sender.location(in: self.view)
         sender.cancelsTouchesInView = false
+        sender.delaysTouchesEnded = false
+        
         //MARK: - 빈공간인지 아닌지 확인
         guard let index = plane
                 .isTouched(at: (Double(point.x), Double(point.y))),
@@ -125,30 +128,19 @@ final class CanvasViewController: UIViewController {
             return
         }
         
-        //MARK: PhotoView와 SquareView 가 한데 들어감
-        let squareViews: [UIView] = view.subviews.filter { $0 is Drawable }
-        beforeSelectedView = squareViews[index]
+        beforeSelectedView = shapeFrameViews[index]
         
         //MARK: - 상태창에 알림
         if let rectangle = selectedShape as? Rectangle {
             self.informSelectedViewToStatus(color: rectangle.color, alpha: selectedShape.alpha, type: .rectangle)
         } else {
-            self.informSelectedViewToStatus(color: Color(r: 0, g: 0, b: 0), alpha: selectedShape.alpha, type: .photo)
+            self.informSelectedViewToStatus(color: Color(), alpha: selectedShape.alpha, type: .photo)
         }
-        
     }
     
     //MARK: - 사각형 버튼 누르면 실행 되는 액션
-    @IBAction func touchedRectangleButton(_ sender: Any) {
+    @IBAction func touchedRectangleButton(_ sender: UIButton) {
         plane.makeShape(with: .rectangle)
-    }
-    
-    private func bind() {
-        plane.onUpdate = {
-            DispatchQueue.main.async { [unowned self] in
-                self.tableView.reloadData()
-            }
-        }
     }
     
     //MARK: - 객체들의 초기값 설정
@@ -195,45 +187,60 @@ final class CanvasViewController: UIViewController {
                     self.informSelectedViewToStatus(color: color, alpha: alpha, type: .rectangle)
                 }
         
-        //MARK: - 사각형 추가
+        //MARK: - 도형 추가 알림 노티피케이션
         NotificationCenter.default
             .addObserver(
-                forName: .rectangle,
+                forName: .add,
                 object: nil,
                 queue: .main) { [unowned self] noti in
-                    guard let rectangle = noti.userInfo?[NotificationKey.rectangle] as? Rectangle,
+                    guard let shape = noti.userInfo?[NotificationKey.shape] as? Shape,
                           let index = noti.userInfo?[NotificationKey.index] as? Int
-                    else { return }
+                    else {
+                        return }
                     
-                    self.addSquareView(rect: rectangle, index: index)
+                    self.addView(from: shape, index: index)
                     self.tableView.reloadData()
                 }
         
-        //MARK: - 사진 추가
-        NotificationCenter.default
-            .addObserver(
-                forName: .photo,
-                object: nil,
-                queue: .main) { [unowned self] noti in
-                    guard let photo = noti.userInfo?[NotificationKey.photo] as? Photo,
-                          let index = noti.userInfo?[NotificationKey.index] as? Int
-                    else { return }
-                    addPhotoView(photo: photo, index: index)
-                    self.tableView.reloadData()
-                }
-        
-        //MARK: - 텍스트 추가
-        NotificationCenter.default
-            .addObserver(
-                forName: .text,
-                object: nil,
-                queue: .main) { [unowned self] noti in
-                    guard let text = noti.userInfo?[NotificationKey.text] as? Text,
-                          let index = noti.userInfo?[NotificationKey.index] as? Int
-                    else { return }
-                    addTextView(text: text, index: index)
-                    self.tableView.reloadData()
-        }
+//        //MARK: - 사각형 추가
+//        NotificationCenter.default
+//            .addObserver(
+//                forName: .rectangle,
+//                object: nil,
+//                queue: .main) { [unowned self] noti in
+//                    guard let rectangle = noti.userInfo?[NotificationKey.rectangle] as? Rectangle,
+//                          let index = noti.userInfo?[NotificationKey.index] as? Int
+//                    else { return }
+//
+//                    self.addView(from: rectangle, index: index)
+//                    self.tableView.reloadData()
+//                }
+//
+//        //MARK: - 사진 추가
+//        NotificationCenter.default
+//            .addObserver(
+//                forName: .photo,
+//                object: nil,
+//                queue: .main) { [unowned self] noti in
+//                    guard let photo = noti.userInfo?[NotificationKey.photo] as? Photo,
+//                          let index = noti.userInfo?[NotificationKey.index] as? Int
+//                    else { return }
+//                    addPhotoView(photo: photo, index: index)
+//                    self.tableView.reloadData()
+//                }
+//
+//        //MARK: - 텍스트 추가
+//        NotificationCenter.default
+//            .addObserver(
+//                forName: .text,
+//                object: nil,
+//                queue: .main) { [unowned self] noti in
+//                    guard let text = noti.userInfo?[NotificationKey.text] as? Text,
+//                          let index = noti.userInfo?[NotificationKey.index] as? Int
+//                    else { return }
+//                    addTextView(text: text, index: index)
+//                    self.tableView.reloadData()
+//        }
         
         //MARK: - 사진 투명도 변경
         NotificationCenter.default
@@ -274,7 +281,6 @@ final class CanvasViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         attribute()
-        bind()
     }
     
     // MARK: - 메모리 관리를 위해 노티 셋업을 willAppear 에서, 노티 해제를 willDisappear 에서 실행
@@ -309,11 +315,20 @@ extension CanvasViewController {
         self.heightLabel.text = "H :: \(Int(view.layer.frame.height))"
     }
     
+    //TODO: 아래 세 메서드 제너럴로 1개로 만들어보자.
+    private func addView(from shape: Shape, index: Int) {
+        let view = UIFactory.makeView(with: shape, at: index)
+        createPanGestureRecognizer(targetView: view)
+        shapeFrameViews.append(view)
+        self.view.addSubview(view)
+        self.view.bringSubviewToFront(drawableStackview)
+    }
+    
     // MARK: - 새로운 스퀘어뷰를 추가하는 메서드
     private func addSquareView(rect: Rectangle, index: Int) {
         let squareView = SquareView(rectangle: rect, index: index)
         createPanGestureRecognizer(targetView: squareView)
-        
+        shapeFrameViews.append(squareView)
         view.addSubview(squareView)
         view.bringSubviewToFront(drawableStackview)
     }
@@ -322,7 +337,7 @@ extension CanvasViewController {
     private func addPhotoView(photo: Photo, index: Int) {
         let photoView = PhotoView(photo: photo, index: index)
         createPanGestureRecognizer(targetView: photoView)
-        
+        shapeFrameViews.append(photoView)
         view.addSubview(photoView)
         view.bringSubviewToFront(drawableStackview)
     }
@@ -331,7 +346,7 @@ extension CanvasViewController {
     private func addTextView(text: Text, index: Int) {
         let textView = TextView(text: text, index: index)
         createPanGestureRecognizer(targetView: textView)
-        
+        shapeFrameViews.append(textView)
         view.addSubview(textView)
         view.bringSubviewToFront(drawableStackview)
     }
@@ -422,35 +437,37 @@ extension CanvasViewController: UITableViewDataSource {
         return plane.count
     }
     
-    //MARK: - 여기서 요구하는 것을 하기 위해선, 서로 다른 Plane에서 다른 모델을 들고 있어야함. 그래야 전체 카운트가 몇개인지 알수 잇는데, 음..만약 플레인을 추가할 때마다 어떤 카운터에 숫자를 더하면 어떨까? 그리고 그 카운터의 값을 리턴을 하는것이지!
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "LayerTableViewCell", for: indexPath) as? LayerTableViewCell else { return UITableViewCell() }
 
+        func getPrintNumber(target: ShapeBlueprint) -> Int {
+            var counter: Int
+            var shapes: [Shape]
+            switch target {
+            case .rectangle:
+                shapes = plane.shapes.filter { $0 is Rectangle }
+            case .photo:
+                shapes = plane.shapes.filter { $0 is Photo }
+            case .text:
+                shapes = plane.shapes.filter { $0 is Text }
+            }
+            counter = shapes.count
+            for shape in shapes {
+                if shape == plane[indexPath.row] {
+                    return counter
+                }
+                counter -= 1
+            }
+            assert(false, "problem ouccured in \(#file), \(#function)")
+        }
+        
         switch plane[indexPath.row] {
         case _ as Rectangle:
-            var counter = plane.rectangleCounter
-            for index in 0..<indexPath.row {
-                if case _ as Rectangle = plane[index]  {
-                    counter -= 1
-                }
-            }
-            cell.setUp(with: .rectangle, at: indexPath.row, printNumber: counter)
+            cell.setUp(with: .rectangle, at: indexPath.row, printNumber: getPrintNumber(target: .rectangle))
         case _ as Photo:
-            var counter = plane.photoCounter
-            for index in 0..<indexPath.row {
-                if case _ as Photo = plane[index]  {
-                    counter -= 1
-                }
-            }
-            cell.setUp(with: .photo, at: indexPath.row, printNumber: counter)
+            cell.setUp(with: .photo, at: indexPath.row, printNumber: getPrintNumber(target: .photo))
         case _ as Text:
-            var counter = plane.textCounter
-            for index in 0..<indexPath.row {
-                if case _ as Text = plane[index]  {
-                    counter -= 1
-                }
-            }
-            cell.setUp(with: .text, at: indexPath.row, printNumber: counter)
+            cell.setUp(with: .text, at: indexPath.row, printNumber: getPrintNumber(target: .text))
         default:
             break
         }
@@ -466,8 +483,7 @@ extension CanvasViewController: UITableViewDataSource {
 extension CanvasViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let shape = plane[indexPath.row]
-        let squareViews: [UIView] = view.subviews.filter { $0 is Drawable }
-        beforeSelectedView = squareViews[indexPath.row]
+        beforeSelectedView = shapeFrameViews[indexPath.row]
         
         //MARK: - 상태창에 알림
         if let rectangle = shape as? Rectangle {
@@ -480,34 +496,62 @@ extension CanvasViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
-
+        
         return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { [unowned self] suggestedActions in
             let backMostAction =
                 UIAction(title: NSLocalizedString("맨 뒤로 보내기", comment: ""),
                          image: UIImage(systemName: "arrow.up.to.line")) { [unowned self] action in
                     self.plane.moveFormost(with: indexPath.row)
+                    var index = indexPath.row
+                    while index > 0 {
+                        self.moveViewForward(with: index)
+                        index -= 1
+                    }
                     tableView.reloadData()
                 }
             let backwardAction =
                 UIAction(title: NSLocalizedString("뒤로 보내기", comment: ""),
                          image: UIImage(systemName: "arrow.up.square")) { [unowned self] action in
                     self.plane.moveforward(with: indexPath.row)
+                    self.moveViewForward(with: indexPath.row)
                     tableView.reloadData()
                 }
             let forwardAction =
                 UIAction(title: NSLocalizedString("앞으로 보내기", comment: ""),
                          image: UIImage(systemName: "arrow.down.square")) { [unowned self] action in
                     self.plane.moveBack(with: indexPath.row)
+                    self.moveViewBackward(with: indexPath.row)
                     tableView.reloadData()
                 }
             let foreMostAction =
             UIAction(title: NSLocalizedString("맨 앞으로 보내기", comment: ""),
                      image: UIImage(systemName: "arrow.down.to.line")) { [unowned self] action in
                 self.plane.moveBackmost(with: indexPath.row)
+                var index = indexPath.row
+                while index < shapeFrameViews.count - 1 {
+                    moveViewBackward(with: index)
+                    index += 1
+                }
                 tableView.reloadData()
             }
     
             return UIMenu(title: "", children: [backMostAction, backwardAction, forwardAction, foreMostAction])
         }
+    }
+}
+
+extension CanvasViewController {
+    private func moveViewForward(with index: Int) {
+        guard index > 0 else { return }
+        let preView = shapeFrameViews[index - 1]
+        shapeFrameViews[index - 1] = shapeFrameViews[index]
+        shapeFrameViews[index] = preView
+    }
+    
+    private func moveViewBackward(with index: Int) {
+        guard index < shapeFrameViews.count - 1 else { return }
+        let postView = shapeFrameViews[index + 1]
+        shapeFrameViews[index + 1] = shapeFrameViews[index]
+        shapeFrameViews[index] = postView
     }
 }

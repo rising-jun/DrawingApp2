@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0000216B28AA0E6000CC21ED /* UIFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0000216A28AA0E6000CC21ED /* UIFactory.swift */; };
 		001B7D6228A0D82100BEF034 /* Text.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001B7D6128A0D82100BEF034 /* Text.swift */; };
 		001B7D6428A0E4C700BEF034 /* TextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001B7D6328A0E4C700BEF034 /* TextView.swift */; };
 		003E1D96288B1A0E0077783E /* Size.swift in Sources */ = {isa = PBXBuildFile; fileRef = 003E1D95288B1A0E0077783E /* Size.swift */; };
@@ -57,6 +58,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0000216A28AA0E6000CC21ED /* UIFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIFactory.swift; sourceTree = "<group>"; };
 		001B7D6128A0D82100BEF034 /* Text.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Text.swift; sourceTree = "<group>"; };
 		001B7D6328A0E4C700BEF034 /* TextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextView.swift; sourceTree = "<group>"; };
 		003E1D95288B1A0E0077783E /* Size.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Size.swift; sourceTree = "<group>"; };
@@ -185,6 +187,7 @@
 				00CC7C80288E47E3009E0D0A /* PhotoView.swift */,
 				001B7D6328A0E4C700BEF034 /* TextView.swift */,
 				00DA93B928A50393000DBC48 /* LayerTableViewCell.swift */,
+				0000216A28AA0E6000CC21ED /* UIFactory.swift */,
 				0057428728743F9500080F14 /* Main.storyboard */,
 			);
 			path = View;
@@ -381,6 +384,7 @@
 				00CC7C7D288E2577009E0D0A /* Notification +.swift in Sources */,
 				00CA7E8C2890FA78008974EF /* Shape.swift in Sources */,
 				003E1D9C288B1A1C0077783E /* Bound.swift in Sources */,
+				0000216B28AA0E6000CC21ED /* UIFactory.swift in Sources */,
 				00DA93BA28A50393000DBC48 /* LayerTableViewCell.swift in Sources */,
 				0057428228743F9500080F14 /* AppDelegate.swift in Sources */,
 				0057428428743F9500080F14 /* SceneDelegate.swift in Sources */,
