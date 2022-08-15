@@ -115,8 +115,9 @@ final class CanvasViewController: UIViewController {
     //MARK: - 메인 화면에 한 점을 터치하면 실행되는 액션
     @IBAction func tapView(_ sender: UITapGestureRecognizer) {
         let point = sender.location(in: self.view)
+        guard 170.0 <= point.x && point.x <= 950.0 else { return }
+        
         sender.cancelsTouchesInView = false
-        sender.delaysTouchesEnded = false
         
         //MARK: - 빈공간인지 아닌지 확인
         guard let index = plane
@@ -187,61 +188,6 @@ final class CanvasViewController: UIViewController {
                     self.informSelectedViewToStatus(color: color, alpha: alpha, type: .rectangle)
                 }
         
-        //MARK: - 도형 추가 알림 노티피케이션
-        NotificationCenter.default
-            .addObserver(
-                forName: .add,
-                object: nil,
-                queue: .main) { [unowned self] noti in
-                    guard let shape = noti.userInfo?[NotificationKey.shape] as? Shape,
-                          let index = noti.userInfo?[NotificationKey.index] as? Int
-                    else {
-                        return }
-                    
-                    self.addView(from: shape, index: index)
-                    self.tableView.reloadData()
-                }
-        
-//        //MARK: - 사각형 추가
-//        NotificationCenter.default
-//            .addObserver(
-//                forName: .rectangle,
-//                object: nil,
-//                queue: .main) { [unowned self] noti in
-//                    guard let rectangle = noti.userInfo?[NotificationKey.rectangle] as? Rectangle,
-//                          let index = noti.userInfo?[NotificationKey.index] as? Int
-//                    else { return }
-//
-//                    self.addView(from: rectangle, index: index)
-//                    self.tableView.reloadData()
-//                }
-//
-//        //MARK: - 사진 추가
-//        NotificationCenter.default
-//            .addObserver(
-//                forName: .photo,
-//                object: nil,
-//                queue: .main) { [unowned self] noti in
-//                    guard let photo = noti.userInfo?[NotificationKey.photo] as? Photo,
-//                          let index = noti.userInfo?[NotificationKey.index] as? Int
-//                    else { return }
-//                    addPhotoView(photo: photo, index: index)
-//                    self.tableView.reloadData()
-//                }
-//
-//        //MARK: - 텍스트 추가
-//        NotificationCenter.default
-//            .addObserver(
-//                forName: .text,
-//                object: nil,
-//                queue: .main) { [unowned self] noti in
-//                    guard let text = noti.userInfo?[NotificationKey.text] as? Text,
-//                          let index = noti.userInfo?[NotificationKey.index] as? Int
-//                    else { return }
-//                    addTextView(text: text, index: index)
-//                    self.tableView.reloadData()
-//        }
-        
         //MARK: - 사진 투명도 변경
         NotificationCenter.default
             .addObserver(
@@ -270,6 +216,21 @@ final class CanvasViewController: UIViewController {
                     else { return }
                     textView.updateAlpha(alpha: alpha)
                     self.informSelectedViewToStatus(color: color, alpha: alpha, type: .text)
+                }
+        
+        //MARK: - 도형 추가 알림 노티피케이션
+        NotificationCenter.default
+            .addObserver(
+                forName: .add,
+                object: nil,
+                queue: .main) { [unowned self] noti in
+                    guard let shape = noti.userInfo?[NotificationKey.shape] as? Shape,
+                          let index = noti.userInfo?[NotificationKey.index] as? Int
+                    else {
+                        return }
+                    
+                    self.addView(from: shape, index: index)
+                    self.tableView.reloadData()
                 }
         
         // MARK: - 도형 이동
@@ -350,7 +311,7 @@ extension CanvasViewController {
         view.addSubview(textView)
         view.bringSubviewToFront(drawableStackview)
     }
-
+    
     
     // MARK: - 스테퍼와 슬라이더의 값을 조정하는 메서드
     private func adjustSliderAndStepper(color: Color, alpha: Alpha) {
@@ -383,8 +344,8 @@ extension CanvasViewController {
             object: nil,
             queue: .main) { [unowned self] noti in
                 guard
-                      let drawbleView = beforeSelectedView as? Drawable,
-                      let currentView = beforeSelectedView
+                    let drawbleView = beforeSelectedView as? Drawable,
+                    let currentView = beforeSelectedView
                 else { return }
                 let shape = plane[drawbleView.index]
                 currentView.layer.frame.origin.x = shape.point.x
@@ -396,8 +357,8 @@ extension CanvasViewController {
             object: nil,
             queue: .main) { [unowned self] noti in
                 guard
-                      let drawbleView = beforeSelectedView as? Drawable,
-                      let currentView = beforeSelectedView
+                    let drawbleView = beforeSelectedView as? Drawable,
+                    let currentView = beforeSelectedView
                 else { return }
                 let shape = plane[drawbleView.index]
                 currentView.layer.frame.origin.y = shape.point.y
@@ -409,8 +370,8 @@ extension CanvasViewController {
             object: nil,
             queue: .main) { [unowned self] noti in
                 guard
-                      let drawbleView = beforeSelectedView as? Drawable,
-                      let currentView = beforeSelectedView
+                    let drawbleView = beforeSelectedView as? Drawable,
+                    let currentView = beforeSelectedView
                 else { return }
                 let shape = plane[drawbleView.index]
                 currentView.frame = CGRect(x: shape.point.x, y: shape.point.y, width: shape.size.width, height: shape.size.height)
@@ -422,8 +383,8 @@ extension CanvasViewController {
             object: nil,
             queue: .main) { [unowned self] noti in
                 guard
-                      let drawbleView = beforeSelectedView as? Drawable,
-                      let currentView = beforeSelectedView
+                    let drawbleView = beforeSelectedView as? Drawable,
+                    let currentView = beforeSelectedView
                 else { return }
                 let shape = plane[drawbleView.index]
                 currentView.frame = CGRect(x: shape.point.x, y: shape.point.y, width: shape.size.width, height: shape.size.height)
@@ -439,7 +400,7 @@ extension CanvasViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "LayerTableViewCell", for: indexPath) as? LayerTableViewCell else { return UITableViewCell() }
-
+        
         func getPrintNumber(target: ShapeBlueprint) -> Int {
             var counter: Int
             var shapes: [Shape]
@@ -499,30 +460,30 @@ extension CanvasViewController: UITableViewDelegate {
         
         return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { [unowned self] suggestedActions in
             let backMostAction =
-                UIAction(title: NSLocalizedString("맨 뒤로 보내기", comment: ""),
-                         image: UIImage(systemName: "arrow.up.to.line")) { [unowned self] action in
-                    self.plane.moveFormost(with: indexPath.row)
-                    var index = indexPath.row
-                    while index > 0 {
-                        self.moveViewForward(with: index)
-                        index -= 1
-                    }
-                    tableView.reloadData()
+            UIAction(title: NSLocalizedString("맨 뒤로 보내기", comment: ""),
+                     image: UIImage(systemName: "arrow.up.to.line")) { [unowned self] action in
+                self.plane.moveFormost(with: indexPath.row)
+                var index = indexPath.row
+                while index > 0 {
+                    self.moveViewForward(with: index)
+                    index -= 1
                 }
+                tableView.reloadData()
+            }
             let backwardAction =
-                UIAction(title: NSLocalizedString("뒤로 보내기", comment: ""),
-                         image: UIImage(systemName: "arrow.up.square")) { [unowned self] action in
-                    self.plane.moveforward(with: indexPath.row)
-                    self.moveViewForward(with: indexPath.row)
-                    tableView.reloadData()
-                }
+            UIAction(title: NSLocalizedString("뒤로 보내기", comment: ""),
+                     image: UIImage(systemName: "arrow.up.square")) { [unowned self] action in
+                self.plane.moveforward(with: indexPath.row)
+                self.moveViewForward(with: indexPath.row)
+                tableView.reloadData()
+            }
             let forwardAction =
-                UIAction(title: NSLocalizedString("앞으로 보내기", comment: ""),
-                         image: UIImage(systemName: "arrow.down.square")) { [unowned self] action in
-                    self.plane.moveBack(with: indexPath.row)
-                    self.moveViewBackward(with: indexPath.row)
-                    tableView.reloadData()
-                }
+            UIAction(title: NSLocalizedString("앞으로 보내기", comment: ""),
+                     image: UIImage(systemName: "arrow.down.square")) { [unowned self] action in
+                self.plane.moveBack(with: indexPath.row)
+                self.moveViewBackward(with: indexPath.row)
+                tableView.reloadData()
+            }
             let foreMostAction =
             UIAction(title: NSLocalizedString("맨 앞으로 보내기", comment: ""),
                      image: UIImage(systemName: "arrow.down.to.line")) { [unowned self] action in
@@ -534,7 +495,7 @@ extension CanvasViewController: UITableViewDelegate {
                 }
                 tableView.reloadData()
             }
-    
+            
             return UIMenu(title: "", children: [backMostAction, backwardAction, forwardAction, foreMostAction])
         }
     }
