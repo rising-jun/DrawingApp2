@@ -1,5 +1,5 @@
 //
-//  CanvasVC+GestureRecognizer.swift
+//  PanGestureRecognizer.swift
 //  DrawingApp
 //
 //  Created by YEONGJIN JANG on 2022/07/29.
@@ -9,7 +9,7 @@ import UIKit
 
 extension CanvasViewController: UIGestureRecognizerDelegate {
     
-    //MARK: - 뷰가 생성될 때마다 아래 panGesture가 생성되어 gesture recognizer 로 추가
+    //MARK: - 뷰가 생성될 때마다 아래 panGesture가 생성되어 타겟 뷰의 gesture recognizer 로 추가
     func createPanGestureRecognizer(targetView: UIView) {
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(panGestureHandler(_:)))
         panGesture.minimumNumberOfTouches = 2
@@ -19,6 +19,7 @@ extension CanvasViewController: UIGestureRecognizerDelegate {
     }
     
     //MARK: - view를 드래깅 하는 GestureRecognizer
+    //TODO: - 여기 깔끔하게 다듬을 수 있는지 확인
     @objc func panGestureHandler(_ sender: UIPanGestureRecognizer) {
         guard let drawableView = sender.view as? Drawable,
               let currentView = sender.view

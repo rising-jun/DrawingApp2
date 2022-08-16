@@ -20,7 +20,6 @@ final class SquareView: UIView, Drawable {
                            height: rectangle.size.height))
 
         super.updateColorAndAlpha(color: rectangle.color, alpha: rectangle.alpha)
-        //MARK: - 좌상단으로 앵커 포인트 잡기(디폴트 중간)
         self.layer.borderColor = tintColor.cgColor
     }
     

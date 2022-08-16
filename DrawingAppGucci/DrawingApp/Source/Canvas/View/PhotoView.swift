@@ -20,10 +20,7 @@ final class PhotoView: UIImageView, Drawable {
                 width: photo.size.width,
                 height: photo.size.height)
         )
-        super.isUserInteractionEnabled = true
-        super.alpha = photo.alpha.value
-        super.layer.borderColor = tintColor.cgColor
-        super.image = UIImage(data: photo.image)
+        configureAttribute(by: photo)
     }
     
     required init?(coder: NSCoder) {
@@ -39,4 +36,10 @@ final class PhotoView: UIImageView, Drawable {
         self.alpha = alpha.value
     }
     
+    private func configureAttribute(by photo: Photo) {
+        super.isUserInteractionEnabled = true
+        super.alpha = photo.alpha.value
+        super.layer.borderColor = tintColor.cgColor
+        super.image = UIImage(data: photo.image)
+    }
 }

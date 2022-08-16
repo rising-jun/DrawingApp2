@@ -9,7 +9,7 @@ import Foundation
 import UIKit.UIView
 
 final class UIFactory {
-    static func makeView<T: Shape>(with shape: T, at index: Int) -> UIView {
+    static func makeView(with shape: Shape, at index: Int) -> UIView {
         switch shape {
         case let rectangle as Rectangle:
             return SquareView(rectangle: rectangle, index: index)

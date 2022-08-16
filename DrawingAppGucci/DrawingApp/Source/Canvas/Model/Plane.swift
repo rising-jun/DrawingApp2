@@ -32,7 +32,7 @@ final class Plane: Planable {
     }
     
     //MARK: - 도형 추가
-    func makeShape(with blueprint: ShapeBlueprint, image data: Data? = nil) {
+    func makeShape(with blueprint: ShapeBlueprint, image data: Data? = nil) { 
         let shape = factory.generateShape(with: blueprint, imageData: data)
         shapes.append(shape)
         
@@ -62,6 +62,8 @@ final class Plane: Planable {
         return self[touchResultIndex]
     }
     
+    // TODO: - 각 도형들의 색상, 투명도 변경 메서드 통합
+    /// 20줄 이내로 줄이는 것이 목표
     //MARK: - 색상 변경
     func changeColor(at index: Int) {
         guard let rectangle = self[index] as? Rectangle else { return }
@@ -77,7 +79,9 @@ final class Plane: Planable {
     }
     
     /// - roundedAlpha 에서 +- 0.1 된 값이 넘겨질 것임
-    //MARK: - 투명도 변경
+    // MARK: - 투명도 변경
+    // TODO: - 각 도형들의 색상, 투명도 변경 메서드 통합
+
     func changeAlpha(at index: Int, value: Double) {
         let roundedAlpha: Double = round(value * 10) / 10
         let shape = self[index]
@@ -120,7 +124,7 @@ extension Plane {
         
         NotificationCenter.default.post(name: .move, object: self)
     }
-    
+    //MARK: - X,Y,W,H, 열거형 만들어서 스위치 문으로 못 돌리나?
     func adjustWidth(index: Int, isUp: Bool) {
         let shape = self[index]
         guard shape.size.width >= 1 else { return }
@@ -155,14 +159,16 @@ extension Plane {
 }
 
 //MARK: - 목록에서 오브젝트 순서 변경 메서드
+//TODO: - 네이밍이 적합한지 조사
 extension Plane {
+    //MARK: - 배열에서 한 칸 앞으로
     func moveforward(with index: Int) {
         guard index > 0 else { return }
         let backShape = shapes[index - 1]
         shapes[index - 1] = shapes[index]
         shapes[index] = backShape
     }
-    
+    //MARK: - 배열에서 맨 앞으로
     func moveFormost(with index: Int) {
         var index = index
         while index > 0 {
@@ -171,13 +177,14 @@ extension Plane {
         }
     }
     
+    //MARK: - 배열에서 한 칸 뒤로
     func moveBackward(with index: Int) {
         guard index < shapes.count - 1 else { return }
         let forwardShape = shapes[index + 1]
         shapes[index + 1] = shapes[index]
         shapes[index] = forwardShape
     }
-    
+    //MARK: - 배열에서 맨 뒤로
     func moveBackmost(with index: Int) {
         var index = index
         while index < shapes.count - 1  {
@@ -185,8 +192,8 @@ extension Plane {
             index += 1
         }
     }
-    
-    func moveRow(by subtractOfIndexPath: Int, from index: Int) {
+    //MARK: - 배열에서 여러 칸 이동
+    func moveRows(by subtractOfIndexPath: Int, from index: Int) {
         let rowCount = abs(subtractOfIndexPath)
         for step in 0..<rowCount {
             if subtractOfIndexPath >= 0 {

@@ -12,14 +12,14 @@ class TextView: UILabel, Drawable {
     
     init(text: Text, index: Int) {
         self.index = index
-        super.init(frame: CGRect(x: text.point.x, y: text.point.y, width: .zero, height: text.size.height))
-        super.layer.borderColor = tintColor.cgColor
-        super.text = text.string
-        super.textColor = UIColor.label.withAlphaComponent(text.alpha.value)
-        super.font = UIFont(name: "Optima", size:  32)
-        super.isUserInteractionEnabled = true
-        super.isEnabled = true
-        super.sizeToFit()
+        
+        super.init(frame:
+                    CGRect(
+                        x: text.point.x,
+                        y: text.point.y,
+                        width: .zero,
+                        height: text.size.height))
+        configureAttribute(by: text)
     }
     
     required init?(coder: NSCoder) {
@@ -28,5 +28,15 @@ class TextView: UILabel, Drawable {
     
     func updateAlpha(alpha: Alpha) {
         self.textColor = UIColor.label.withAlphaComponent(alpha.value)
+    }
+    
+    func configureAttribute(by text: Text) {
+        super.layer.borderColor = tintColor.cgColor
+        super.text = text.string
+        super.textColor = UIColor.label.withAlphaComponent(text.alpha.value)
+        super.font = UIFont(name: "Optima", size:  32)
+        super.isUserInteractionEnabled = true
+        super.isEnabled = true
+        super.sizeToFit()
     }
 }

@@ -40,7 +40,7 @@ final class LayerTableViewCell: UITableViewCell {
     }
     
     func setUp(with blueprint: ShapeBlueprint, at index: Int, printNumber number: Int) {
-        self.shapeIndex = index
+        shapeIndex = index
         title.text = "\(blueprint.rawValue) \(number)"
         switch blueprint {
         case .rectangle:
