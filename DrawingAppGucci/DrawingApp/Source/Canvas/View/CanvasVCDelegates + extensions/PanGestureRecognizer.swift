@@ -19,7 +19,6 @@ extension CanvasViewController: UIGestureRecognizerDelegate {
     }
     
     //MARK: - view를 드래깅 하는 GestureRecognizer
-    //TODO: - 여기 깔끔하게 다듬을 수 있는지 확인
     @objc func panGestureHandler(_ sender: UIPanGestureRecognizer) {
         guard let drawableView = sender.view as? Drawable,
               let currentView = sender.view
@@ -37,7 +36,6 @@ extension CanvasViewController: UIGestureRecognizerDelegate {
             self.plane.renewCenterOfShape(at: drawableView.index, after: movedPoint)
             sender.view?.alpha = CGFloat(self.plane[drawableView.index].alpha.value)
             self.updatePropertiesLabels(with: currentView)
-            loadViewIfNeeded()
         default:
             break
         }

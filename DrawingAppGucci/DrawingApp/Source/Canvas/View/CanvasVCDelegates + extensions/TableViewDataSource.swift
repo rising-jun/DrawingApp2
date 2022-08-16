@@ -58,7 +58,7 @@ extension CanvasViewController: UITableViewDataSource {
         plane.moveRows(by: spaceOfRow, from: sourceIndexPath.row)
         if spaceOfRow > 0 {
             for step in 0..<abs(spaceOfRow) {
-                self.moveViewForward(with: sourceIndexPath.row - step)
+                self.moveViewForeward(with: sourceIndexPath.row - step)
             }
         } else {
             for step in 0..<abs(spaceOfRow) {

@@ -41,8 +41,6 @@ enum ShapeSize {
 
 extension CGImage {
     
-    /// Gives info whether or not this `CGImage` represents a png image
-    /// By observing its UT type.
     var isPNG: Bool {
         if #available(iOS 14.0, *) {
             return (utType as String?) == UTType.png.identifier
@@ -52,13 +50,6 @@ extension CGImage {
     }
 }
 
-
-/// Used for limiting memory usage when opening new photos from user's library.
-///
-/// Photos could consume a lot of memory when loaded into `UIImage`s. A 2000 by 2000 photo
-/// roughly will consume 2000 x 2000 x 4 bytes = 16MB. A 10 000 by 10 000 photo will consume
-/// 10000 * 10000 * 4 = 400MB which is a lot, give that in your app
-/// you could pick up more than one photo (consider picking 10-15 photos)
 extension URL {
     weak var asSmallImage: UIImage? {
             
@@ -77,7 +68,6 @@ extension URL {
             let data = NSMutableData()
         guard let imageDestination = CGImageDestinationCreateWithData(data, UTType.jpeg.identifier as CFString, 1, nil) else { return nil }
             
-            // Don't compress PNGs, they're too pretty
             let destinationProperties = [kCGImageDestinationLossyCompressionQuality: cgImage.isPNG ? 1.0 : 0.75] as CFDictionary
             CGImageDestinationAddImage(imageDestination, cgImage, destinationProperties)
             CGImageDestinationFinalize(imageDestination)

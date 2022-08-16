@@ -159,36 +159,36 @@ extension Plane {
 }
 
 //MARK: - 목록에서 오브젝트 순서 변경 메서드
-//TODO: - 네이밍이 적합한지 조사
+//TODO: - 네이밍이 적합한지 조사, REFECTOR
 extension Plane {
     //MARK: - 배열에서 한 칸 앞으로
-    func moveforward(with index: Int) {
+    func moveBackward(with index: Int) {
         guard index > 0 else { return }
         let backShape = shapes[index - 1]
         shapes[index - 1] = shapes[index]
         shapes[index] = backShape
     }
     //MARK: - 배열에서 맨 앞으로
-    func moveFormost(with index: Int) {
+    func moveBackmost(with index: Int) {
         var index = index
         while index > 0 {
-            moveforward(with: index)
+            moveBackward(with: index)
             index -= 1
         }
     }
     
     //MARK: - 배열에서 한 칸 뒤로
-    func moveBackward(with index: Int) {
+    func moveForward(with index: Int) {
         guard index < shapes.count - 1 else { return }
         let forwardShape = shapes[index + 1]
         shapes[index + 1] = shapes[index]
         shapes[index] = forwardShape
     }
     //MARK: - 배열에서 맨 뒤로
-    func moveBackmost(with index: Int) {
+    func moveForemost(with index: Int) {
         var index = index
         while index < shapes.count - 1  {
-            moveBackward(with: index)
+            moveForward(with: index)
             index += 1
         }
     }
@@ -197,9 +197,9 @@ extension Plane {
         let rowCount = abs(subtractOfIndexPath)
         for step in 0..<rowCount {
             if subtractOfIndexPath >= 0 {
-                moveforward(with: index - step)
+                moveBackward(with: index - step)
             } else {
-                moveBackward(with: index + step)
+                moveForward(with: index + step)
             }
         }
     }

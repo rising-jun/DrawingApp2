@@ -29,37 +29,25 @@ extension CanvasViewController: UITableViewDelegate {
             let backMostAction =
             UIAction(title: NSLocalizedString("맨 뒤로 보내기", comment: ""),
                      image: UIImage(systemName: "arrow.up.to.line")) { [unowned self] action in
-                self.plane.moveFormost(with: indexPath.row)
-                var index = indexPath.row
-                while index > 0 {
-                    self.moveViewForward(with: index)
-                    index -= 1
-                }
+                moveViewAndModel(to: .backmost, index: indexPath.row)
                 tableView.reloadData()
             }
             let backwardAction =
             UIAction(title: NSLocalizedString("뒤로 보내기", comment: ""),
                      image: UIImage(systemName: "arrow.up.square")) { [unowned self] action in
-                self.plane.moveforward(with: indexPath.row)
-                self.moveViewForward(with: indexPath.row)
+                moveViewAndModel(to: .backward, index: indexPath.row)
                 tableView.reloadData()
             }
             let forwardAction =
             UIAction(title: NSLocalizedString("앞으로 보내기", comment: ""),
                      image: UIImage(systemName: "arrow.down.square")) { [unowned self] action in
-                self.plane.moveBackward(with: indexPath.row)
-                self.moveViewBackward(with: indexPath.row)
+                moveViewAndModel(to: .forward, index: indexPath.row)
                 tableView.reloadData()
             }
             let foreMostAction =
             UIAction(title: NSLocalizedString("맨 앞으로 보내기", comment: ""),
                      image: UIImage(systemName: "arrow.down.to.line")) { [unowned self] action in
-                self.plane.moveBackmost(with: indexPath.row)
-                var index = indexPath.row
-                while index < shapeFrameViews.count - 1 {
-                    moveViewBackward(with: index)
-                    index += 1
-                }
+                moveViewAndModel(to: .foremost, index: indexPath.row)
                 tableView.reloadData()
             }
             
