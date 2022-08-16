@@ -8,10 +8,10 @@
 import Foundation
 
 final class Photo: Shape {
-    let image: Data
+    var imageURL: URL
     
-    init(shape: Shape, imageData: Data) {
-        self.image = imageData
+    init(shape: Shape, url: URL) {
+        self.imageURL = url
         super.init(id: shape.id, size: shape.size, point: shape.point, alpha: shape.alpha, bound: shape.bound)
     }
 }

@@ -28,18 +28,15 @@ final class PhotoView: UIImageView, Drawable {
 
     }
     
-    func updateImage(image: UIImage) {
-        self.image = image
-    }
-    
     func updateAlpha(alpha: Alpha) {
         self.alpha = alpha.value
     }
     
     private func configureAttribute(by photo: Photo) {
-        super.isUserInteractionEnabled = true
-        super.alpha = photo.alpha.value
-        super.layer.borderColor = tintColor.cgColor
-        super.image = UIImage(data: photo.image)
+        guard let image = photo.imageURL.asSmallImage else { return }
+        self.isUserInteractionEnabled = true
+        self.alpha = photo.alpha.value
+        self.layer.borderColor = tintColor.cgColor
+        self.image = image
     }
 }

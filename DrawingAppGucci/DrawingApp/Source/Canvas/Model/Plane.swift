@@ -8,7 +8,7 @@
 import Foundation
 
 protocol Planable {
-    func makeShape(with blueprint: ShapeBlueprint, image data: Data?)
+    func makeShape(with blueprint: ShapeBlueprint, by url: URL?)
     func isTouched(at point: (Double, Double)) -> Int?
     func findTouchedShape(at point: (Double, Double)) -> Shape?
     func changeColor(at index: Int)
@@ -32,8 +32,8 @@ final class Plane: Planable {
     }
     
     //MARK: - 도형 추가
-    func makeShape(with blueprint: ShapeBlueprint, image data: Data? = nil) { 
-        let shape = factory.generateShape(with: blueprint, imageData: data)
+    func makeShape(with blueprint: ShapeBlueprint, by url: URL? = nil) {
+        let shape = factory.generateShape(with: blueprint, url: url)
         shapes.append(shape)
         
         NotificationCenter.default

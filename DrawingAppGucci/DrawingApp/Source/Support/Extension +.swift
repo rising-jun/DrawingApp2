@@ -7,6 +7,7 @@
 
 import os.log
 import UIKit
+import UniformTypeIdentifiers
 
 extension OSLog {
     static var subsystem = Bundle.main.bundleIdentifier!
@@ -36,4 +37,52 @@ extension UIView {
 enum ShapeSize {
     static let width: Double = 150.0
     static let height: Double = 120.0
+}
+
+extension CGImage {
+    
+    /// Gives info whether or not this `CGImage` represents a png image
+    /// By observing its UT type.
+    var isPNG: Bool {
+        if #available(iOS 14.0, *) {
+            return (utType as String?) == UTType.png.identifier
+        } else {
+            return utType == UTType.png.identifier as CFString
+        }
+    }
+}
+
+
+/// Used for limiting memory usage when opening new photos from user's library.
+///
+/// Photos could consume a lot of memory when loaded into `UIImage`s. A 2000 by 2000 photo
+/// roughly will consume 2000 x 2000 x 4 bytes = 16MB. A 10 000 by 10 000 photo will consume
+/// 10000 * 10000 * 4 = 400MB which is a lot, give that in your app
+/// you could pick up more than one photo (consider picking 10-15 photos)
+extension URL {
+    weak var asSmallImage: UIImage? {
+            
+        let sourceOptions = [kCGImageSourceShouldCache: false] as CFDictionary
+            
+            guard let source = CGImageSourceCreateWithURL(self as CFURL, sourceOptions) else { return nil }
+            
+            let downsampleOptions = [
+                kCGImageSourceCreateThumbnailFromImageAlways: true,
+                kCGImageSourceCreateThumbnailWithTransform: true,
+                kCGImageSourceThumbnailMaxPixelSize: 0_500,
+            ] as CFDictionary
+
+            guard let cgImage = CGImageSourceCreateThumbnailAtIndex(source, 0, downsampleOptions) else { return nil }
+
+            let data = NSMutableData()
+        guard let imageDestination = CGImageDestinationCreateWithData(data, UTType.jpeg.identifier as CFString, 1, nil) else { return nil }
+            
+            // Don't compress PNGs, they're too pretty
+            let destinationProperties = [kCGImageDestinationLossyCompressionQuality: cgImage.isPNG ? 1.0 : 0.75] as CFDictionary
+            CGImageDestinationAddImage(imageDestination, cgImage, destinationProperties)
+            CGImageDestinationFinalize(imageDestination)
+            
+            let image = UIImage(data: data as Data)
+            return image
+    }
 }

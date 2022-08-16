@@ -10,7 +10,7 @@ import Foundation
 final class ShapeFactory {
     
     //TODO: - Shape를 먼저 인잇하고 사각형엔 컬러 추가 하는 방식
-    func generateShape(with: ShapeBlueprint, imageData: Data? = nil) -> Shape {
+    func generateShape(with: ShapeBlueprint, url: URL? = nil) -> Shape {
         let size = Size(width: ShapeSize.width,
                         height: ShapeSize.height)
         let point = Point(x: Double.random(in: 0...ScreenSize.width),
@@ -25,10 +25,10 @@ final class ShapeFactory {
         case .rectangle:
             return Rectangle(shape: shape, color: Color())
         case .photo:
-            guard let imageData = imageData else {
+            guard let url = url else {
                 assert(false, "imageData is nil")
             }
-            return Photo(shape: shape, imageData: imageData)
+            return Photo(shape: shape, url: url)
         case .text:
             let string = makeRandomText()
             let textSize = Size(width: Double(string.count) * 13, height: 35)
