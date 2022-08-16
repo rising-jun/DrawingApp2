@@ -161,6 +161,9 @@ final class CanvasViewController: UIViewController {
         phPickerViewController.delegate = self
         tableView.dataSource = self
         tableView.delegate = self
+        tableView.dragInteractionEnabled = true
+        tableView.dragDelegate = self
+        tableView.dropDelegate = self
         
         [pointXView, pointYView, sizeWView, sizeHView].forEach {
             guard let view = $0 else { return }
@@ -436,6 +439,22 @@ extension CanvasViewController: UITableViewDataSource {
         return cell
     }
     
+    //MARK: - drag and drop 후에 애니메이션과 함께 실행될 메서드
+    func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        guard sourceIndexPath.row != destinationIndexPath.row else { return }
+        let spaceOfRow = sourceIndexPath.row - destinationIndexPath.row
+        plane.moveRow(by: spaceOfRow, from: sourceIndexPath.row)
+        if spaceOfRow > 0 {
+            for step in 0..<spaceOfRow {
+                self.moveViewForward(with: sourceIndexPath.row - step)
+            }
+        } else {
+            for step in 0..<spaceOfRow {
+                self.moveViewBackward(with: step + sourceIndexPath.row)
+            }
+        }
+    }
+    
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return "레이어"
     }
@@ -480,7 +499,7 @@ extension CanvasViewController: UITableViewDelegate {
             let forwardAction =
             UIAction(title: NSLocalizedString("앞으로 보내기", comment: ""),
                      image: UIImage(systemName: "arrow.down.square")) { [unowned self] action in
-                self.plane.moveBack(with: indexPath.row)
+                self.plane.moveBackward(with: indexPath.row)
                 self.moveViewBackward(with: indexPath.row)
                 tableView.reloadData()
             }
@@ -501,6 +520,7 @@ extension CanvasViewController: UITableViewDelegate {
     }
 }
 
+//MARK: - 길게 눌러서 한칸 셀을 움직이는 메서드
 extension CanvasViewController {
     private func moveViewForward(with index: Int) {
         guard index > 0 else { return }
@@ -515,4 +535,21 @@ extension CanvasViewController {
         shapeFrameViews[index + 1] = shapeFrameViews[index]
         shapeFrameViews[index] = postView
     }
+}
+
+
+//MARK: - TableView Cell Drag and Drop
+extension CanvasViewController: UITableViewDragDelegate, UITableViewDropDelegate {
+    func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
+        return [UIDragItem(itemProvider: NSItemProvider())]
+    }
+    
+    func tableView(_ tableView: UITableView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UITableViewDropProposal {
+        if session.localDragSession != nil {
+            return UITableViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
+        }
+        return UITableViewDropProposal(operation: .cancel, intent: .unspecified)
+    }
+    
+    func tableView(_ tableView: UITableView, performDropWith coordinator: UITableViewDropCoordinator) { }
 }

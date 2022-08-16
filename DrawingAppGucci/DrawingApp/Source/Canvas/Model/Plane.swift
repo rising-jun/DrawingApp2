@@ -171,7 +171,7 @@ extension Plane {
         }
     }
     
-    func moveBack(with index: Int) {
+    func moveBackward(with index: Int) {
         guard index < shapes.count - 1 else { return }
         let forwardShape = shapes[index + 1]
         shapes[index + 1] = shapes[index]
@@ -181,8 +181,19 @@ extension Plane {
     func moveBackmost(with index: Int) {
         var index = index
         while index < shapes.count - 1  {
-            moveBack(with: index)
+            moveBackward(with: index)
             index += 1
+        }
+    }
+    
+    func moveRow(by subtractOfIndexPath: Int, from index: Int) {
+        let rowCount = abs(subtractOfIndexPath)
+        for step in 0..<rowCount {
+            if subtractOfIndexPath >= 0 {
+                moveforward(with: index - step)
+            } else {
+                moveBackward(with: index + step)
+            }
         }
     }
 }
