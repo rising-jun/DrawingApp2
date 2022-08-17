@@ -161,7 +161,6 @@ final class CanvasViewController: UIViewController {
         stepper.stepValue = 0.1
         rectangleButton.isOpaque = false
         statusView.isHidden = true
-        rectangleButton.layer.cornerRadius = 10
         phPickerViewController.delegate = self
         tableView.dataSource = self
         tableView.delegate = self
@@ -174,6 +173,10 @@ final class CanvasViewController: UIViewController {
             view.layer.borderWidth = 0.5
             view.layer.cornerRadius = 10
             view.layer.borderColor = UIColor.darkGray.cgColor
+        }
+        
+        drawableStackview.arrangedSubviews.forEach {
+            $0.layer.cornerRadius = 10
         }
     }
     
