@@ -99,19 +99,20 @@ final class CanvasViewController: UIViewController {
     //MARK: - 상태창에 컬러 버튼 누르면 실행 되는 액션
     @IBAction func touchedColorButton(_ sender: UIButton) {
         guard let currentSquare = beforeSelectedView as? Drawable else { return }
-        plane.changeColor(at: currentSquare.index)
+        plane.changeColorAndAlpha(at: currentSquare.index, by: nil)
     }
     
     //MARK: - 스테퍼 + - 버튼 누르면 실행 되는 액션
     @IBAction func touchedStepper(_ sender: UIStepper) {
         guard let currentSquare = beforeSelectedView as? Drawable else { return }
-        plane.changeAlpha(at: currentSquare.index, value: sender.value)
+        plane.changeColorAndAlpha(at: currentSquare.index, by: sender.value)
+
     }
     
     //MARK: - 슬라이더에 점을 움직이면 실행 되는 액션
     @IBAction func movedDot(_ sender: UISlider) {
         guard let currentSquare = beforeSelectedView as? Drawable else { return }
-        plane.changeAlpha(at: currentSquare.index, value: Double(sender.value))
+        plane.changeColorAndAlpha(at: currentSquare.index, by: Double(sender.value))
     }
     
     //MARK: - 메인 화면에 한 점을 터치하면 실행되는 액션

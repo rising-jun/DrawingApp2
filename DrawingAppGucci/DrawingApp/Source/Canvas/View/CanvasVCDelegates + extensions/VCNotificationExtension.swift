@@ -67,53 +67,24 @@ extension CanvasViewController {
     // MARK: - 노티피케이션 옵저버 등록
     func addObservers() {
         
-        // TODO: - 아래 3개 메서드를 제너럴을 이용해서 1개의 메서드로 개편
-        // MARK: - 사각형 색 및 투명도 조절
+        //MARK: - 도형 투명도 변경
         NotificationCenter.default
             .addObserver(
-                forName: .rectangle,
+                forName: .color,
                 object: nil,
                 queue: .main) { [unowned self] noti in
                     guard
+                        let alpha = noti.userInfo?[NotificationKey.alpha] as? Alpha,
                         let color = noti.userInfo?[NotificationKey.color] as? Color,
-                        let alpha = noti.userInfo?[NotificationKey.alpha] as? Alpha
+                        let blueprint = noti.userInfo?[NotificationKey.blueprint] as? ShapeBlueprint,
+                        let drawableView = beforeSelectedView as? Drawable
                     else { return }
                     
-                    self.beforeSelectedView?.updateColorAndAlpha(color: color, alpha: alpha)
-                    self.informSelectedViewToStatus(color: color, alpha: alpha, type: .rectangle)
+                    drawableView.updateAlphaOrColor(alpha: alpha, color: color)
+                    self.informSelectedViewToStatus(color: color, alpha: alpha, type: blueprint)
                 }
-        
-        //MARK: - 사진 투명도 변경
-        NotificationCenter.default
-            .addObserver(
-                forName: .photo,
-                object: nil,
-                queue: .main) { [unowned self] noti in
-                    guard
-                        let alpha = noti.userInfo?[NotificationKey.alpha] as? Alpha,
-                        let color = noti.userInfo?[NotificationKey.color] as? Color,
-                        let photoView = beforeSelectedView as? PhotoView
-                    else { return }
-                    photoView.updateAlpha(alpha: alpha)
-                    self.informSelectedViewToStatus(color: color, alpha: alpha, type: .photo)
-                }
-        
-        //MARK: - 텍스트 투명도 변경
-        NotificationCenter.default
-            .addObserver(
-                forName: .text,
-                object: nil,
-                queue: .main) { [unowned self] noti in
-                    guard
-                        let alpha = noti.userInfo?[NotificationKey.alpha] as? Alpha,
-                        let color = noti.userInfo?[NotificationKey.color] as? Color,
-                        let textView = beforeSelectedView as? TextView
-                    else { return }
-                    textView.updateAlpha(alpha: alpha)
-                    self.informSelectedViewToStatus(color: color, alpha: alpha, type: .text)
-                }
-        
-        //MARK: - 도형 추가 알림
+
+        //MARK: - 도형 추가
         NotificationCenter.default
             .addObserver(
                 forName: .add,

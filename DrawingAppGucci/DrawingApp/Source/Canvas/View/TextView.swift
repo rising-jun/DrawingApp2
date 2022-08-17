@@ -8,6 +8,7 @@
 import UIKit
 
 class TextView: UILabel, Drawable {
+    
     var index: Int
     
     init(text: Text, index: Int) {
@@ -26,17 +27,17 @@ class TextView: UILabel, Drawable {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func updateAlpha(alpha: Alpha) {
+    func updateAlphaOrColor(alpha: Alpha, color: Color? = nil) {
         self.textColor = UIColor.label.withAlphaComponent(alpha.value)
     }
     
     func configureAttribute(by text: Text) {
         super.layer.borderColor = tintColor.cgColor
         super.text = text.string
-        super.textColor = UIColor.label.withAlphaComponent(text.alpha.value)
         super.font = UIFont(name: "Optima", size:  32)
         super.isUserInteractionEnabled = true
         super.isEnabled = true
         super.sizeToFit()
+        self.updateAlphaOrColor(alpha: text.alpha)
     }
 }

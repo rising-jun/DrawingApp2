@@ -22,7 +22,6 @@ extension CanvasViewController: UITableViewDelegate {
         return
     }
     
-    //TODO: - 20줄 이내 줄이기
     func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         
         return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { [unowned self] suggestedActions in

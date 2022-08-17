@@ -11,8 +11,7 @@ protocol Planable {
     func makeShape(with blueprint: ShapeBlueprint, by url: URL?)
     func isTouched(at point: (Double, Double)) -> Int?
     func findTouchedShape(at point: (Double, Double)) -> Shape?
-    func changeColor(at index: Int)
-    func changeAlpha(at index: Int, value: Double)
+    func changeColorAndAlpha(at index: Int, by alphaValue: Double?)
     subscript(_ index: Int) -> Shape { get }
 }
 
@@ -21,7 +20,7 @@ final class Plane: Planable {
     private(set) var shapes: [Shape] = []
     private let factory = ShapeFactory()
     var count: Int { shapes.count }
-
+    
     subscript(index: Int) -> Shape {
         precondition(isIndexValid(index: index), "shapes is out of index")
         return self.shapes[index]
@@ -62,56 +61,44 @@ final class Plane: Planable {
         return self[touchResultIndex]
     }
     
-    // TODO: - 각 도형들의 색상, 투명도 변경 메서드 통합
-    /// 20줄 이내로 줄이는 것이 목표
     //MARK: - 색상 변경
-    func changeColor(at index: Int) {
-        guard let rectangle = self[index] as? Rectangle else { return }
-        rectangle.setRandomColor()
+    func changeColorAndAlpha(at index: Int, by alphaValue: Double? = nil) {
+        var blueprint: ShapeBlueprint = .rectangle
+        var color = Color(r: 0, g: 0, b: 0)
+        var alpha = Alpha.ten
+        switch self[index] {
+        case let rectangle as Rectangle:
+            if let alphaValue = alphaValue {
+                rectangle.changeAlpha(value: alphaValue)
+            } else {
+                rectangle.setRandomColor()
+            }
+            blueprint = .rectangle
+            color = rectangle.color
+            alpha = rectangle.alpha
+            print(alpha)
+        case let photo as Photo:
+            photo.changeAlpha(value: alphaValue ?? 0)
+            blueprint = .photo
+            alpha = photo.alpha
+        case let text as Text:
+            text.changeAlpha(value: alphaValue ?? 0)
+            blueprint = .text
+            alpha = text.alpha
+        default:
+            assert(false, "failure at type casting")
+        }
         
         NotificationCenter.default
             .post(
-                name: .rectangle,
+                name: .color,
                 object: self,
-                userInfo: [NotificationKey.color: rectangle.color,
-                           NotificationKey.alpha: rectangle.alpha]
+                userInfo: [
+                    NotificationKey.color: color,
+                    NotificationKey.alpha: alpha,
+                    NotificationKey.blueprint: blueprint
+                ]
             )
-    }
-    
-    /// - roundedAlpha 에서 +- 0.1 된 값이 넘겨질 것임
-    // MARK: - 투명도 변경
-    // TODO: - 각 도형들의 색상, 투명도 변경 메서드 통합
-
-    func changeAlpha(at index: Int, value: Double) {
-        let roundedAlpha: Double = round(value * 10) / 10
-        let shape = self[index]
-        shape.changeAlpha(value: roundedAlpha)
-        
-        if let rectangle = shape as? Rectangle {
-            NotificationCenter.default
-                .post(
-                    name: .rectangle,
-                    object: self,
-                    userInfo: [NotificationKey.color: rectangle.color,
-                               NotificationKey.alpha: shape.alpha]
-                )
-        } else if shape is Photo {
-            NotificationCenter.default
-                .post(
-                    name: .photo,
-                    object: self,
-                    userInfo: [NotificationKey.color: Color.init(r: 0, g: 0, b: 0),
-                               NotificationKey.alpha: shape.alpha]
-                )
-        } else if shape is Text {
-            NotificationCenter.default
-                .post(
-                    name: .text,
-                    object: self,
-                    userInfo: [NotificationKey.color: Color.init(r: 0, g: 0, b: 0),
-                               NotificationKey.alpha: shape.alpha]
-                )
-        }
     }
 }
 
@@ -159,7 +146,6 @@ extension Plane {
 }
 
 //MARK: - 목록에서 오브젝트 순서 변경 메서드
-//TODO: - 네이밍이 적합한지 조사, REFECTOR
 extension Plane {
     //MARK: - 배열에서 한 칸 앞으로
     func moveBackward(with index: Int) {

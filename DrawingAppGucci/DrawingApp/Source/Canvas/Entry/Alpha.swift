@@ -8,6 +8,8 @@
 import Foundation
 import UIKit
 
+//TODO: - 뭔가 중복되 보이는 느낌은 나만 느끼나..?
+/// property wrapper로 어떻게 안되려나?
 enum Alpha {
     case one, two, three, four, five, six, seven, eight, nine, ten
     
@@ -38,23 +40,23 @@ enum Alpha {
     
     mutating func change(value: Double) {
         switch value {
-        case 0.1:
+        case 0.1..<0.2:
             self =  .one
-        case 0.2:
+        case 0.2..<0.3:
             self = .two
-        case 0.3:
+        case 0.3..<0.4:
             self = .three
-        case 0.4:
+        case 0.4..<0.5:
             self = .four
-        case 0.5:
+        case 0.5..<0.6:
             self = .five
-        case 0.6:
+        case 0.6..<0.7:
             self = .six
-        case 0.7:
+        case 0.7..<0.8:
             self = .seven
-        case 0.8:
+        case 0.8..<0.9:
             self = .eight
-        case 0.9:
+        case 0.9..<1.0:
             self = .nine
         default:
             self = .ten

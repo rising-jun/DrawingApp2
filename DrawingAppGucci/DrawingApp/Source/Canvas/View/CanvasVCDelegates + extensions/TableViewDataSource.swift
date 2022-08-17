@@ -12,10 +12,10 @@ extension CanvasViewController: UITableViewDataSource {
         return plane.count
     }
     
-    //TODO: - 20 줄 이내로 깔쌈하게 가능?
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "LayerTableViewCell", for: indexPath) as? LayerTableViewCell else { return UITableViewCell() }
-        
+                
         func getPrintNumber(target: ShapeBlueprint) -> Int {
             var counter: Int
             var shapes: [Shape]
@@ -70,4 +70,5 @@ extension CanvasViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return "레이어"
     }
+
 }

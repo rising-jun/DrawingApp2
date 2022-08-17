@@ -27,11 +27,6 @@ extension UIView {
     func drawEdges(selected: Bool) {
         self.layer.borderWidth = selected ? 3 : 0
     }
-    
-    func updateColorAndAlpha(color: Color, alpha: Alpha) {
-        self.backgroundColor = UIColor.init(red: color.$r, green: color.$g, blue: color.$b, alpha: alpha.value)
-    }
-
 }
 
 enum ShapeSize {

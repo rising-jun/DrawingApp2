@@ -8,7 +8,7 @@
 import UIKit
 
 final class SquareView: UIView, Drawable {
-    
+
     var index: Int
     
     init(rectangle: Rectangle, index: Int) {
@@ -19,11 +19,17 @@ final class SquareView: UIView, Drawable {
                            width: rectangle.size.width,
                            height: rectangle.size.height))
 
-        super.updateColorAndAlpha(color: rectangle.color, alpha: rectangle.alpha)
+        self.updateAlphaOrColor(alpha: rectangle.alpha, color: rectangle.color)
         self.layer.borderColor = tintColor.cgColor
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func updateAlphaOrColor(alpha: Alpha, color: Color?) {
+        guard let color = color else { return }
+
+        self.backgroundColor = UIColor.init(red: color.$r, green: color.$g, blue: color.$b, alpha: alpha.value)
     }
 }

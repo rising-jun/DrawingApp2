@@ -9,7 +9,6 @@ import Foundation
 
 final class ShapeFactory {
     
-    //TODO: - Shape를 먼저 인잇하고 사각형엔 컬러 추가 하는 방식
     func generateShape(with: ShapeBlueprint, url: URL? = nil) -> Shape {
         let size = Size(width: ShapeSize.width,
                         height: ShapeSize.height)
