@@ -8,14 +8,8 @@
 import Foundation
 import UIKit
 
-//TODO: - 뭔가 중복되 보이는 느낌은 나만 느끼나..?
-/// property wrapper로 어떻게 안되려나?
-enum Alpha {
+enum Alpha  {
     case one, two, three, four, five, six, seven, eight, nine, ten
-    
-//    var value: Double {
-//        return Double(self.rawValue) / 10
-//    }
     
     var value: Double {
         switch self {

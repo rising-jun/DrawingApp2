@@ -76,7 +76,6 @@ final class Plane: Planable {
             blueprint = .rectangle
             color = rectangle.color
             alpha = rectangle.alpha
-            print(alpha)
         case let photo as Photo:
             photo.changeAlpha(value: alphaValue ?? 0)
             blueprint = .photo

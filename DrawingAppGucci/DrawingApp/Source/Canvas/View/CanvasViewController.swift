@@ -105,7 +105,8 @@ final class CanvasViewController: UIViewController {
     //MARK: - 스테퍼 + - 버튼 누르면 실행 되는 액션
     @IBAction func touchedStepper(_ sender: UIStepper) {
         guard let currentSquare = beforeSelectedView as? Drawable else { return }
-        plane.changeColorAndAlpha(at: currentSquare.index, by: sender.value)
+        let roundedNumber: Double = round(sender.value * 10) / 10
+        plane.changeColorAndAlpha(at: currentSquare.index, by: roundedNumber)
 
     }
     

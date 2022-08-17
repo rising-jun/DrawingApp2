@@ -47,27 +47,37 @@ extension CGImage {
 
 extension URL {
     weak var asSmallImage: UIImage? {
-            
+        
         let sourceOptions = [kCGImageSourceShouldCache: false] as CFDictionary
-            
-            guard let source = CGImageSourceCreateWithURL(self as CFURL, sourceOptions) else { return nil }
-            
-            let downsampleOptions = [
-                kCGImageSourceCreateThumbnailFromImageAlways: true,
-                kCGImageSourceCreateThumbnailWithTransform: true,
-                kCGImageSourceThumbnailMaxPixelSize: 0_500,
-            ] as CFDictionary
-
-            guard let cgImage = CGImageSourceCreateThumbnailAtIndex(source, 0, downsampleOptions) else { return nil }
-
-            let data = NSMutableData()
+        
+        // URL -> CgImageSource
+        guard let source = CGImageSourceCreateWithURL(self as CFURL, sourceOptions) else { return nil }
+        
+        // Screen size
+        let scale: CGFloat = UIScreen.main.scale
+        
+        // Pixel scale fitted to PhotoView
+        /// 이건 지금 프로젝트 환경에 맞추기 위해 적은 코드
+        /// PhotoView의 가장 긴 변을 기준으로 scale 과 곱해서 변수에 저장
+        let maxDimensionsInPixel = max(ShapeSize.height, ShapeSize.width) * scale
+        
+        // Downsampling options
+        let downsampleOptions = [
+            kCGImageSourceCreateThumbnailFromImageAlways: true,
+            kCGImageSourceCreateThumbnailWithTransform: true,
+            kCGImageSourceThumbnailMaxPixelSize: maxDimensionsInPixel,
+        ] as CFDictionary
+        
+        guard let cgImage = CGImageSourceCreateThumbnailAtIndex(source, 0, downsampleOptions) else { return nil }
+        
+        // Convert cgImage to Data
+        let data = NSMutableData()
         guard let imageDestination = CGImageDestinationCreateWithData(data, UTType.jpeg.identifier as CFString, 1, nil) else { return nil }
-            
-            let destinationProperties = [kCGImageDestinationLossyCompressionQuality: cgImage.isPNG ? 1.0 : 0.75] as CFDictionary
-            CGImageDestinationAddImage(imageDestination, cgImage, destinationProperties)
-            CGImageDestinationFinalize(imageDestination)
-            
-            let image = UIImage(data: data as Data)
-            return image
+        
+        let destinationProperties = [kCGImageDestinationLossyCompressionQuality: cgImage.isPNG ? 1.0 : 0.75] as CFDictionary
+        CGImageDestinationAddImage(imageDestination, cgImage, destinationProperties)
+        CGImageDestinationFinalize(imageDestination)
+        
+        return UIImage(data: data as Data)
     }
 }
