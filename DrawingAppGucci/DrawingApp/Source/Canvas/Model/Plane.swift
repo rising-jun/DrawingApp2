@@ -39,7 +39,7 @@ final class Plane: Planable {
             .post(
                 name: .add,
                 object: self,
-                userInfo: [NotificationKey.shape: shape,
+                userInfo: [NotificationKey.shapeObject: shape,
                            NotificationKey.index: count - 1]
             )
     }
@@ -108,40 +108,43 @@ extension Plane {
         let shape = self[index]
         guard shape.point.x >= 1 && shape.point.y >= 1 else { return }
         shape.movePlace(to: position)
-        
-        NotificationCenter.default.post(name: .move, object: self)
     }
     //MARK: - X,Y,W,H, 열거형 만들어서 스위치 문으로 못 돌리나?
     func adjustWidth(index: Int, isUp: Bool) {
         let shape = self[index]
         guard shape.size.width >= 1 else { return }
         shape.adjustWidth(isUp: isUp)
-        postPropertiesNotification(notiName: .width)
+        postPropertiesNotification(changed: .width)
     }
     
     func adjustHeight(index: Int, isUp: Bool) {
         let shape = self[index]
         guard shape.size.height >= 1 else { return }
         shape.adjustHeight(isUp: isUp)
-        postPropertiesNotification(notiName: .height)
+        postPropertiesNotification(changed: .height)
     }
     
     func adjustX(index: Int, isUp: Bool) {
         let shape = self[index]
         guard shape.point.x >= 1 else { return }
         shape.adjustX(isUp: isUp)
-        postPropertiesNotification(notiName: .x)
+        postPropertiesNotification(changed: .x)
     }
     
     func adjustY(index: Int, isUp: Bool) {
         let shape = self[index]
         guard shape.point.y >= 1 else { return }
         shape.adjustY(isUp: isUp)
-        postPropertiesNotification(notiName: .y)
+        postPropertiesNotification(changed: .y)
     }
     
-    private func postPropertiesNotification(notiName: Notification.Name) {
-        NotificationCenter.default.post(name: notiName, object: self)
+    private func postPropertiesNotification(changed property: ShapeProperty) {
+        NotificationCenter.default
+            .post(
+                name: .property,
+                object: self,
+                userInfo: [NotificationKey.property : property]
+            )
     }
 }
 

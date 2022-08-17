@@ -185,7 +185,6 @@ final class CanvasViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         addObservers()
-        setUpPropertiesNotifications()
     }
     
     override func viewWillDisappear(_ animated: Bool) {

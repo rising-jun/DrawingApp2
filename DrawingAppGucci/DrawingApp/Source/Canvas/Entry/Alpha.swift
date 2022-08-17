@@ -13,6 +13,10 @@ import UIKit
 enum Alpha {
     case one, two, three, four, five, six, seven, eight, nine, ten
     
+//    var value: Double {
+//        return Double(self.rawValue) / 10
+//    }
+    
     var value: Double {
         switch self {
         case .one:

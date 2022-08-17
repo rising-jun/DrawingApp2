@@ -7,65 +7,36 @@
 
 import UIKit
 
-// MARK: - 크기와 위치에 관련한 노티피케이션 설정 추가
-// TODO: - 이 메서드 제너럴을 이용해서 줄이는 것 가능한지 따져보기
 extension CanvasViewController {
-    func setUpPropertiesNotifications() {
-        NotificationCenter.default.addObserver(
-            forName: .x,
-            object: nil,
-            queue: .main) { [unowned self] noti in
-                guard
-                    let drawbleView = beforeSelectedView as? Drawable,
-                    let currentView = beforeSelectedView
-                else { return }
-                let shape = plane[drawbleView.index]
-                currentView.layer.frame.origin.x = shape.point.x
-                updatePropertiesLabels(with: currentView)
-            }
-        
-        NotificationCenter.default.addObserver(
-            forName: .y,
-            object: nil,
-            queue: .main) { [unowned self] noti in
-                guard
-                    let drawbleView = beforeSelectedView as? Drawable,
-                    let currentView = beforeSelectedView
-                else { return }
-                let shape = plane[drawbleView.index]
-                currentView.layer.frame.origin.y = shape.point.y
-                updatePropertiesLabels(with: currentView)
-            }
-        
-        NotificationCenter.default.addObserver(
-            forName: .width,
-            object: nil,
-            queue: .main) { [unowned self] noti in
-                guard
-                    let drawbleView = beforeSelectedView as? Drawable,
-                    let currentView = beforeSelectedView
-                else { return }
-                let shape = plane[drawbleView.index]
-                currentView.frame = CGRect(x: shape.point.x, y: shape.point.y, width: shape.size.width, height: shape.size.height)
-                updatePropertiesLabels(with: currentView)
-            }
-        
-        NotificationCenter.default.addObserver(
-            forName: .height,
-            object: nil,
-            queue: .main) { [unowned self] noti in
-                guard
-                    let drawbleView = beforeSelectedView as? Drawable,
-                    let currentView = beforeSelectedView
-                else { return }
-                let shape = plane[drawbleView.index]
-                currentView.frame = CGRect(x: shape.point.x, y: shape.point.y, width: shape.size.width, height: shape.size.height)
-                updatePropertiesLabels(with: currentView)
-            }
-    }
     
     // MARK: - 노티피케이션 옵저버 등록
     func addObservers() {
+        
+        // MARK: - 크기와 위치에 관련한 노티피케이션
+        NotificationCenter.default.addObserver(
+            forName: .property,
+            object: nil,
+            queue: .main) { [unowned self] noti in
+                guard
+                    let drawbleView = beforeSelectedView as? Drawable,
+                    let currentView = beforeSelectedView,
+                    let someProtperty = noti.userInfo?[NotificationKey.property] as? ShapeProperty
+                else { return }
+                let shape = plane[drawbleView.index]
+                switch someProtperty {
+                case .x:
+                    currentView.layer.frame.origin.x = shape.point.x
+                case .y:
+                    currentView.layer.frame.origin.y = shape.point.y
+                case .width, .height:
+                    currentView.frame = CGRect(
+                        x: shape.point.x,
+                        y: shape.point.y,
+                        width: shape.size.width,
+                        height: shape.size.height)
+                }
+                updatePropertiesLabels(with: currentView)
+            }
         
         //MARK: - 도형 투명도 변경
         NotificationCenter.default
@@ -90,7 +61,7 @@ extension CanvasViewController {
                 forName: .add,
                 object: nil,
                 queue: .main) { [unowned self] noti in
-                    guard let shape = noti.userInfo?[NotificationKey.shape] as? Shape,
+                    guard let shape = noti.userInfo?[NotificationKey.shapeObject] as? Shape,
                           let index = noti.userInfo?[NotificationKey.index] as? Int
                     else {
                         return }
@@ -99,9 +70,5 @@ extension CanvasViewController {
                     self.tableView.reloadData()
                 }
         
-        // MARK: - 도형 이동
-        NotificationCenter.default.addObserver(forName: .move, object: nil, queue: .main) { _ in
-            self.view.reloadInputViews()
-        }
     }
 }
