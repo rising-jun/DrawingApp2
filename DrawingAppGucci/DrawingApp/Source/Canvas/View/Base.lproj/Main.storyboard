@@ -316,7 +316,6 @@
                                     <constraint firstItem="mkX-9z-uBo" firstAttribute="leading" secondItem="wEe-lM-fZ5" secondAttribute="leading" constant="15" id="olX-IP-FIe"/>
                                     <constraint firstItem="In1-ud-jv1" firstAttribute="top" secondItem="mkX-9z-uBo" secondAttribute="bottom" constant="15" id="opO-ZZ-IU5"/>
                                     <constraint firstItem="7Nh-d9-PsU" firstAttribute="leading" secondItem="wEe-lM-fZ5" secondAttribute="leading" constant="15" id="ppI-54-xgM"/>
-                                    <constraint firstAttribute="width" priority="250" constant="240" id="uTT-DD-Auz"/>
                                     <constraint firstItem="rd0-TC-Ekx" firstAttribute="leading" secondItem="7Nh-d9-PsU" secondAttribute="leading" id="xud-Lz-FNB"/>
                                     <constraint firstItem="mkX-9z-uBo" firstAttribute="top" secondItem="aip-n3-Kfp" secondAttribute="bottom" constant="15" id="z6N-j4-wgu"/>
                                 </constraints>
@@ -369,17 +368,14 @@
                                 </subviews>
                             </stackView>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="gwH-jC-mel" userLabel="Layer Table View">
-                                <rect key="frame" x="0.0" y="24" width="165" height="796"/>
+                                <rect key="frame" x="0.0" y="24" width="236" height="796"/>
                                 <color key="backgroundColor" systemColor="systemGray5Color"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="165" id="BB1-W0-8Jz"/>
-                                </constraints>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="LayerTableViewCell" id="6vq-Qz-w2s" customClass="LayerTableViewCell" customModule="DrawingApp" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="44.5" width="165" height="43.5"/>
+                                        <rect key="frame" x="0.0" y="44.5" width="236" height="43.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="6vq-Qz-w2s" id="bVr-0t-HzI">
-                                            <rect key="frame" x="0.0" y="0.0" width="165" height="43.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="236" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" systemColor="systemGray5Color"/>
@@ -396,6 +392,7 @@
                             <constraint firstItem="wEe-lM-fZ5" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" multiplier="0.2" id="EIA-S5-HqB"/>
                             <constraint firstAttribute="bottom" secondItem="gwH-jC-mel" secondAttribute="bottom" id="GEy-5r-zCX"/>
                             <constraint firstAttribute="bottom" secondItem="wEe-lM-fZ5" secondAttribute="bottom" id="GH7-dg-SFA"/>
+                            <constraint firstItem="gwH-jC-mel" firstAttribute="width" secondItem="wEe-lM-fZ5" secondAttribute="width" id="Hqc-se-qvw"/>
                             <constraint firstItem="gwH-jC-mel" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="Oaz-9Q-AIg"/>
                             <constraint firstItem="gwH-jC-mel" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="QMi-fy-aLF"/>
                             <constraint firstItem="wEe-lM-fZ5" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="XEN-M8-ngE"/>
