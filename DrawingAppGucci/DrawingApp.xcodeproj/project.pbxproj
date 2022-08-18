@@ -202,7 +202,7 @@
 			isa = PBXGroup;
 			children = (
 				0057428528743F9500080F14 /* CanvasViewController.swift */,
-				004C648428AB70FC00C63D86 /* CanvasVCDelegates + extensions */,
+				004C648428AB70FC00C63D86 /* VCDelegates + extensions */,
 				00A9D5D8287BFC68002A6049 /* SquareView.swift */,
 				00CC7C80288E47E3009E0D0A /* PhotoView.swift */,
 				001B7D6328A0E4C700BEF034 /* TextView.swift */,
@@ -213,7 +213,7 @@
 			path = View;
 			sourceTree = "<group>";
 		};
-		004C648428AB70FC00C63D86 /* CanvasVCDelegates + extensions */ = {
+		004C648428AB70FC00C63D86 /* VCDelegates + extensions */ = {
 			isa = PBXGroup;
 			children = (
 				00EC55E528936E0300254487 /* PanGestureRecognizer.swift */,
@@ -225,7 +225,7 @@
 				004C648528AB71A900C63D86 /* VCShapeExtension.swift */,
 				004C648928AB760A00C63D86 /* VCNotificationExtension.swift */,
 			);
-			path = "CanvasVCDelegates + extensions";
+			path = "VCDelegates + extensions";
 			sourceTree = "<group>";
 		};
 		0057427528743F9500080F14 = {

@@ -12,10 +12,10 @@ extension CanvasViewController: UITableViewDataSource {
         return plane.count
     }
     
-
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "LayerTableViewCell", for: indexPath) as? LayerTableViewCell else { return UITableViewCell() }
-                
+        
         func getPrintNumber(target: ShapeBlueprint) -> Int {
             var counter: Int
             var shapes: [Shape]
@@ -53,18 +53,19 @@ extension CanvasViewController: UITableViewDataSource {
     
     //MARK: - drag and drop 후에 애니메이션과 함께 실행될 메서드
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        guard sourceIndexPath.row != destinationIndexPath.row else { return }
+        guard sourceIndexPath.row != destinationIndexPath.row else {
+            return
+        }
         let spaceOfRow = sourceIndexPath.row - destinationIndexPath.row
-        plane.moveRows(by: spaceOfRow, from: sourceIndexPath.row)
-        if spaceOfRow > 0 {
-            for step in 0..<abs(spaceOfRow) {
+
+        for step in 0..<abs(spaceOfRow) {
+            if spaceOfRow > 0 {
                 self.moveViewAndModel(to: .backward, index: sourceIndexPath.row - step)
-            }
-        } else {
-            for step in 0..<abs(spaceOfRow) {
+            } else {
                 self.moveViewAndModel(to: .forward, index: sourceIndexPath.row + step)
             }
         }
+        tableView.reloadData()
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {

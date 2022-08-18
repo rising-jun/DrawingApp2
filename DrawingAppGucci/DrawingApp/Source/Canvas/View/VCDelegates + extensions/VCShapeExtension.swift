@@ -31,6 +31,7 @@ extension CanvasViewController {
         createPanGestureRecognizer(targetView: view)
         shapeFrameViews.append(view)
         self.backgroundView.addSubview(view)
+        view.becomeFirstResponder()
         self.view.bringSubviewToFront(drawableStackview)
     }
     

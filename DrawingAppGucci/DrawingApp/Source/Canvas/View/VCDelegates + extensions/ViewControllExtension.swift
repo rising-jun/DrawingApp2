@@ -23,7 +23,6 @@ extension CanvasViewController {
         shapeFrameViews[index] = postView
     }
     
-    //TODO: 오류 있음
     func moveViewAndModel(to direction: Direction, index: Int) {
         var index = index
         switch direction {
