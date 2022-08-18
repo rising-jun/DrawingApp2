@@ -26,17 +26,18 @@ final class LayerTableViewCell: UITableViewCell {
             contentView.addSubview($0)
         }
         
-        shapeImageView.snp.makeConstraints {
-            $0.leading.equalToSuperview().offset(10)
-            $0.centerY.equalToSuperview()
-            $0.width.equalTo(20)
-            $0.height.equalTo(shapeImageView.snp.width)
+        title.snp.makeConstraints {
+            $0.center.equalToSuperview()
         }
         
-        title.snp.makeConstraints {
-            $0.leading.equalTo(shapeImageView.snp.trailing).offset(5)
+        shapeImageView.snp.makeConstraints {
+
+            $0.leading.equalToSuperview().offset(30)
             $0.centerY.equalToSuperview()
+            $0.height.equalTo(title)
+            $0.width.equalTo(shapeImageView.snp.height)
         }
+        
     }
     
     func setUp(with blueprint: ShapeBlueprint, at index: Int, printNumber number: Int) {

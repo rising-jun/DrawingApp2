@@ -14,7 +14,7 @@
 		003E1D98288B1A120077783E /* Point.swift in Sources */ = {isa = PBXBuildFile; fileRef = 003E1D97288B1A120077783E /* Point.swift */; };
 		003E1D9A288B1A170077783E /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 003E1D99288B1A170077783E /* Color.swift */; };
 		003E1D9C288B1A1C0077783E /* Bound.swift in Sources */ = {isa = PBXBuildFile; fileRef = 003E1D9B288B1A1C0077783E /* Bound.swift */; };
-		004C648628AB71A900C63D86 /* ShapeExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 004C648528AB71A900C63D86 /* ShapeExtension.swift */; };
+		004C648628AB71A900C63D86 /* VCShapeExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 004C648528AB71A900C63D86 /* VCShapeExtension.swift */; };
 		004C648828AB757E00C63D86 /* PHPickerDeleagte.swift in Sources */ = {isa = PBXBuildFile; fileRef = 004C648728AB757E00C63D86 /* PHPickerDeleagte.swift */; };
 		004C648A28AB760A00C63D86 /* VCNotificationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 004C648928AB760A00C63D86 /* VCNotificationExtension.swift */; };
 		004C648C28AB763200C63D86 /* TableViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 004C648B28AB763200C63D86 /* TableViewDelegate.swift */; };
@@ -74,7 +74,7 @@
 		003E1D97288B1A120077783E /* Point.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Point.swift; sourceTree = "<group>"; };
 		003E1D99288B1A170077783E /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 		003E1D9B288B1A1C0077783E /* Bound.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bound.swift; sourceTree = "<group>"; };
-		004C648528AB71A900C63D86 /* ShapeExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShapeExtension.swift; sourceTree = "<group>"; };
+		004C648528AB71A900C63D86 /* VCShapeExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VCShapeExtension.swift; sourceTree = "<group>"; };
 		004C648728AB757E00C63D86 /* PHPickerDeleagte.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHPickerDeleagte.swift; sourceTree = "<group>"; };
 		004C648928AB760A00C63D86 /* VCNotificationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VCNotificationExtension.swift; sourceTree = "<group>"; };
 		004C648B28AB763200C63D86 /* TableViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewDelegate.swift; sourceTree = "<group>"; };
@@ -222,7 +222,7 @@
 				004C648F28AB770A00C63D86 /* ViewControllExtension.swift */,
 				004C648D28AB76CF00C63D86 /* TableViewDataSource.swift */,
 				004C648728AB757E00C63D86 /* PHPickerDeleagte.swift */,
-				004C648528AB71A900C63D86 /* ShapeExtension.swift */,
+				004C648528AB71A900C63D86 /* VCShapeExtension.swift */,
 				004C648928AB760A00C63D86 /* VCNotificationExtension.swift */,
 			);
 			path = "CanvasVCDelegates + extensions";
@@ -443,7 +443,7 @@
 				004C648A28AB760A00C63D86 /* VCNotificationExtension.swift in Sources */,
 				00CC7C81288E47E3009E0D0A /* PhotoView.swift in Sources */,
 				004C648828AB757E00C63D86 /* PHPickerDeleagte.swift in Sources */,
-				004C648628AB71A900C63D86 /* ShapeExtension.swift in Sources */,
+				004C648628AB71A900C63D86 /* VCShapeExtension.swift in Sources */,
 				004C648E28AB76CF00C63D86 /* TableViewDataSource.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

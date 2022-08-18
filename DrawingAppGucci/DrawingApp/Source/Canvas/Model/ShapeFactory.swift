@@ -9,11 +9,37 @@ import Foundation
 
 final class ShapeFactory {
     
+    private var viewBound: (ClosedRange<Double>, ClosedRange<Double>)?
+    
+    init() {
+        NotificationCenter.default
+            .addObserver(
+                forName: .boundary,
+                object: nil,
+                queue: .current) { noti in
+                    guard let bound =
+                            noti.userInfo?[NotificationKey.range]
+                            as? (ClosedRange<Double>, ClosedRange<Double>)
+                    else { return }
+                    
+                    self.viewBound = bound
+                }
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
     func generateShape(with: ShapeBlueprint, url: URL? = nil) -> Shape {
+        guard let viewBound = viewBound else {
+            assert(false, "viewBound에 값이 없습니다.")
+        }
+
+
         let size = Size(width: ShapeSize.width,
                         height: ShapeSize.height)
-        let point = Point(x: Double.random(in: 0...ScreenSize.width),
-                          y: Double.random(in: 0...ScreenSize.height))
+        let point = Point(x: Double.random(in: viewBound.0),
+                          y: Double.random(in: viewBound.1))
         let shape = Shape(id: generateUUID(),
                           size: size,
                           point: point,

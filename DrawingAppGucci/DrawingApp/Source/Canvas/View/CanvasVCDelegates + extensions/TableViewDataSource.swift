@@ -58,11 +58,11 @@ extension CanvasViewController: UITableViewDataSource {
         plane.moveRows(by: spaceOfRow, from: sourceIndexPath.row)
         if spaceOfRow > 0 {
             for step in 0..<abs(spaceOfRow) {
-                self.moveViewForeward(with: sourceIndexPath.row - step)
+                self.moveViewAndModel(to: .backward, index: sourceIndexPath.row - step)
             }
         } else {
             for step in 0..<abs(spaceOfRow) {
-                self.moveViewBackward(with: step + sourceIndexPath.row)
+                self.moveViewAndModel(to: .forward, index: sourceIndexPath.row + step)
             }
         }
     }
@@ -70,5 +70,8 @@ extension CanvasViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return "레이어"
     }
-
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return CGFloat(40)
+    }
 }

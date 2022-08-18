@@ -1,5 +1,5 @@
 //
-//  ShapeExtension.swift
+//  VCShapeExtension.swift
 //  DrawingApp
 //
 //  Created by YEONGJIN JANG on 2022/08/16.
@@ -30,7 +30,7 @@ extension CanvasViewController {
         let view = UIFactory.makeView(with: shape, at: index)
         createPanGestureRecognizer(targetView: view)
         shapeFrameViews.append(view)
-        self.view.addSubview(view)
+        self.backgroundView.addSubview(view)
         self.view.bringSubviewToFront(drawableStackview)
     }
     
