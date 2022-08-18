@@ -29,9 +29,10 @@ final class CanvasViewController: UIViewController {
     @IBOutlet weak var widthLabel: UILabel!
     @IBOutlet weak var heightLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
-    internal let plane = Plane()
-    
+    @IBOutlet weak var backgroundView: UIView!
     var shapeFrameViews: [UIView] = []
+    let plane = Plane()
+
     var beforeSelectedView: UIView? {
         //MARK: - 선택된 뷰의 테두리를 그리고, 이전에 있던 뷰의 테두리를 지우기
         didSet {
@@ -118,8 +119,8 @@ final class CanvasViewController: UIViewController {
     
     //MARK: - 메인 화면에 한 점을 터치하면 실행되는 액션
     @IBAction func tapView(_ sender: UITapGestureRecognizer) {
-        let point = sender.location(in: self.view)
-        guard 170.0 <= point.x && point.x <= 950.0 else { return }
+        let point = sender.location(in: self.backgroundView)
+//        guard 170.0 <= point.x && point.x <= 950.0 else { return }
         
         sender.cancelsTouchesInView = false
         
@@ -188,7 +189,7 @@ final class CanvasViewController: UIViewController {
     // MARK: - 메모리 관리를 위해 노티 셋업을 willAppear 에서, 노티 해제를 willDisappear 에서 실행
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        addObservers()
+        coufigureNotifications()
     }
     
     override func viewWillDisappear(_ animated: Bool) {

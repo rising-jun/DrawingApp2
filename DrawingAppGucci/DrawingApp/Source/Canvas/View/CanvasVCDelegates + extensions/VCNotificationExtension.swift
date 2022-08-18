@@ -10,9 +10,22 @@ import UIKit
 extension CanvasViewController {
     
     // MARK: - 노티피케이션 옵저버 등록
-    func addObservers() {
+    func coufigureNotifications() {
         
-        // MARK: - 크기와 위치에 관련한 노티피케이션
+        // MARK: - [POST] 배경 뷰의 범위를 알리는 노티피케이션
+        var bound:(ClosedRange<Double>, ClosedRange<Double>) {
+            let xbound = Double(backgroundView.bounds.minX)...Double(backgroundView.bounds.maxX - ShapeSize.width)
+            let ybound = Double(backgroundView.bounds.minY)...Double(backgroundView.bounds.maxY - ShapeSize.height)
+            return (xbound, ybound)
+        }
+        NotificationCenter.default
+            .post(
+                name: .boundary,
+                object: self,
+                userInfo: [NotificationKey.range: bound]
+            )
+        
+        // MARK: - [GET] 크기와 위치에 관련한 노티피케이션
         NotificationCenter.default.addObserver(
             forName: .property,
             object: nil,
@@ -29,7 +42,7 @@ extension CanvasViewController {
                 case .y:
                     currentView.layer.frame.origin.y = shape.point.y
                 case .width, .height:
-                    currentView.frame = CGRect(
+                    currentView.bounds = CGRect(
                         x: shape.point.x,
                         y: shape.point.y,
                         width: shape.size.width,
@@ -38,7 +51,7 @@ extension CanvasViewController {
                 updatePropertiesLabels(with: currentView)
             }
         
-        //MARK: - 도형 투명도 변경
+        //MARK: - [GET] 도형 투명도 변경
         NotificationCenter.default
             .addObserver(
                 forName: .color,
@@ -55,7 +68,7 @@ extension CanvasViewController {
                     self.informSelectedViewToStatus(color: color, alpha: alpha, type: blueprint)
                 }
 
-        //MARK: - 도형 추가
+        //MARK: - [GET] 도형 추가
         NotificationCenter.default
             .addObserver(
                 forName: .add,

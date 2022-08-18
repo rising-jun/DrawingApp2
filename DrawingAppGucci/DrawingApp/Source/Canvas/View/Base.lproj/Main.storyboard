@@ -383,6 +383,13 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aTK-gC-RH4">
+                                <rect key="frame" x="241" y="24" width="698" height="621"/>
+                                <gestureRecognizers/>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="KF2-Ix-xug" appends="YES" id="sOX-ge-rYj"/>
+                                </connections>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -395,16 +402,18 @@
                             <constraint firstItem="gwH-jC-mel" firstAttribute="width" secondItem="wEe-lM-fZ5" secondAttribute="width" id="Hqc-se-qvw"/>
                             <constraint firstItem="gwH-jC-mel" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="Oaz-9Q-AIg"/>
                             <constraint firstItem="gwH-jC-mel" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="QMi-fy-aLF"/>
+                            <constraint firstItem="aTK-gC-RH4" firstAttribute="leading" secondItem="gwH-jC-mel" secondAttribute="trailing" constant="5" id="VUT-vr-S1G"/>
                             <constraint firstItem="wEe-lM-fZ5" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="XEN-M8-ngE"/>
+                            <constraint firstItem="SfJ-tN-geC" firstAttribute="top" secondItem="aTK-gC-RH4" secondAttribute="bottom" constant="5" id="ecB-vz-IF0"/>
+                            <constraint firstItem="wEe-lM-fZ5" firstAttribute="leading" secondItem="aTK-gC-RH4" secondAttribute="trailing" constant="5" id="fnw-AH-qiU"/>
                             <constraint firstItem="SfJ-tN-geC" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="ksl-Mp-H8v"/>
+                            <constraint firstItem="aTK-gC-RH4" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="t6a-S8-dyx"/>
                             <constraint firstAttribute="trailing" secondItem="wEe-lM-fZ5" secondAttribute="trailing" id="ybf-dv-sWW"/>
                         </constraints>
-                        <connections>
-                            <outletCollection property="gestureRecognizers" destination="xrw-jX-tBe" appends="YES" id="Ik6-qO-tWO"/>
-                        </connections>
                     </view>
                     <connections>
                         <outlet property="alphaLabel" destination="DL5-eW-nSO" id="Qzl-8U-UJW"/>
+                        <outlet property="backgroundView" destination="aTK-gC-RH4" id="MGu-d7-vZ9"/>
                         <outlet property="colorButton" destination="rd0-TC-Ekx" id="Nfm-mN-M70"/>
                         <outlet property="colorLabel" destination="7Nh-d9-PsU" id="xEU-hf-8ON"/>
                         <outlet property="drawableStackview" destination="SfJ-tN-geC" id="vk6-Vt-Kh4"/>
@@ -424,9 +433,9 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
-                <tapGestureRecognizer id="xrw-jX-tBe">
+                <tapGestureRecognizer id="KF2-Ix-xug">
                     <connections>
-                        <action selector="tapView:" destination="BYZ-38-t0r" id="ZWC-mr-rR5"/>
+                        <action selector="tapView:" destination="BYZ-38-t0r" id="yRY-q7-nbV"/>
                     </connections>
                 </tapGestureRecognizer>
             </objects>
