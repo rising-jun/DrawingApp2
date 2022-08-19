@@ -31,8 +31,10 @@ final class CanvasViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var backgroundView: UIView!
     var shapeFrameViews: [UIView] = []
-    let plane = Plane()
-
+    var plane: Plane {
+        guard let plane = SceneDelegate.shared?.plane else { assert(false) }
+        return plane
+    }
     var beforeSelectedView: UIView? {
         //MARK: - 선택된 뷰의 테두리를 그리고, 이전에 있던 뷰의 테두리를 지우기
         didSet {
