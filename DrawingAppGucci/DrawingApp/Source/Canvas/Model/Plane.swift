@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol Planable {
+protocol Planable: NSObject {
     func makeShape(with blueprint: ShapeBlueprint, by url: URL?)
     func isTouched(at point: (Double, Double)) -> Int?
     func findTouchedShape(at point: (Double, Double)) -> Shape?
@@ -15,11 +15,20 @@ protocol Planable {
     subscript(_ index: Int) -> Shape { get }
 }
 
-final class Plane: Planable {
+final class Plane: NSObject, Planable {
     
     private(set) var shapes: [Shape] = []
     private let factory = ShapeFactory()
     var count: Int { shapes.count }
+    
+    required init?(coder: NSCoder) {
+        guard let shapes = coder.decodeObject(forKey: "shapes") as? [Shape] else { assert(false) }
+        self.shapes = shapes
+    }
+    
+    override init() {
+        
+    }
     
     subscript(index: Int) -> Shape {
         precondition(isIndexValid(index: index), "shapes is out of index")
@@ -190,5 +199,19 @@ extension Plane {
                 moveForward(with: index + step)
             }
         }
+    }
+}
+
+extension Plane: NSCopying {
+    func copy(with zone: NSZone? = nil) -> Any {
+        let newPlane = Self()
+        newPlane.shapes = self.shapes
+        return newPlane
+    }
+}
+
+extension Plane: NSCoding {
+    func encode(with coder: NSCoder) {
+        coder.encode(self.shapes, forKey: "shapes")
     }
 }

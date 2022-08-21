@@ -12,6 +12,7 @@ extension Notification.Name {
     static let color = Notification.Name("컬러값이 변경되었습니다.")
     static let property = Notification.Name("프로퍼티 값이 변경되었습니다.")
     static let boundary = Notification.Name("BackgroundView의 범위가 설정되었습니다.")
+    static let plane = Notification.Name("플레인의 값이 들어왔습니다. 시작하세요")
 }
 
 enum NotificationKey {

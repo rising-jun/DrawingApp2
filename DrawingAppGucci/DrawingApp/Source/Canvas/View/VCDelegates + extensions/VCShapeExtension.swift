@@ -31,6 +31,7 @@ extension CanvasViewController {
         createPanGestureRecognizer(targetView: view)
         shapeFrameViews.append(view)
         self.backgroundView.addSubview(view)
+        view.becomeFirstResponder()
         self.view.bringSubviewToFront(drawableStackview)
     }
     
@@ -40,4 +41,11 @@ extension CanvasViewController {
         stepper.value = value.value
     }
     
+    func removeViews() {
+        self.shapeFrameViews.forEach {
+            self.backgroundView.willRemoveSubview($0)
+        }
+        self.shapeFrameViews = []
+        viewWillAppear(true)
+    }
 }

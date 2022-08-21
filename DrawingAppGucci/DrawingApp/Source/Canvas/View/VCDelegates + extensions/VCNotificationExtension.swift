@@ -10,20 +10,18 @@ import UIKit
 extension CanvasViewController {
     
     // MARK: - 노티피케이션 옵저버 등록
-    func coufigureNotifications() {
+    func coufigureObserverNotifications() {
         
-        // MARK: - [POST] 배경 뷰의 범위를 알리는 노티피케이션
-        var bound:(ClosedRange<Double>, ClosedRange<Double>) {
-            let xbound = Double(backgroundView.bounds.minX)...Double(backgroundView.bounds.maxX - ShapeSize.width)
-            let ybound = Double(backgroundView.bounds.minY)...Double(backgroundView.bounds.maxY - ShapeSize.height)
-            return (xbound, ybound)
+        // MARK: - [GET] SceneDelegate 에 Plane 값이 들어오면 알리는 옵저버
+        NotificationCenter.default.addObserver(forName: .plane, object: nil, queue: .current) { [weak self] _ in
+            guard let shapes = SceneDelegate.shared?.plane.shapes else { return }
+            shapes.enumerated().forEach {
+                self?.addView(from: $0.element, index: $0.offset)
+                self?.configurePostNotification()
+            }
+            self?.tableView.reloadData()
+            
         }
-        NotificationCenter.default
-            .post(
-                name: .boundary,
-                object: self,
-                userInfo: [NotificationKey.range: bound]
-            )
         
         // MARK: - [GET] 크기와 위치에 관련한 노티피케이션
         NotificationCenter.default.addObserver(
@@ -83,5 +81,20 @@ extension CanvasViewController {
                     self.tableView.reloadData()
                 }
         
+    }
+    
+    func configurePostNotification() {
+        // MARK: - [POST] 배경 뷰의 범위를 알리는 노티피케이션
+        var bound:(ClosedRange<Double>, ClosedRange<Double>) {
+            let xbound = Double(backgroundView.bounds.minX)...Double(backgroundView.bounds.maxX - ShapeSize.width)
+            let ybound = Double(backgroundView.bounds.minY)...Double(backgroundView.bounds.maxY - ShapeSize.height)
+            return (xbound, ybound)
+        }
+        NotificationCenter.default
+            .post(
+                name: .boundary,
+                object: self,
+                userInfo: [NotificationKey.range: bound]
+            )
     }
 }

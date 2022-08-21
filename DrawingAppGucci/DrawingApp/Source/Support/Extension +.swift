@@ -66,6 +66,7 @@ extension URL {
             kCGImageSourceCreateThumbnailFromImageAlways: true,
             kCGImageSourceCreateThumbnailWithTransform: true,
             kCGImageSourceThumbnailMaxPixelSize: maxDimensionsInPixel,
+            kCGImageSourceShouldCacheImmediately: true
         ] as CFDictionary
         
         guard let cgImage = CGImageSourceCreateThumbnailAtIndex(source, 0, downsampleOptions) else { return nil }

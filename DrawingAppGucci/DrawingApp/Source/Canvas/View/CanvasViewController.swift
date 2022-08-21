@@ -31,8 +31,10 @@ final class CanvasViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var backgroundView: UIView!
     var shapeFrameViews: [UIView] = []
-    let plane = Plane()
-
+    var plane: Plane {
+        guard let plane = SceneDelegate.shared?.plane else { assert(false) }
+        return plane
+    }
     var beforeSelectedView: UIView? {
         //MARK: - 선택된 뷰의 테두리를 그리고, 이전에 있던 뷰의 테두리를 지우기
         didSet {
@@ -55,6 +57,11 @@ final class CanvasViewController: UIViewController {
         return vc
     }()
     
+    @IBAction func touchedRemoveAll(_ sender: Any) {
+        SceneDelegate.shared?.plane = Plane()
+        removeViews()
+        
+    }
     @IBAction func touchedTextButton(_ sender: UIButton) {
         plane.makeShape(with: .text)
     }
@@ -146,6 +153,8 @@ final class CanvasViewController: UIViewController {
     
     //MARK: - 사각형 버튼 누르면 실행 되는 액션
     @IBAction func touchedRectangleButton(_ sender: UIButton) {
+        dump(plane.shapes)
+        tableView.reloadData()
         plane.makeShape(with: .rectangle)
     }
     
@@ -189,7 +198,13 @@ final class CanvasViewController: UIViewController {
     // MARK: - 메모리 관리를 위해 노티 셋업을 willAppear 에서, 노티 해제를 willDisappear 에서 실행
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        coufigureNotifications()
+        coufigureObserverNotifications()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        configurePostNotification()
+        tableView.reloadData()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
