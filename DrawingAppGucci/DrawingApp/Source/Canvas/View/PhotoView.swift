@@ -33,7 +33,10 @@ final class PhotoView: UIImageView, Drawable {
     }
     
     private func configureAttribute(by photo: Photo) {
-        guard let image = photo.imageURL.asSmallImage else { return }
+        guard let image = photo.imageURL.asSmallImage else {
+            print(photo.imageURL.absoluteURL)
+            return
+        }
         self.isUserInteractionEnabled = true
         self.layer.borderColor = tintColor.cgColor
         self.image = image

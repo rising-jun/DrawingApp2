@@ -14,4 +14,16 @@ final class Photo: Shape {
         self.imageURL = url
         super.init(id: shape.id, size: shape.size, point: shape.point, alpha: shape.alpha, bound: shape.bound)
     }
+    
+    required init?(coder: NSCoder) {
+        guard
+            let url = coder.decodeObject(forKey: "imageURL") as? URL else { assert(false)}
+        self.imageURL = url
+        super.init(coder: coder)
+    }
+    
+    override func encode(with coder: NSCoder) {
+        super.encode(with: coder)
+        coder.encode(imageURL, forKey: "imageURL")
+    }
 }

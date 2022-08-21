@@ -57,6 +57,11 @@ final class CanvasViewController: UIViewController {
         return vc
     }()
     
+    @IBAction func touchedRemoveAll(_ sender: Any) {
+        SceneDelegate.shared?.plane = Plane()
+        removeViews()
+        
+    }
     @IBAction func touchedTextButton(_ sender: UIButton) {
         plane.makeShape(with: .text)
     }
@@ -148,6 +153,8 @@ final class CanvasViewController: UIViewController {
     
     //MARK: - 사각형 버튼 누르면 실행 되는 액션
     @IBAction func touchedRectangleButton(_ sender: UIButton) {
+        dump(plane.shapes)
+        tableView.reloadData()
         plane.makeShape(with: .rectangle)
     }
     
@@ -191,7 +198,13 @@ final class CanvasViewController: UIViewController {
     // MARK: - 메모리 관리를 위해 노티 셋업을 willAppear 에서, 노티 해제를 willDisappear 에서 실행
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        coufigureNotifications()
+        coufigureObserverNotifications()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        configurePostNotification()
+        tableView.reloadData()
     }
     
     override func viewWillDisappear(_ animated: Bool) {

@@ -43,7 +43,7 @@ final class ShapeFactory {
         let shape = Shape(id: generateUUID(),
                           size: size,
                           point: point,
-                          alpha: generateAlpha(),
+                          alpha: Self.generateAlpha(),
                           bound: Bound(size: size, point: point))
 
         switch with {
@@ -85,7 +85,7 @@ final class ShapeFactory {
         return resultId             // xxx-xxx-xxx
     }
     
-    private func generateAlpha() -> Alpha {
+    static func generateAlpha() -> Alpha {
         let randomAlpha = Int.random(in: 1...10)
         switch randomAlpha {
         case 1:

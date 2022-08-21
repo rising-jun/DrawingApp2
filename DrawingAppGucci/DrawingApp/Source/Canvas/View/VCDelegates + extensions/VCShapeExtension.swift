@@ -41,4 +41,11 @@ extension CanvasViewController {
         stepper.value = value.value
     }
     
+    func removeViews() {
+        self.shapeFrameViews.forEach {
+            self.backgroundView.willRemoveSubview($0)
+        }
+        self.shapeFrameViews = []
+        viewWillAppear(true)
+    }
 }
