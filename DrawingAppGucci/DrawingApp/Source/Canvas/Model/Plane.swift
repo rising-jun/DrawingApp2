@@ -215,3 +215,10 @@ extension Plane: NSCoding {
         coder.encode(self.shapes, forKey: "shapes")
     }
 }
+
+
+extension Plane {
+    func removeShape() {
+        self.shapes = []
+    }
+}

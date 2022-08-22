@@ -42,16 +42,13 @@ extension CanvasViewController {
     }
     
     func removeViews() {
-        dump(self.backgroundView.layer.sublayers)
-        DispatchQueue.main.async { [unowned self] in
-            tableView.reloadData()
-            self.backgroundView.layer.sublayers?.forEach({ layer in
-                
-                    layer.removeFromSuperlayer()
-                
-            })
-            self.shapeFrameViews.removeAll()
-        }
-
+        tableView.reloadData()
+        self.backgroundView.layer.sublayers?.forEach({ layer in
+            layer.removeFromSuperlayer()
+        })
+        self.shapeFrameViews.removeAll()
+        
     }
+    
 }
+

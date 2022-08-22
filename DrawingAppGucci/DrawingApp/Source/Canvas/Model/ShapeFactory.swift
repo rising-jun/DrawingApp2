@@ -16,13 +16,13 @@ final class ShapeFactory {
             .addObserver(
                 forName: .boundary,
                 object: nil,
-                queue: .current) { noti in
+                queue: .current) { [weak self] noti in
                     guard let bound =
                             noti.userInfo?[NotificationKey.range]
                             as? (ClosedRange<Double>, ClosedRange<Double>)
                     else { return }
                     
-                    self.viewBound = bound
+                    self?.viewBound = bound
                 }
     }
     

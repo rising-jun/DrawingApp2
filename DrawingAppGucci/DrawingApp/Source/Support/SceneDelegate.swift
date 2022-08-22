@@ -9,41 +9,49 @@ import UIKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
-    static weak var shared: SceneDelegate?
     var window: UIWindow?
-    var plane: Plane? {
-        didSet { 
-            NotificationCenter.default.post(name: Notification.Name.plane, object: self)
-        }
-    }
     
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let _ = (scene as? UIWindowScene) else { return }
         
-        Self.shared = self
+        guard let canvasVC = window?.rootViewController as? CanvasViewController else { return }
+        canvasVC.plane = makePlane()
     }
     
     func sceneDidBecomeActive(_ scene: UIScene) {
-        guard let planeData = UserDefaults.standard.data(forKey: "planeData") else {
-            self.plane = Plane()
-            return
-        }
-        resetUserDefaults()
-        do {
-            let unarchiver = try NSKeyedUnarchiver.init(forReadingFrom: planeData)
-            unarchiver.requiresSecureCoding = false
-            guard let plane = unarchiver.decodeObject(of: Plane.self, forKey: NSKeyedArchiveRootObjectKey) else { fatalError() }
-            self.plane = plane
-        }
-        catch {
-            fatalError("\"언\"아카이빙 실패")
-        }
+        guard let canvasVC = window?.rootViewController as? CanvasViewController else { return }
+        canvasVC.plane = makePlane()
         
     }
     
     func sceneWillResignActive(_ scene: UIScene) {
+        archivingPlane()
+//        
+//        guard let image = takeSnapshot() else { return }
+//        UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
+        
+    }
+    
+    private func makePlane() -> Plane {
+        guard let planeData = UserDefaults.standard.data(forKey: "planeData") else {
+            return Plane()
+        }
+        
         do {
-            let data = try NSKeyedArchiver.archivedData(withRootObject: self.plane, requiringSecureCoding: false)
+            let unarchiver = try NSKeyedUnarchiver.init(forReadingFrom: planeData)
+            unarchiver.requiresSecureCoding = false
+            guard let plane = unarchiver.decodeObject(of: Plane.self, forKey: NSKeyedArchiveRootObjectKey) else { fatalError() }
+            return plane
+        }
+        catch {
+            fatalError("\"언\"아카이빙 실패")
+        }
+    }
+    
+    private func archivingPlane() {
+        do {
+            guard let plane = (self.window?.rootViewController as? CanvasViewController)?.plane else { return }
+            let data = try NSKeyedArchiver.archivedData(withRootObject: plane, requiringSecureCoding: false)
             UserDefaults.standard.set(data, forKey: "planeData")
         }
         catch {
@@ -51,11 +59,18 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }
     }
     
-    private func resetUserDefaults() {
-        for key in UserDefaults.standard.dictionaryRepresentation().keys {
-            if key.description == "planeData" {
-                UserDefaults.standard.removeObject(forKey: key.description)
-            }
-        }
+    private func takeSnapshot() -> UIImage? {
+        var image :UIImage?
+        guard let currentLayer = self.window?.layer else { return nil }
+        let currentScale = UIScreen.main.scale
+        UIGraphicsBeginImageContextWithOptions(currentLayer.frame.size, false, currentScale);
+        guard let currentContext = UIGraphicsGetCurrentContext() else { return nil }
+        currentLayer.render(in: currentContext)
+        image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        guard let img = image else { return nil }
+        return img
     }
+    
+    
 }

@@ -31,12 +31,8 @@ final class CanvasViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var backgroundView: UIView!
     var shapeFrameViews: [UIView] = []
-    var plane: Plane? {
-        guard let plane = SceneDelegate.shared?.plane else {
-            return nil
-        }
-        return plane
-    }
+    
+    var plane: Plane?
     
     var beforeSelectedView: UIView? {
         //MARK: - 선택된 뷰의 테두리를 그리고, 이전에 있던 뷰의 테두리를 지우기
@@ -61,15 +57,18 @@ final class CanvasViewController: UIViewController {
     }()
     
     @IBAction func touchedRemoveAll(_ sender: Any) {
-        SceneDelegate.shared?.plane = nil
-        removeViews()
+        self.plane?.removeShape()
+        DispatchQueue.main.async { [unowned self] in
+            self.removeViews()
+        }
+        
         
     }
     @IBAction func touchedTextButton(_ sender: UIButton) {
         guard let plane = plane else {
             return
         }
-
+        
         plane.makeShape(with: .text)
     }
     
@@ -79,6 +78,7 @@ final class CanvasViewController: UIViewController {
         else { return }
         plane.adjustX(index: currentView.index, isUp: true)
     }
+    
     @IBAction func touchedXDown(_ sender: UIButton) {
         guard let currentView = beforeSelectedView as? Drawable,
               let plane = plane
@@ -142,7 +142,7 @@ final class CanvasViewController: UIViewController {
         else { return }
         let roundedNumber: Double = round(sender.value * 10) / 10
         plane.changeColorAndAlpha(at: currentSquare.index, by: roundedNumber)
-
+        
     }
     
     //MARK: - 슬라이더에 점을 움직이면 실행 되는 액션
@@ -236,7 +236,16 @@ final class CanvasViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        guard let shapes = plane?.shapes else {
+            return
+        }
+        shapes.enumerated().forEach { shape in
+            addView(from: shape.element, index: shape.offset)
+        }
         configurePostNotification()
+        
+            
+        
         tableView.reloadData()
     }
     
