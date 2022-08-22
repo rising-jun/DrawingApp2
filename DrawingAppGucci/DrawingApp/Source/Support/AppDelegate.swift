@@ -20,22 +20,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
     }
     
-    func applicationWillTerminate(_ application: UIApplication) {
-        let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-        guard let plane = (mainStoryboard.instantiateViewController(withIdentifier: "Canvas") as? CanvasViewController)?.plane else { return }
-        
-        
-        archivingPlane(with: plane)
-    }
+//    func applicationWillTerminate(_ application: UIApplication) {
+
+//    }
     
-    private func archivingPlane(with plane: Plane) {
-        do {
-            let data = try NSKeyedArchiver.archivedData(withRootObject: plane, requiringSecureCoding: false)
-            UserDefaults.standard.set(data, forKey: "planeData")
-        }
-        catch {
-            fatalError("아카이빙 실패")
-        }
-    }
 }
 

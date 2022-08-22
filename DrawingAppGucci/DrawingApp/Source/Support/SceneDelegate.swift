@@ -25,10 +25,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
     
     func sceneWillResignActive(_ scene: UIScene) {
-        
+        archivingPlane()
         guard let image = takeSnapshot() else { return }
         UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
-        
     }
     
     private func makePlaneByUnarchiver() -> Plane {
@@ -48,6 +47,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
     
 
+    private func archivingPlane() {
+        guard let plane = (self.window?.rootViewController as? CanvasViewController)?.plane else { return }
+        do {
+            let data = try NSKeyedArchiver.archivedData(withRootObject: plane, requiringSecureCoding: false)
+            UserDefaults.standard.set(data, forKey: "planeData")
+        }
+        catch {
+            fatalError("아카이빙 실패")
+        }
+    }
+    
     
     private func takeSnapshot() -> UIImage? {
         var image :UIImage?
@@ -56,6 +66,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         UIGraphicsBeginImageContextWithOptions(currentLayer.frame.size, false, currentScale);
         guard let currentContext = UIGraphicsGetCurrentContext() else { return nil }
         currentLayer.render(in: currentContext)
+        
         image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         guard let img = image else { return nil }
