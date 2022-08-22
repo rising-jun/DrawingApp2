@@ -8,7 +8,7 @@
 import Foundation
 
 final class Photo: Shape {
-    var imageData: Data
+    private(set) var imageData: Data
     
     init(shape: Shape, urlData: Data) {
         self.imageData = urlData

@@ -23,6 +23,11 @@ final class SquareView: UIView, Drawable {
         self.layer.borderColor = tintColor.cgColor
     }
     
+    deinit {
+        self.backgroundColor = .none
+        self.layer.backgroundColor = .none
+    }
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

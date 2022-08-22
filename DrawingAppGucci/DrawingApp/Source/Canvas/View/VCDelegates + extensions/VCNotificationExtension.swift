@@ -13,13 +13,13 @@ extension CanvasViewController {
     func coufigureObserverNotifications() {
         
         // MARK: - [GET] SceneDelegate 에 Plane 값이 들어오면 알리는 옵저버
-        NotificationCenter.default.addObserver(forName: .plane, object: nil, queue: .current) { [weak self] _ in
+        NotificationCenter.default.addObserver(forName: .plane, object: nil, queue: .current) { [unowned self] _ in
             guard let shapes = SceneDelegate.shared?.plane.shapes else { return }
             shapes.enumerated().forEach {
-                self?.addView(from: $0.element, index: $0.offset)
-                self?.configurePostNotification()
+                self.addView(from: $0.element, index: $0.offset)
+                self.configurePostNotification()
             }
-            self?.tableView.reloadData()
+            self.tableView.reloadData()
             
         }
         

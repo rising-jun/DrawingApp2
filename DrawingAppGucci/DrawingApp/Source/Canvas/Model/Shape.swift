@@ -9,7 +9,7 @@ import Foundation
 
 class Shape: NSObject {
     
-    let id: String
+    var id: String
     var size: Size {
         didSet {
             self.bound = Bound(size: self.size, point: self.point)

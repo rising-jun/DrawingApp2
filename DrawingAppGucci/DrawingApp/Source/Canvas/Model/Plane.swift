@@ -18,7 +18,7 @@ protocol Planable: NSObject {
 final class Plane: NSObject, Planable {
     
     private(set) var shapes: [Shape] = []
-    private let factory = ShapeFactory()
+    private var factory = ShapeFactory()
     var count: Int { shapes.count }
     
     required init?(coder: NSCoder) {
@@ -40,7 +40,7 @@ final class Plane: NSObject, Planable {
     }
     
     //MARK: - 도형 추가
-    func makeShape(with blueprint: ShapeBlueprint, by urlData: Data? = nil) {
+    func makeShape(with blueprint: ShapeBlueprint, by urlData: Data? = nil) { 
         let shape = factory.generateShape(with: blueprint, urlData: urlData)
         shapes.append(shape)
         

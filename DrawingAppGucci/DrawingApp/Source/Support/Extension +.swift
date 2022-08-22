@@ -77,7 +77,6 @@ extension URL {
         CGImageDestinationAddImage(imageDestination, cgImage, destinationProperties)
         CGImageDestinationFinalize(imageDestination)
         
-//        return UIImage(data: data as Data)
         return data as Data
     }
 }

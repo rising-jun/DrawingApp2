@@ -39,7 +39,8 @@ extension CanvasViewController: UITableViewDataSource {
         
         switch plane[indexPath.row] {
         case _ as Rectangle:
-            cell.setUp(with: .rectangle, at: indexPath.row, printNumber: getPrintNumber(target: .rectangle))
+            let number = getPrintNumber(target: .rectangle)
+            cell.setUp(with: .rectangle, at: indexPath.row, printNumber: number)
         case _ as Photo:
             cell.setUp(with: .photo, at: indexPath.row, printNumber: getPrintNumber(target: .photo))
         case _ as Text:
@@ -70,6 +71,10 @@ extension CanvasViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return "레이어"
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        CGFloat(40)
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {

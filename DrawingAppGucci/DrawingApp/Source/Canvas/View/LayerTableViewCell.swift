@@ -10,16 +10,26 @@ import SnapKit
 
 final class LayerTableViewCell: UITableViewCell {
     
-    let title: UILabel = UILabel()
-    let shapeImageView = UIImageView()
+    var title: UILabel?
+    var shapeImageView: UIImageView?
     var shapeIndex: Int = Int.max
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        
+        self.title = UILabel()
+        self.shapeImageView = UIImageView()
     }
+    
+    override func prepareForReuse() {
+        self.title = .none
+        self.shapeImageView = .none
+    }
+    
     override func layoutSubviews() {
         super.layoutSubviews()
+        guard let title = title,
+              let shapeImageView = shapeImageView else { return }
+
         title.textColor = .label
         
         [shapeImageView, title].forEach {
@@ -42,14 +52,14 @@ final class LayerTableViewCell: UITableViewCell {
     
     func setUp(with blueprint: ShapeBlueprint, at index: Int, printNumber number: Int) {
         shapeIndex = index
-        title.text = "\(blueprint.rawValue) \(number)"
+        title?.text = "\(blueprint.rawValue) \(number)"
         switch blueprint {
         case .rectangle:
-            shapeImageView.image = UIImage(systemName: "rectangle")
+            shapeImageView?.image = UIImage(systemName: "rectangle")
         case .photo:
-            shapeImageView.image = UIImage(systemName: "photo")
+            shapeImageView?.image = UIImage(systemName: "photo")
         case .text:
-            shapeImageView.image = UIImage(systemName: "t.square")
+            shapeImageView?.image = UIImage(systemName: "t.square")
         }
     }
 }

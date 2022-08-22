@@ -23,6 +23,11 @@ final class PhotoView: UIImageView, Drawable {
         configureAttribute(by: photo)
     }
     
+    deinit {
+        self.image = nil
+        self.layer.borderColor = .none
+    }
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
         

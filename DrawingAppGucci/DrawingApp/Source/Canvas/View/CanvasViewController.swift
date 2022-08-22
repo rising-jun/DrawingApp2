@@ -30,11 +30,12 @@ final class CanvasViewController: UIViewController {
     @IBOutlet weak var heightLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var backgroundView: UIView!
-    var shapeFrameViews: [UIView] = []
+    var shapeFrameViews: [UIView?] = []
     var plane: Plane {
         guard let plane = SceneDelegate.shared?.plane else { assert(false) }
         return plane
     }
+    
     var beforeSelectedView: UIView? {
         //MARK: - 선택된 뷰의 테두리를 그리고, 이전에 있던 뷰의 테두리를 지우기
         didSet {
@@ -127,8 +128,6 @@ final class CanvasViewController: UIViewController {
     //MARK: - 메인 화면에 한 점을 터치하면 실행되는 액션
     @IBAction func tapView(_ sender: UITapGestureRecognizer) {
         let point = sender.location(in: self.backgroundView)
-//        guard 170.0 <= point.x && point.x <= 950.0 else { return }
-        
         sender.cancelsTouchesInView = false
         
         //MARK: - 빈공간인지 아닌지 확인
@@ -145,15 +144,20 @@ final class CanvasViewController: UIViewController {
         
         //MARK: - 상태창에 알림
         if let rectangle = selectedShape as? Rectangle {
-            self.informSelectedViewToStatus(color: rectangle.color, alpha: selectedShape.alpha, type: .rectangle)
+            self.informSelectedViewToStatus(
+                color: rectangle.color,
+                alpha: selectedShape.alpha,
+                type: .rectangle)
         } else {
-            self.informSelectedViewToStatus(color: Color(), alpha: selectedShape.alpha, type: .photo)
+            self.informSelectedViewToStatus(
+                color: Color(),
+                alpha: selectedShape.alpha,
+                type: .photo)
         }
     }
     
     //MARK: - 사각형 버튼 누르면 실행 되는 액션
     @IBAction func touchedRectangleButton(_ sender: UIButton) {
-        dump(plane.shapes)
         tableView.reloadData()
         plane.makeShape(with: .rectangle)
     }
