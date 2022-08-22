@@ -242,11 +242,8 @@ final class CanvasViewController: UIViewController {
         shapes.enumerated().forEach { shape in
             addView(from: shape.element, index: shape.offset)
         }
-        configurePostNotification()
-        
-            
-        
         tableView.reloadData()
+        configurePostNotification()
     }
     
     override func viewWillDisappear(_ animated: Bool) {

@@ -21,8 +21,8 @@ final class LayerTableViewCell: UITableViewCell {
     }
     
     override func prepareForReuse() {
-        self.title = .none
-        self.shapeImageView = .none
+        self.title?.text = ""
+        self.shapeImageView?.image = .none
     }
     
     override func layoutSubviews() {

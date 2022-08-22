@@ -15,24 +15,23 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let _ = (scene as? UIWindowScene) else { return }
         
         guard let canvasVC = window?.rootViewController as? CanvasViewController else { return }
-        canvasVC.plane = makePlane()
+        canvasVC.plane = makePlaneByUnarchiver()
     }
     
     func sceneDidBecomeActive(_ scene: UIScene) {
         guard let canvasVC = window?.rootViewController as? CanvasViewController else { return }
-        canvasVC.plane = makePlane()
+        canvasVC.plane = makePlaneByUnarchiver()
         
     }
     
     func sceneWillResignActive(_ scene: UIScene) {
-        archivingPlane()
-//        
-//        guard let image = takeSnapshot() else { return }
-//        UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
+        
+        guard let image = takeSnapshot() else { return }
+        UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
         
     }
     
-    private func makePlane() -> Plane {
+    private func makePlaneByUnarchiver() -> Plane {
         guard let planeData = UserDefaults.standard.data(forKey: "planeData") else {
             return Plane()
         }
@@ -48,16 +47,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }
     }
     
-    private func archivingPlane() {
-        do {
-            guard let plane = (self.window?.rootViewController as? CanvasViewController)?.plane else { return }
-            let data = try NSKeyedArchiver.archivedData(withRootObject: plane, requiringSecureCoding: false)
-            UserDefaults.standard.set(data, forKey: "planeData")
-        }
-        catch {
-            fatalError("아카이빙 실패")
-        }
-    }
+
     
     private func takeSnapshot() -> UIImage? {
         var image :UIImage?

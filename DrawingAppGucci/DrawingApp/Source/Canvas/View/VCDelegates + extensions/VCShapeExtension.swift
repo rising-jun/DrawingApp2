@@ -43,11 +43,10 @@ extension CanvasViewController {
     
     func removeViews() {
         tableView.reloadData()
-        self.backgroundView.layer.sublayers?.forEach({ layer in
-            layer.removeFromSuperlayer()
-        })
-        self.shapeFrameViews.removeAll()
-        
+        shapeFrameViews.forEach { view in
+            view.removeFromSuperview()
+        }
+        shapeFrameViews = []
     }
     
 }
