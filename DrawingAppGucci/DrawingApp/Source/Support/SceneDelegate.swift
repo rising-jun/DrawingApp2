@@ -10,24 +10,29 @@ import UIKit
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     var window: UIWindow?
+    var canvasVC: CanvasViewController?
     
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let _ = (scene as? UIWindowScene) else { return }
         
         guard let canvasVC = window?.rootViewController as? CanvasViewController else { return }
         canvasVC.plane = makePlaneByUnarchiver()
+        self.canvasVC = canvasVC
     }
     
     func sceneDidBecomeActive(_ scene: UIScene) {
-        guard let canvasVC = window?.rootViewController as? CanvasViewController else { return }
+        guard let canvasVC = self.canvasVC else { return }
         canvasVC.plane = makePlaneByUnarchiver()
-        
+        canvasVC.configurePostNotification()
     }
     
     func sceneWillResignActive(_ scene: UIScene) {
-        archivingPlane()
         guard let image = takeSnapshot() else { return }
         UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
+    }
+    
+    func sceneDidEnterBackground(_ scene: UIScene) {
+        archivingPlane()
     }
     
     private func makePlaneByUnarchiver() -> Plane {
