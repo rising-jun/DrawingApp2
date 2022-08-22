@@ -31,8 +31,10 @@ final class CanvasViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var backgroundView: UIView!
     var shapeFrameViews: [UIView?] = []
-    var plane: Plane {
-        guard let plane = SceneDelegate.shared?.plane else { assert(false) }
+    var plane: Plane? {
+        guard let plane = SceneDelegate.shared?.plane else {
+            return nil 
+        }
         return plane
     }
     
