@@ -9,6 +9,7 @@ import UIKit
 
 extension CanvasViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let plane = plane else { return }
         let shape = plane[indexPath.row]
         beforeSelectedView = shapeFrameViews[indexPath.row]
         

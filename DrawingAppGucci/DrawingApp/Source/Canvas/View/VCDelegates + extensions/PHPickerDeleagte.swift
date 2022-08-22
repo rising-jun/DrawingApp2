@@ -15,7 +15,7 @@ extension CanvasViewController: PHPickerViewControllerDelegate {
         results.forEach { result in
             result.itemProvider.loadFileRepresentation(forTypeIdentifier: UTType.image.identifier) { [weak self] (url, error) in
                 guard let url = url else { return }
-                    self?.plane.makeShape(with: .photo, by: url.asSmallImageData)
+                    self?.plane?.makeShape(with: .photo, by: url.asSmallImageData)
             }
         }
         picker.dismiss(animated: true, completion: nil)

@@ -9,12 +9,14 @@ import UIKit
 
 extension CanvasViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return plane.count
+        return plane?.count ?? 0
     }
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "LayerTableViewCell", for: indexPath) as? LayerTableViewCell else { return UITableViewCell() }
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "LayerTableViewCell", for: indexPath) as? LayerTableViewCell,
+              let plane = plane
+        else { return UITableViewCell() }
         
         func getPrintNumber(target: ShapeBlueprint) -> Int {
             var counter: Int

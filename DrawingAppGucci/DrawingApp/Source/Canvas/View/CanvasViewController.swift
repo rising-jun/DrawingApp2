@@ -30,10 +30,10 @@ final class CanvasViewController: UIViewController {
     @IBOutlet weak var heightLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var backgroundView: UIView!
-    var shapeFrameViews: [UIView?] = []
+    var shapeFrameViews: [UIView] = []
     var plane: Plane? {
         guard let plane = SceneDelegate.shared?.plane else {
-            return nil 
+            return nil
         }
         return plane
     }
@@ -61,44 +61,64 @@ final class CanvasViewController: UIViewController {
     }()
     
     @IBAction func touchedRemoveAll(_ sender: Any) {
-        SceneDelegate.shared?.plane = Plane()
+        SceneDelegate.shared?.plane = nil
         removeViews()
         
     }
     @IBAction func touchedTextButton(_ sender: UIButton) {
+        guard let plane = plane else {
+            return
+        }
+
         plane.makeShape(with: .text)
     }
     
     @IBAction func touchedXUp(_ sender: UIButton) {
-        guard let currentView = beforeSelectedView as? Drawable else { return }
+        guard let currentView = beforeSelectedView as? Drawable,
+              let plane = plane
+        else { return }
         plane.adjustX(index: currentView.index, isUp: true)
     }
     @IBAction func touchedXDown(_ sender: UIButton) {
-        guard let currentView = beforeSelectedView as? Drawable else { return }
+        guard let currentView = beforeSelectedView as? Drawable,
+              let plane = plane
+        else { return }
         plane.adjustX(index: currentView.index, isUp: false)
     }
     @IBAction func touchedYUp(_ sender: UIButton) {
-        guard let currentView = beforeSelectedView as? Drawable else { return }
+        guard let currentView = beforeSelectedView as? Drawable,
+              let plane = plane
+        else { return }
         plane.adjustY(index: currentView.index, isUp: true)
     }
     @IBAction func touchedYDown(_ sender: UIButton) {
-        guard let currentView = beforeSelectedView as? Drawable else { return }
+        guard let currentView = beforeSelectedView as? Drawable,
+              let plane = plane
+        else { return }
         plane.adjustY(index: currentView.index, isUp: false)
     }
     @IBAction func touchedWUp(_ sender: UIButton) {
-        guard let currentView = beforeSelectedView as? Drawable else { return }
+        guard let currentView = beforeSelectedView as? Drawable,
+              let plane = plane
+        else { return }
         plane.adjustWidth(index: currentView.index, isUp: true)
     }
     @IBAction func touchedWDown(_ sender: UIButton) {
-        guard let currentView = beforeSelectedView as? Drawable else { return }
+        guard let currentView = beforeSelectedView as? Drawable,
+              let plane = plane
+        else { return }
         plane.adjustWidth(index: currentView.index, isUp: false)
     }
     @IBAction func touchedHUp(_ sender: UIButton) {
-        guard let currentView = beforeSelectedView as? Drawable else { return }
+        guard let currentView = beforeSelectedView as? Drawable,
+              let plane = plane
+        else { return }
         plane.adjustHeight(index: currentView.index, isUp: true)
     }
     @IBAction func touchedHDown(_ sender: UIButton) {
-        guard let currentView = beforeSelectedView as? Drawable else { return }
+        guard let currentView = beforeSelectedView as? Drawable,
+              let plane = plane
+        else { return }
         plane.adjustHeight(index: currentView.index, isUp: false)
     }
     
@@ -109,13 +129,17 @@ final class CanvasViewController: UIViewController {
     
     //MARK: - 상태창에 컬러 버튼 누르면 실행 되는 액션
     @IBAction func touchedColorButton(_ sender: UIButton) {
-        guard let currentSquare = beforeSelectedView as? Drawable else { return }
+        guard let currentSquare = beforeSelectedView as? Drawable,
+              let plane = plane
+        else { return }
         plane.changeColorAndAlpha(at: currentSquare.index, by: nil)
     }
     
     //MARK: - 스테퍼 + - 버튼 누르면 실행 되는 액션
     @IBAction func touchedStepper(_ sender: UIStepper) {
-        guard let currentSquare = beforeSelectedView as? Drawable else { return }
+        guard let currentSquare = beforeSelectedView as? Drawable,
+              let plane = plane
+        else { return }
         let roundedNumber: Double = round(sender.value * 10) / 10
         plane.changeColorAndAlpha(at: currentSquare.index, by: roundedNumber)
 
@@ -123,12 +147,15 @@ final class CanvasViewController: UIViewController {
     
     //MARK: - 슬라이더에 점을 움직이면 실행 되는 액션
     @IBAction func movedDot(_ sender: UISlider) {
-        guard let currentSquare = beforeSelectedView as? Drawable else { return }
-        plane.changeColorAndAlpha(at: currentSquare.index, by: Double(sender.value))
+        guard let currentView = beforeSelectedView as? Drawable,
+              let plane = plane
+        else { return }
+        plane.changeColorAndAlpha(at: currentView.index, by: Double(sender.value))
     }
     
     //MARK: - 메인 화면에 한 점을 터치하면 실행되는 액션
     @IBAction func tapView(_ sender: UITapGestureRecognizer) {
+        guard let plane = plane else { return }
         let point = sender.location(in: self.backgroundView)
         sender.cancelsTouchesInView = false
         
@@ -161,7 +188,7 @@ final class CanvasViewController: UIViewController {
     //MARK: - 사각형 버튼 누르면 실행 되는 액션
     @IBAction func touchedRectangleButton(_ sender: UIButton) {
         tableView.reloadData()
-        plane.makeShape(with: .rectangle)
+        plane?.makeShape(with: .rectangle)
     }
     
     //MARK: - 객체들의 초기값 설정

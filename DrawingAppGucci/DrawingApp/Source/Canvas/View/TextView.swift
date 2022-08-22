@@ -7,7 +7,7 @@
 
 import UIKit
 
-class TextView: UILabel, Drawable {
+final class TextView: UILabel, Drawable {
     
     var index: Int
     

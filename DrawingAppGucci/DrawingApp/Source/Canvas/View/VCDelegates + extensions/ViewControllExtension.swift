@@ -27,19 +27,19 @@ extension CanvasViewController {
         var index = index
         switch direction {
         case .backward:
-            self.plane.moveBackward(with: index)
+            self.plane?.moveBackward(with: index)
             self.moveViewBackward(with: index)
         case .backmost:
-            self.plane.moveBackmost(with: index)
+            self.plane?.moveBackmost(with: index)
             while index > 0 {
                 self.moveViewBackward(with: index)
                 index -= 1
             }
         case .forward:
-            self.plane.moveForward(with: index)
+            self.plane?.moveForward(with: index)
             self.moveViewForeward(with: index)
         case .foremost:
-            self.plane.moveForemost(with: index)
+            self.plane?.moveForemost(with: index)
             while index < shapeFrameViews.count - 1 {
                 moveViewForeward(with: index)
                 index += 1

@@ -28,13 +28,13 @@ extension CanvasViewController: UIGestureRecognizerDelegate {
         case .began:
             fallthrough
         case .changed:
-            sender.view?.alpha = CGFloat(self.plane[drawableView.index].alpha.value / 2)
+            sender.view?.alpha = CGFloat(self.plane?[drawableView.index].alpha.value ?? 0 / 2)
             self.updatePropertiesLabels(with: currentView)
         case .ended:
             guard let changedOrigin = sender.view?.frame.origin else { return }
             let movedPoint = Point(x: changedOrigin.x, y: changedOrigin.y)
-            self.plane.renewCenterOfShape(at: drawableView.index, after: movedPoint)
-            sender.view?.alpha = CGFloat(self.plane[drawableView.index].alpha.value)
+            self.plane?.renewCenterOfShape(at: drawableView.index, after: movedPoint)
+            sender.view?.alpha = CGFloat(self.plane?[drawableView.index].alpha.value ?? 0)
             self.updatePropertiesLabels(with: currentView)
         default:
             break

@@ -12,7 +12,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     static weak var shared: SceneDelegate?
     var window: UIWindow?
     var plane: Plane? {
-        didSet {
+        didSet { 
             NotificationCenter.default.post(name: Notification.Name.plane, object: self)
         }
     }
