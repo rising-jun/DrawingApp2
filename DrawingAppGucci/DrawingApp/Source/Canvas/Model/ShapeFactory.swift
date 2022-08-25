@@ -16,13 +16,13 @@ final class ShapeFactory {
             .addObserver(
                 forName: .boundary,
                 object: nil,
-                queue: .current) { noti in
+                queue: .current) { [weak self] noti in
                     guard let bound =
                             noti.userInfo?[NotificationKey.range]
                             as? (ClosedRange<Double>, ClosedRange<Double>)
                     else { return }
                     
-                    self.viewBound = bound
+                    self?.viewBound = bound
                 }
     }
     
@@ -30,7 +30,7 @@ final class ShapeFactory {
         NotificationCenter.default.removeObserver(self)
     }
     
-    func generateShape(with: ShapeBlueprint, url: URL? = nil) -> Shape {
+    func generateShape(with: ShapeBlueprint, urlData: Data? = nil) -> Shape {
         guard let viewBound = viewBound else {
             assert(false, "viewBound에 값이 없습니다.")
         }
@@ -50,10 +50,10 @@ final class ShapeFactory {
         case .rectangle:
             return Rectangle(shape: shape, color: Color())
         case .photo:
-            guard let url = url else {
+            guard let urlData = urlData else {
                 assert(false, "imageData is nil")
             }
-            return Photo(shape: shape, url: url)
+            return Photo(shape: shape, urlData: urlData)
         case .text:
             let string = makeRandomText()
             let textSize = Size(width: Double(string.count) * 13, height: 35)

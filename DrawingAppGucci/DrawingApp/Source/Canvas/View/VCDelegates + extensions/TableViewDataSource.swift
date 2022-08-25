@@ -9,12 +9,14 @@ import UIKit
 
 extension CanvasViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return plane.count
+        return plane?.count ?? 0
     }
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "LayerTableViewCell", for: indexPath) as? LayerTableViewCell else { return UITableViewCell() }
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "LayerTableViewCell", for: indexPath) as? LayerTableViewCell,
+              let plane = plane
+        else { return UITableViewCell() }
         
         func getPrintNumber(target: ShapeBlueprint) -> Int {
             var counter: Int
@@ -39,7 +41,8 @@ extension CanvasViewController: UITableViewDataSource {
         
         switch plane[indexPath.row] {
         case _ as Rectangle:
-            cell.setUp(with: .rectangle, at: indexPath.row, printNumber: getPrintNumber(target: .rectangle))
+            let number = getPrintNumber(target: .rectangle)
+            cell.setUp(with: .rectangle, at: indexPath.row, printNumber: number)
         case _ as Photo:
             cell.setUp(with: .photo, at: indexPath.row, printNumber: getPrintNumber(target: .photo))
         case _ as Text:
@@ -72,7 +75,16 @@ extension CanvasViewController: UITableViewDataSource {
         return "레이어"
     }
     
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        CGFloat(40)
+    }
+    
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return CGFloat(40)
+    }
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let view = UIView()
+        view.backgroundColor = .clear
+        return view
     }
 }

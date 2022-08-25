@@ -12,17 +12,6 @@ extension CanvasViewController {
     // MARK: - 노티피케이션 옵저버 등록
     func coufigureObserverNotifications() {
         
-        // MARK: - [GET] SceneDelegate 에 Plane 값이 들어오면 알리는 옵저버
-        NotificationCenter.default.addObserver(forName: .plane, object: nil, queue: .current) { [weak self] _ in
-            guard let shapes = SceneDelegate.shared?.plane.shapes else { return }
-            shapes.enumerated().forEach {
-                self?.addView(from: $0.element, index: $0.offset)
-                self?.configurePostNotification()
-            }
-            self?.tableView.reloadData()
-            
-        }
-        
         // MARK: - [GET] 크기와 위치에 관련한 노티피케이션
         NotificationCenter.default.addObserver(
             forName: .property,
@@ -31,7 +20,8 @@ extension CanvasViewController {
                 guard
                     let drawbleView = beforeSelectedView as? Drawable,
                     let currentView = beforeSelectedView,
-                    let someProtperty = noti.userInfo?[NotificationKey.property] as? ShapeProperty
+                    let someProtperty = noti.userInfo?[NotificationKey.property] as? ShapeProperty,
+                    let plane = plane
                 else { return }
                 let shape = plane[drawbleView.index]
                 switch someProtperty {
@@ -93,7 +83,7 @@ extension CanvasViewController {
         NotificationCenter.default
             .post(
                 name: .boundary,
-                object: self,
+                object: nil,
                 userInfo: [NotificationKey.range: bound]
             )
     }

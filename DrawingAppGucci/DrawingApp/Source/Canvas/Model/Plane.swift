@@ -8,7 +8,7 @@
 import Foundation
 
 protocol Planable: NSObject {
-    func makeShape(with blueprint: ShapeBlueprint, by url: URL?)
+    func makeShape(with blueprint: ShapeBlueprint, by urlData: Data?)
     func isTouched(at point: (Double, Double)) -> Int?
     func findTouchedShape(at point: (Double, Double)) -> Shape?
     func changeColorAndAlpha(at index: Int, by alphaValue: Double?)
@@ -18,7 +18,7 @@ protocol Planable: NSObject {
 final class Plane: NSObject, Planable {
     
     private(set) var shapes: [Shape] = []
-    private let factory = ShapeFactory()
+    private var factory = ShapeFactory()
     var count: Int { shapes.count }
     
     required init?(coder: NSCoder) {
@@ -40,8 +40,8 @@ final class Plane: NSObject, Planable {
     }
     
     //MARK: - 도형 추가
-    func makeShape(with blueprint: ShapeBlueprint, by url: URL? = nil) {
-        let shape = factory.generateShape(with: blueprint, url: url)
+    func makeShape(with blueprint: ShapeBlueprint, by urlData: Data? = nil) { 
+        let shape = factory.generateShape(with: blueprint, urlData: urlData)
         shapes.append(shape)
         
         NotificationCenter.default
@@ -213,5 +213,12 @@ extension Plane: NSCopying {
 extension Plane: NSCoding {
     func encode(with coder: NSCoder) {
         coder.encode(self.shapes, forKey: "shapes")
+    }
+}
+
+
+extension Plane {
+    func removeShape() {
+        self.shapes = []
     }
 }

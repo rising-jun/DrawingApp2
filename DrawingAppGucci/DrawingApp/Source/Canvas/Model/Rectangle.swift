@@ -8,7 +8,6 @@
 import Foundation
 
 final class Rectangle: Shape  {
-    //    override var description: String = "(\(id)), X\(point.x), Y\(point.y), W\(size.width), H\(size.height) R: \(color.r), G: \(color.g), B: \(color.b), alpha: \(alpha.value)"
     
     private(set) var color: Color
     

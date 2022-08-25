@@ -8,7 +8,7 @@
 import UIKit
 
 final class PhotoView: UIImageView, Drawable {
-
+    
     var index: Int
     
     init(photo: Photo, index: Int) {
@@ -23,9 +23,14 @@ final class PhotoView: UIImageView, Drawable {
         configureAttribute(by: photo)
     }
     
+    deinit {
+        self.image = nil
+        self.layer.borderColor = .none
+    }
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-
+        
     }
     
     func updateAlphaOrColor(alpha: Alpha, color: Color? = nil) {
@@ -33,13 +38,9 @@ final class PhotoView: UIImageView, Drawable {
     }
     
     private func configureAttribute(by photo: Photo) {
-        guard let image = photo.imageURL.asSmallImage else {
-            print(photo.imageURL.absoluteURL)
-            return
-        }
+        self.image = UIImage(data: photo.imageData)
         self.isUserInteractionEnabled = true
         self.layer.borderColor = tintColor.cgColor
-        self.image = image
         updateAlphaOrColor(alpha: photo.alpha)
     }
 }

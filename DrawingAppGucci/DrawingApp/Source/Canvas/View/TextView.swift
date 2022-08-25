@@ -7,7 +7,7 @@
 
 import UIKit
 
-class TextView: UILabel, Drawable {
+final class TextView: UILabel, Drawable {
     
     var index: Int
     
@@ -18,9 +18,14 @@ class TextView: UILabel, Drawable {
                     CGRect(
                         x: text.point.x,
                         y: text.point.y,
-                        width: .zero,
+                        width: text.size.width,
                         height: text.size.height))
         configureAttribute(by: text)
+    }
+    
+    deinit {
+        self.text = .none
+        self.layer.borderColor = .none
     }
     
     required init?(coder: NSCoder) {
